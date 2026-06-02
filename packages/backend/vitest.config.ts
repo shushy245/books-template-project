@@ -4,7 +4,8 @@ import { defineConfig } from 'vitest/config';
 // Integration tests (requiring Docker/Postgres) live in vitest.config.integration.ts.
 export default defineConfig({
     test: {
+        reporter: 'verbose',
         environment: 'node',
-        exclude: ['**/node_modules/**', '**/*.integration.test.ts'],
+        exclude: ['**/node_modules/**', '**/dist/**', '**/*.integration.test.ts'],
     },
 });

@@ -4,6 +4,7 @@ import { defineConfig } from 'vitest/config';
 // Run with: pnpm test:integration
 export default defineConfig({
     test: {
+        reporter: 'verbose',
         environment: 'node',
         include: ['**/*.integration.test.ts'],
         testTimeout: 15000,
