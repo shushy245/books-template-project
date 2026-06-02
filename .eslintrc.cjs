@@ -10,12 +10,13 @@ module.exports = {
     // project is omitted here — type-aware rules are expensive and break on non-TS files.
     // We use syntactic rules only at the root; packages add type-aware rules in their own configs.
   },
-  plugins: ['@typescript-eslint', 'import'],
+  plugins: ['@typescript-eslint', 'import', 'prettier'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
+    'prettier',
   ],
   settings: {
     'import/resolver': {
@@ -80,18 +81,23 @@ module.exports = {
       { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
     ],
 
-    // ── Import ordering ───────────────────────────────────────────────────────
-    'import/order': [
-      'error',
-      {
-        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-        'newlines-between': 'always',
-        alphabetize: { order: 'asc', caseInsensitive: true },
-      },
-    ],
-
     // ── No redundant type annotations that TS already infers ─────────────────
     // (disabled: we want explicit return types on exported fns)
+
+    // ── Prettier ──────────────────────────────────────────────────────────────
+    'prettier/prettier': [
+      'error',
+      {
+        printWidth: 120,
+        semi: true,
+        singleQuote: true,
+        tabWidth: 4,
+        trailingComma: 'all',
+        useTabs: false,
+        endOfLine: 'lf',
+        bracketSpacing: true,
+      },
+    ],
 
     // ── Misc quality ─────────────────────────────────────────────────────────
     'no-console': 'warn', // use the structured logger, not console.log
