@@ -2,7 +2,7 @@ import { Request, RequestHandler, Response } from 'express';
 import { ZodError } from 'zod';
 
 import { StorePort } from '../../domain/ports/store.port.js';
-import { listBooks } from '../../domain/queries/list-books.query.js';
+import { listBooks } from '../../domain/queries/list-books.js';
 import { Logger } from '../../telemetry/logger.port.js';
 import { parseBookQuery } from './list-books.handler.utils.js';
 

@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { BookSortField, ReadingStatus, SortDirection } from '@reading-room/common';
 
 import { FakeBookRepository } from '../../testing/fake-book-repository.js';
-import { listBooks } from './list-books.query.js';
+import { listBooks } from './list-books.js';
 
 type ListBooksDriver = {
     seedBook: (title: string, shelfId?: string, status?: ReadingStatus) => Promise<void>;

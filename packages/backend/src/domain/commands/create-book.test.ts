@@ -5,7 +5,7 @@ import { OutboxEventType, ReadingStatus } from '@reading-room/common';
 import { NotFoundError } from '../errors/index.js';
 import { FakeStore } from '../../testing/fake-store.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
-import { createBook } from './create-book.command.js';
+import { createBook } from './create-book.js';
 
 type CreateBookDriver = {
     seedShelf: (shelfId: string) => void;

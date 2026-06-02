@@ -13,7 +13,7 @@ import { BookRepository } from '../../adapters/repositories/book.repository.js';
 import { Store } from '../../adapters/store.js';
 import { StorePort } from '../ports/store.port.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
-import { createBook } from './create-book.command.js';
+import { createBook } from './create-book.js';
 
 const makeTestDb = (): { pool: Pool; db: Db } =>
     createDb({
