@@ -3,6 +3,7 @@ import request from 'supertest';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { buildApp } from './app.js';
+import { FakeBookRepository } from './testing/fake-book-repository.js';
 import { makeFakeLogger } from './testing/fake-logger.js';
 
 // HealthDriver: encapsulates all When actions and Then assertions for the health endpoint.
@@ -15,7 +16,7 @@ type HealthDriver = {
 
 const makeHealthDriver = (): HealthDriver => {
     const logger = makeFakeLogger();
-    const app = buildApp({ logger });
+    const app = buildApp({ bookRepo: new FakeBookRepository(), logger });
 
     return {
         getHealth: () => request(app).get('/health'),
