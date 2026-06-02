@@ -1,6 +1,6 @@
 import { Db } from '../../db/client.js';
 import { outbox } from '../../db/schema.js';
-import { OutboxEvent, OutboxRepositoryPort } from '../../domain/ports/outbox.port.js';
+import { OutboxEvent, OutboxRepositoryPort } from '../../domain/ports/outbox-repository.port.js';
 
 export class OutboxRepository implements OutboxRepositoryPort {
     constructor(private readonly db: Db) {}
