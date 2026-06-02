@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
 import { StorePort } from '../domain/ports/store.port.js';
-import { Logger } from '../telemetry/logger.port.js';
+import { LoggerPort } from '../telemetry/logger.port.js';
 import { makeListBooksHandler } from './handlers/list-books.handler.js';
 
 type RouterDeps = {
     store: StorePort;
-    logger: Logger;
+    logger: LoggerPort;
 };
 
 export const buildRouter = (deps: RouterDeps): Router => {

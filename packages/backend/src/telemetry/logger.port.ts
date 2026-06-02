@@ -9,7 +9,7 @@ export type LogEntry = {
     fields?: LogFields;
 };
 
-export type Logger = {
+export type LoggerPort = {
     info: (ctx: LogContext, message: string, fields?: LogFields) => void;
     warn: (ctx: LogContext, message: string, fields?: LogFields) => void;
     error: (ctx: LogContext, message: string, fields?: LogFields) => void;

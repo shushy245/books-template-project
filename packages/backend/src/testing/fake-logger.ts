@@ -1,4 +1,4 @@
-import { LogEntry, LogFields, Logger } from '../telemetry/logger.port.js';
+import { LogEntry, LogFields, LoggerPort } from '../telemetry/logger.port.js';
 
 // `exactOptionalPropertyTypes` forbids setting an optional property to `undefined` explicitly.
 // We use a conditional spread so `fields` is only included in the entry when actually provided.
@@ -14,7 +14,7 @@ const makeEntry = (
     ...(fields !== undefined ? { fields } : {}),
 });
 
-export const makeFakeLogger = (): Logger & { entries: LogEntry[] } => {
+export const makeFakeLogger = (): LoggerPort & { entries: LogEntry[] } => {
     const entries: LogEntry[] = [];
 
     return {

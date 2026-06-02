@@ -2,11 +2,11 @@ import { Book, CreateBookDto, EntityKind, OutboxEventType } from '@reading-room/
 
 import { NotFoundError, notFoundMessage } from '../errors/index.js';
 import { StorePort } from '../ports/store.port.js';
-import { Logger } from '../../telemetry/logger.port.js';
+import { LoggerPort } from '../../telemetry/logger.port.js';
 
 type CreateBookDeps = {
     store: StorePort;
-    logger: Logger;
+    logger: LoggerPort;
 };
 
 export const createBook = async (deps: CreateBookDeps, dto: CreateBookDto): Promise<Book> => {

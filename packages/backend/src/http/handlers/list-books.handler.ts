@@ -3,12 +3,12 @@ import { ZodError } from 'zod';
 
 import { StorePort } from '../../domain/ports/store.port.js';
 import { listBooks } from '../../domain/queries/list-books.js';
-import { Logger } from '../../telemetry/logger.port.js';
+import { LoggerPort } from '../../telemetry/logger.port.js';
 import { parseBookQuery } from './list-books.handler.utils.js';
 
 type ListBooksDeps = {
     store: StorePort;
-    logger: Logger;
+    logger: LoggerPort;
 };
 
 export const makeListBooksHandler =
