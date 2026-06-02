@@ -1,11 +1,11 @@
 import express, { Application, json } from 'express';
 
-import { BookRepositoryPort } from './domain/ports/book-repository.port.js';
+import { StorePort } from './domain/ports/store.port.js';
 import { buildRouter } from './http/router.js';
 import { Logger } from './telemetry/logger.port.js';
 
 export type AppDeps = {
-    bookRepo: BookRepositoryPort;
+    store: StorePort;
     logger: Logger;
 };
 

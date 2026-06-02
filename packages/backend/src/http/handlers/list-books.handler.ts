@@ -1,13 +1,13 @@
 import { Request, RequestHandler, Response } from 'express';
 import { ZodError } from 'zod';
 
-import { BookRepositoryPort } from '../../domain/ports/book-repository.port.js';
+import { StorePort } from '../../domain/ports/store.port.js';
 import { listBooks } from '../../domain/queries/list-books.query.js';
 import { Logger } from '../../telemetry/logger.port.js';
 import { parseBookQuery } from './list-books.handler.utils.js';
 
 type ListBooksDeps = {
-    bookRepo: BookRepositoryPort;
+    store: StorePort;
     logger: Logger;
 };
 
@@ -22,7 +22,7 @@ export const makeListBooksHandler =
             return;
         }
 
-        const result = await listBooks({ bookRepo: deps.bookRepo }, queryResult.data);
+        const result = await listBooks({ bookRepo: deps.store.books }, queryResult.data);
         res.json(result);
     };
 

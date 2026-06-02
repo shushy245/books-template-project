@@ -1,0 +1,14 @@
+import { BookRepositoryPort } from './book-repository.port.js';
+import { OutboxRepositoryPort } from './outbox.port.js';
+import { ShelfRepositoryPort } from './shelf-repository.port.js';
+
+export type TransactionRepos = {
+    books: BookRepositoryPort;
+    outbox: OutboxRepositoryPort;
+};
+
+export interface StorePort {
+    books: BookRepositoryPort;
+    shelves: ShelfRepositoryPort;
+    transaction: <T>(work: (repos: TransactionRepos) => Promise<T>) => Promise<T>;
+}

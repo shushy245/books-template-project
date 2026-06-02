@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { ReadingStatus } from '@reading-room/common';
 
 import { buildApp } from '../../app.js';
-import { FakeBookRepository } from '../../testing/fake-book-repository.js';
+import { FakeStore } from '../../testing/fake-store.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
 
 type ListBooksDriver = {
@@ -16,11 +16,11 @@ type ListBooksDriver = {
 };
 
 const makeListBooksDriver = (): ListBooksDriver => {
-    const bookRepo = new FakeBookRepository();
-    const app = buildApp({ bookRepo, logger: makeFakeLogger() });
+    const store = new FakeStore();
+    const app = buildApp({ store, logger: makeFakeLogger() });
 
     const seedBook = async (title: string): Promise<void> => {
-        await bookRepo.insert({ title, authorId: 'author-1', shelfId: 'shelf-1', status: ReadingStatus.WantToRead });
+        await store.books.insert({ title, authorId: 'author-1', shelfId: 'shelf-1', status: ReadingStatus.WantToRead });
     };
 
     return {

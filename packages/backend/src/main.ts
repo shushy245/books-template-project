@@ -2,11 +2,10 @@
 // This is the only place real adapters are wired.
 // buildApp() takes deps and remains testable without this file.
 import { buildApp } from './app.js';
-import { DrizzleBookRepository } from './adapters/repositories/drizzle-book.repository.js';
+import { DrizzleStore } from './adapters/drizzle-store.js';
 import { createDb } from './db/client.js';
 
 // TODO (S8 T8.1): replace with the real OTel-backed structured logger.
-// For now, a console-based shim that honours the Logger port contract.
 const logger = {
     info: (ctx: Record<string, unknown>, message: string, fields?: Record<string, unknown>): void => {
         console.log(JSON.stringify({ level: 'info', ...ctx, message, ...fields }));
@@ -27,11 +26,7 @@ const { db } = createDb({
     database: process.env['DB_NAME'] ?? 'reading_room',
 });
 
-const app = buildApp({
-    bookRepo: new DrizzleBookRepository(db),
-    logger,
-});
-
+const app = buildApp({ store: new DrizzleStore(db), logger });
 const port = Number(process.env['PORT'] ?? 3000);
 
 app.listen(port, () => {
