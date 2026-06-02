@@ -28,7 +28,7 @@ const sortColumnMap: Record<BookSortField, BookSortColumn> = {
     [BookSortField.CreatedAt]: books.createdAt,
 };
 
-export class DrizzleBookRepository implements BookRepositoryPort {
+export class BookRepository implements BookRepositoryPort {
     constructor(private readonly db: Db) {}
 
     async findById(id: string): Promise<Book | undefined> {

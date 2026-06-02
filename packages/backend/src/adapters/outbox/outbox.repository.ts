@@ -2,7 +2,7 @@ import { Db } from '../../db/client.js';
 import { outbox } from '../../db/schema.js';
 import { OutboxEvent, OutboxRepositoryPort } from '../../domain/ports/outbox.port.js';
 
-export class DrizzleOutboxRepository implements OutboxRepositoryPort {
+export class OutboxRepository implements OutboxRepositoryPort {
     constructor(private readonly db: Db) {}
 
     async append(event: OutboxEvent): Promise<void> {

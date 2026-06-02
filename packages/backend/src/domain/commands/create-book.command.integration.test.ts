@@ -9,8 +9,8 @@ import { ReadingStatus } from '@reading-room/common';
 
 import { Db, createDb } from '../../db/client.js';
 import { authors, books, outbox, shelves } from '../../db/schema.js';
-import { DrizzleBookRepository } from '../../adapters/repositories/drizzle-book.repository.js';
-import { DrizzleStore } from '../../adapters/drizzle-store.js';
+import { BookRepository } from '../../adapters/repositories/book.repository.js';
+import { Store } from '../../adapters/store.js';
 import { StorePort } from '../ports/store.port.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
 import { createBook } from './create-book.command.js';
@@ -60,7 +60,7 @@ describe('createBook integration', () => {
         const { authorId, shelfId } = await seedAuthorAndShelf();
 
         await createBook(
-            { store: new DrizzleStore(db), logger: makeFakeLogger() },
+            { store: new Store(db), logger: makeFakeLogger() },
             { title: 'Dune', authorId, shelfId, status: ReadingStatus.WantToRead },
         );
 
@@ -71,7 +71,7 @@ describe('createBook integration', () => {
         const { authorId, shelfId } = await seedAuthorAndShelf();
 
         const store: StorePort = {
-            books: new DrizzleBookRepository(db),
+            books: new BookRepository(db),
             shelves: {
                 findById: async () => ({
                     id: shelfId,
@@ -83,7 +83,7 @@ describe('createBook integration', () => {
             transaction: (work) =>
                 db.transaction(async (tx) =>
                     work({
-                        books: new DrizzleBookRepository(tx),
+                        books: new BookRepository(tx),
                         outbox: {
                             append: async () => {
                                 throw new Error('forced failure');

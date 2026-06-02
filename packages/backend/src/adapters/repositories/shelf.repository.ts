@@ -6,7 +6,7 @@ import { Db } from '../../db/client.js';
 import { shelves } from '../../db/schema.js';
 import { ShelfRepositoryPort } from '../../domain/ports/shelf-repository.port.js';
 
-export class DrizzleShelfRepository implements ShelfRepositoryPort {
+export class ShelfRepository implements ShelfRepositoryPort {
     constructor(private readonly db: Db) {}
 
     async findById(id: string): Promise<Shelf | undefined> {

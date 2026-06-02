@@ -7,7 +7,7 @@ import { afterAll, beforeAll } from 'vitest';
 
 import { Db, createDb } from '../../db/client.js';
 import { authors, shelves } from '../../db/schema.js';
-import { DrizzleBookRepository } from './drizzle-book.repository.js';
+import { BookRepository } from './book.repository.js';
 import { runBookRepositoryContractTests } from '../../domain/ports/book-repository.contract.js';
 
 const makeTestDb = (): { pool: Pool; db: Db } =>
@@ -41,11 +41,11 @@ runBookRepositoryContractTests(async () => {
     const [altShelfRow] = await db.insert(shelves).values({ name: 'Shelf B' }).returning();
 
     if (authorRow === undefined || shelfRow === undefined || altShelfRow === undefined) {
-        throw new Error('drizzle-book.repository.integration setup: failed to insert required FK rows');
+        throw new Error('book.repository.integration setup: failed to insert required FK rows');
     }
 
     return {
-        repo: new DrizzleBookRepository(db),
+        repo: new BookRepository(db),
         authorId: authorRow.id,
         shelfId: shelfRow.id,
         alternateShelfId: altShelfRow.id,
