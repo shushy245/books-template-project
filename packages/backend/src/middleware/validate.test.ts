@@ -1,7 +1,8 @@
-import express, { json } from 'express';
 import { z } from 'zod';
-import supertest from 'supertest';
 import { describe, expect, it } from 'vitest';
+import express, { json } from 'express';
+import type { Response } from 'supertest';
+import supertest from 'supertest';
 
 import { validateBody } from './validate.js';
 
@@ -19,32 +20,56 @@ app.post('/test', validateBody(Schema), (req, res) => {
     res.status(200).json(req.body);
 });
 
-describe('validateBody', () => {
-    it('returns 200 with parsed body on valid input', async () => {
-        const res = await supertest(app).post('/test').send({ name: 'Alice', age: 30 });
+type ValidateDriver = {
+    post: (body: Record<string, unknown>) => Promise<Response>;
+    assertSuccess: (res: Response, expected: Record<string, unknown>) => void;
+    assertBadRequest: (res: Response) => void;
+    assertFieldAbsent: (res: Response, field: string) => void;
+};
 
+const makeValidateDriver = (): ValidateDriver => ({
+    post: (body) => supertest(app).post('/test').send(body),
+
+    assertSuccess: (res, expected) => {
         expect(res.status).toBe(200);
-        expect(res.body).toEqual({ name: 'Alice', age: 30 });
+        expect(res.body).toEqual(expected);
+    },
+
+    assertBadRequest: (res) => {
+        expect(res.status).toBe(400);
+        expect(res.body).toHaveProperty('error');
+    },
+
+    assertFieldAbsent: (res, field) => {
+        expect(res.body[field]).toBeUndefined();
+    },
+});
+
+describe('validateBody', () => {
+    const driver = makeValidateDriver();
+
+    it('returns 200 with parsed body on valid input', async () => {
+        const res = await driver.post({ name: 'Alice', age: 30 });
+
+        driver.assertSuccess(res, { name: 'Alice', age: 30 });
     });
 
     it('returns 400 on invalid input', async () => {
-        const res = await supertest(app).post('/test').send({ name: '', age: 'not-a-number' });
+        const res = await driver.post({ name: '', age: 'not-a-number' });
 
-        expect(res.status).toBe(400);
-        expect(res.body).toHaveProperty('error');
+        driver.assertBadRequest(res);
     });
 
     it('strips unknown fields from the parsed body', async () => {
-        const res = await supertest(app).post('/test').send({ name: 'Bob', age: 25, extra: 'stripped' });
+        const res = await driver.post({ name: 'Bob', age: 25, extra: 'stripped' });
 
-        expect(res.status).toBe(200);
-        expect(res.body).toEqual({ name: 'Bob', age: 25 });
-        expect(res.body.extra).toBeUndefined();
+        driver.assertSuccess(res, { name: 'Bob', age: 25 });
+        driver.assertFieldAbsent(res, 'extra');
     });
 
     it('returns 400 on missing required fields', async () => {
-        const res = await supertest(app).post('/test').send({ name: 'Alice' });
+        const res = await driver.post({ name: 'Alice' });
 
-        expect(res.status).toBe(400);
+        driver.assertBadRequest(res);
     });
 });

@@ -32,15 +32,6 @@ export class FakeBookRepository implements BookRepositoryPort {
     }
 
     async list(query: BookQueryDto): Promise<PaginatedResult<Book>> {
-        let items = [...this.store.values()];
-
-        if (query.shelfId !== undefined) {
-            items = items.filter((b) => b.shelfId === query.shelfId);
-        }
-        if (query.status !== undefined) {
-            items = items.filter((b) => b.status === query.status);
-        }
-
         const sortBy = query.sortBy ?? BookSortField.CreatedAt;
         const sortDir = query.sortDir ?? SortDirection.Desc;
 
@@ -49,17 +40,18 @@ export class FakeBookRepository implements BookRepositoryPort {
             throw new Error(`list: unexpected BookSortField '${sortBy}'`);
         }
 
-        items = [...items].sort(compareFn);
-        if (sortDir === SortDirection.Desc) {
-            items = items.reverse();
-        }
+        const filtered = [...this.store.values()]
+            .filter((b) => query.shelfId === undefined || b.shelfId === query.shelfId)
+            .filter((b) => query.status === undefined || b.status === query.status);
+
+        const sorted = [...filtered].sort(compareFn);
+        const ordered = sortDir === SortDirection.Desc ? [...sorted].reverse() : sorted;
 
         const page = query.page ?? 1;
         const pageSize = query.pageSize ?? DEFAULT_PAGE_SIZE;
-        const total = items.length;
         const start = (page - 1) * pageSize;
 
-        return { items: items.slice(start, start + pageSize), page, pageSize, total };
+        return { items: ordered.slice(start, start + pageSize), page, pageSize, total: ordered.length };
     }
 
     async insert(dto: CreateBookDto): Promise<Book> {

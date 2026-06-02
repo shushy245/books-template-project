@@ -26,8 +26,7 @@ const normaliseNulls = (value: unknown): unknown => {
 };
 
 httpClient.interceptors.response.use((response) => {
-    // Axios types response.data as `any`, so the assignment is safe here at the boundary.
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // Axios types response.data as `any` — safe to assign here at the null-normalisation boundary.
     response.data = normaliseNulls(response.data);
     return response;
 });

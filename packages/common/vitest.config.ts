@@ -4,5 +4,6 @@ export default defineConfig({
     test: {
         reporter: 'verbose',
         environment: 'node',
+        passWithNoTests: true,
     },
 });

@@ -5,3 +5,5 @@ export const notFoundMessage = (op: string, kind: EntityKind, id: string): strin
 
 export const conflictMessage = (op: string, id: string, storedAt: Date): string =>
     `${op}: optimistic lock conflict — id=${id}, storedAt=${storedAt.toISOString()}`;
+
+export const ruleMessage = (op: string, reason: string): string => `${op}: rule violated — ${reason}`;
