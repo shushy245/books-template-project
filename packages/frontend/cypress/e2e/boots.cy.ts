@@ -8,10 +8,10 @@ describe('App shell', () => {
     });
 
     it('shows the Reading Room heading', () => {
-        driver.getHeading().should('be.visible');
+        driver.assertHeadingVisible();
     });
 
     it('shows the backend: ok badge once the health check resolves', () => {
-        driver.getBackendBadge().should('contain.text', 'backend: ok');
+        driver.assertBackendOk();
     });
 });
