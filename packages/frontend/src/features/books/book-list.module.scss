@@ -1,0 +1,25 @@
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.empty {
+  color: #888;
+  padding: 32px 0;
+  text-align: center;
+}

@@ -7,9 +7,9 @@ import styles from './primitives.module.css';
 
 type BoxProps = {
     children: ReactNode;
-    className?: string;
-    style?: CSSProperties;
-    'data-testid'?: string;
+    className?: string | undefined;
+    style?: CSSProperties | undefined;
+    'data-testid'?: string | undefined;
 };
 
 export const Box = ({ children, className, style, 'data-testid': testId }: BoxProps): JSX.Element => (

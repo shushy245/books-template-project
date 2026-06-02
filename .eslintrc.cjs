@@ -114,8 +114,9 @@ module.exports = {
     },
     // ── Boundary files: null is allowed (normalise at the seam) ──────────────
     // ADR-8: null is confined to row-mappers.utils.ts, http-client.ts, and main.tsx (DOM boundary).
+    // cypress.config.ts: Cypress task API requires returning null to signal task completion.
     {
-      files: ['**/row-mappers.utils.ts', '**/http-client.ts', '**/main.tsx'],
+      files: ['**/row-mappers.utils.ts', '**/http-client.ts', '**/main.tsx', '**/cypress.config.ts'],
       rules: {
         'no-restricted-syntax': 'off',
       },
