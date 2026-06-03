@@ -2,9 +2,8 @@ import type { Response } from 'supertest';
 import request from 'supertest';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { ReadingStatus } from '@reading-room/common';
-
 import { buildApp } from '../../app.js';
+import { aBook } from '../../testing/builders/book.js';
 import { FakeStore } from '../../testing/fake-store.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
 
@@ -20,7 +19,7 @@ const makeListBooksDriver = (): ListBooksDriver => {
     const app = buildApp({ store, logger: makeFakeLogger() });
 
     const seedBook = async (title: string): Promise<void> => {
-        await store.books.insert({ title, authorId: 'author-1', shelfId: 'shelf-1', status: ReadingStatus.WantToRead });
+        await store.books.insert(aBook({ title }).buildDTO());
     };
 
     return {

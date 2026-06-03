@@ -5,13 +5,12 @@ import { Pool } from 'pg';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import { ReadingStatus } from '@reading-room/common';
-
 import { Db, createDb } from '../../db/client.js';
 import { authors, books, outbox, shelves } from '../../db/schema.js';
 import { BookRepository } from '../../adapters/repositories/book.repository.js';
 import { Store } from '../../adapters/store.js';
 import { StorePort } from '../ports/store.port.js';
+import { aBook } from '../../testing/builders/book.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
 import { createBook } from './create-book.js';
 
@@ -61,7 +60,7 @@ describe('createBook integration', () => {
 
         await createBook(
             { store: new Store(db), logger: makeFakeLogger() },
-            { title: 'Dune', authorId, shelfId, status: ReadingStatus.WantToRead },
+            aBook({ title: 'Dune', authorId, shelfId }).buildDTO(),
         );
 
         await assertCounts(1, 1);
@@ -94,10 +93,7 @@ describe('createBook integration', () => {
         };
 
         await expect(
-            createBook(
-                { store, logger: makeFakeLogger() },
-                { title: 'Dune', authorId, shelfId, status: ReadingStatus.WantToRead },
-            ),
+            createBook({ store, logger: makeFakeLogger() }, aBook({ title: 'Dune', authorId, shelfId }).buildDTO()),
         ).rejects.toThrow('forced failure');
 
         await assertCounts(0, 0);

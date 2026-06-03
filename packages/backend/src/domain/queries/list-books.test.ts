@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { BookSortField, ReadingStatus, SortDirection } from '@reading-room/common';
 
+import { aBook } from '../../testing/builders/book.js';
 import { FakeBookRepository } from '../../testing/fake-book-repository.js';
 import { listBooks } from './list-books.js';
 
@@ -17,7 +18,7 @@ const makeListBooksDriver = (): ListBooksDriver => {
     const repo = new FakeBookRepository();
 
     const seedBook = async (title: string, shelfId = 'shelf-1', status = ReadingStatus.WantToRead): Promise<void> => {
-        await repo.insert({ title, authorId: 'author-1', shelfId, status });
+        await repo.insert(aBook({ title, shelfId, status }).buildDTO());
     };
 
     const list = (query: Parameters<typeof listBooks>[1] = {}) => listBooks({ bookRepo: repo }, query);

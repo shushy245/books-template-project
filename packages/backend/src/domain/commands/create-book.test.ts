@@ -1,8 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { OutboxEventType, ReadingStatus } from '@reading-room/common';
+import { OutboxEventType } from '@reading-room/common';
 
 import { NotFoundError } from '../errors/index.js';
+import { aBook } from '../../testing/builders/book.js';
+import { aShelf } from '../../testing/builders/shelf.js';
 import { FakeStore } from '../../testing/fake-store.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
 import { createBook } from './create-book.js';
@@ -20,15 +22,13 @@ const makeCreateBookDriver = (): CreateBookDriver => {
     const store = new FakeStore();
     const logger = makeFakeLogger();
 
-    const defaultDto = { title: 'Dune', authorId: 'author-1', shelfId: 'shelf-1', status: ReadingStatus.WantToRead };
-
     return {
         seedShelf: (shelfId) => {
-            store.shelves.seed({ id: shelfId, name: 'Test Shelf', createdAt: new Date(), updatedAt: new Date() });
+            store.shelves.seed(aShelf({ id: shelfId }).build());
         },
 
         create: async (overrides = {}) => {
-            await createBook({ store, logger }, { ...defaultDto, ...overrides });
+            await createBook({ store, logger }, aBook({ title: 'Dune', shelfId: 'shelf-1', ...overrides }).buildDTO());
         },
 
         assertBookPersisted: async () => {
