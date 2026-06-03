@@ -8,37 +8,47 @@ import { FakeStore } from '../../testing/fake-store.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
 
 type ListBooksDriver = {
-    seedBook: (title: string) => Promise<void>;
-    listBooks: (query?: Record<string, string>) => Promise<Response>;
-    assertPaginatedResult: (res: Response, itemCount: number, total: number) => void;
-    assertBadRequest: (res: Response) => void;
+    given: {
+        book: (title: string) => Promise<void>;
+    };
+    get: {
+        books: (query?: Record<string, string>) => Promise<Response>;
+    };
+    assert: {
+        paginatedResult: (res: Response, itemCount: number, total: number) => void;
+        badRequest: (res: Response) => void;
+    };
 };
 
 const makeListBooksDriver = (): ListBooksDriver => {
     const store = new FakeStore();
     const app = buildApp({ store, logger: makeFakeLogger() });
 
-    const seedBook = async (title: string): Promise<void> => {
-        await store.books.insert(aBook({ title }).buildDTO());
-    };
-
     return {
-        seedBook,
-
-        listBooks: (query = {}) => {
-            const qs = new URLSearchParams(query).toString();
-            return request(app).get(`/api/books${qs ? `?${qs}` : ''}`);
+        given: {
+            book: async (title) => {
+                await store.books.insert(aBook({ title }).buildDTO());
+            },
         },
 
-        assertPaginatedResult: (res, itemCount, total) => {
-            expect(res.status).toBe(200);
-            expect(res.body.items).toHaveLength(itemCount);
-            expect(res.body.total).toBe(total);
+        get: {
+            books: (query = {}) => {
+                const qs = new URLSearchParams(query).toString();
+                return request(app).get(`/api/books${qs ? `?${qs}` : ''}`);
+            },
         },
 
-        assertBadRequest: (res) => {
-            expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty('error');
+        assert: {
+            paginatedResult: (res, itemCount, total) => {
+                expect(res.status).toBe(200);
+                expect(res.body.items).toHaveLength(itemCount);
+                expect(res.body.total).toBe(total);
+            },
+
+            badRequest: (res) => {
+                expect(res.status).toBe(400);
+                expect(res.body).toHaveProperty('error');
+            },
         },
     };
 };
@@ -51,27 +61,27 @@ describe('GET /api/books', () => {
     });
 
     it('returns a paginated result with seeded books', async () => {
-        await driver.seedBook('Dune');
-        await driver.seedBook('Foundation');
+        await driver.given.book('Dune');
+        await driver.given.book('Foundation');
 
-        const res = await driver.listBooks();
+        const res = await driver.get.books();
 
-        driver.assertPaginatedResult(res, 2, 2);
+        driver.assert.paginatedResult(res, 2, 2);
     });
 
     it('filters by shelfId, sortBy, sortDir, and page via query params', async () => {
-        await driver.seedBook('Alpha');
-        await driver.seedBook('Beta');
-        await driver.seedBook('Gamma');
+        await driver.given.book('Alpha');
+        await driver.given.book('Beta');
+        await driver.given.book('Gamma');
 
-        const res = await driver.listBooks({ sortBy: 'Title', sortDir: 'Asc', page: '2', pageSize: '2' });
+        const res = await driver.get.books({ sortBy: 'Title', sortDir: 'Asc', page: '2', pageSize: '2' });
 
-        driver.assertPaginatedResult(res, 1, 3);
+        driver.assert.paginatedResult(res, 1, 3);
     });
 
     it('returns 400 on an invalid sort field', async () => {
-        const res = await driver.listBooks({ sortBy: 'invalid' });
+        const res = await driver.get.books({ sortBy: 'invalid' });
 
-        driver.assertBadRequest(res);
+        driver.assert.badRequest(res);
     });
 });
