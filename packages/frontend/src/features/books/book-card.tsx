@@ -1,27 +1,70 @@
-import { Book } from '@reading-room/common';
+import { useState } from 'react';
 
+import { Book, ReadingStatus } from '@reading-room/common';
+
+import { patchBook } from '../../api/books.api.js';
 import { Column, Row } from '../../ui/box.js';
 import { BookListTestIds } from './book-list.test-ids.js';
-import { readingStatusLabelMap } from './book-list.utils.js';
+import { isReadingStatus, readingStatusLabelMap } from './book-list.utils.js';
 import styles from './book-card.module.scss';
 
 type BookCardProps = { book: Book };
 
-export const BookCard = ({ book }: BookCardProps): JSX.Element => (
-    <Column className={styles.card} data-testid={BookListTestIds.Card(book.id)}>
-        <h3 className={styles.title} data-testid={BookListTestIds.CardTitle(book.id)}>
-            {book.title}
-        </h3>
+export const BookCard = ({ book }: BookCardProps): JSX.Element => {
+    const [localBook, setLocalBook] = useState(book);
 
-        <Row className={styles.meta}>
-            <StatusBadge book={book} />
-            {book.rating !== undefined && <span>{book.rating} ★</span>}
-        </Row>
-    </Column>
-);
+    const handleStatusChange = async (newStatus: ReadingStatus): Promise<void> => {
+        const original = localBook;
+        setLocalBook({ ...localBook, status: newStatus });
 
-const StatusBadge = ({ book }: BookCardProps): JSX.Element => (
-    <span className={styles.status} data-testid={BookListTestIds.CardStatus(book.id)}>
-        {readingStatusLabelMap[book.status]}
-    </span>
-);
+        try {
+            const updated = await patchBook({
+                id: localBook.id,
+                updatedAt: String(localBook.updatedAt),
+                status: newStatus,
+            });
+            setLocalBook(updated);
+        } catch {
+            setLocalBook(original);
+        }
+    };
+
+    return (
+        <Column className={styles.card} data-testid={BookListTestIds.Card(localBook.id)}>
+            <h3 className={styles.title} data-testid={BookListTestIds.CardTitle(localBook.id)}>
+                {localBook.title}
+            </h3>
+
+            <Row className={styles.meta}>
+                <StatusSelect book={localBook} onStatusChange={handleStatusChange} />
+                {localBook.rating !== undefined && <span>{localBook.rating} ★</span>}
+            </Row>
+        </Column>
+    );
+};
+
+type StatusSelectProps = {
+    book: Book;
+    onStatusChange: (status: ReadingStatus) => Promise<void>;
+};
+
+const StatusSelect = ({ book, onStatusChange }: StatusSelectProps): JSX.Element => {
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+        if (isReadingStatus(e.target.value)) void onStatusChange(e.target.value);
+    };
+
+    return (
+        <select
+            value={book.status}
+            onChange={handleChange}
+            className={styles.status}
+            data-testid={BookListTestIds.CardStatus(book.id)}
+        >
+            {Object.values(ReadingStatus).map((s) => (
+                <option key={s} value={s}>
+                    {readingStatusLabelMap[s]}
+                </option>
+            ))}
+        </select>
+    );
+};

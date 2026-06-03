@@ -1,8 +1,10 @@
 import { BookQueryDto, BookSortField, ReadingStatus, SortDirection } from '@reading-room/common';
 
+const validReadingStatuses = new Set<string>(Object.values(ReadingStatus));
 const validSortFields = new Set<string>(Object.values(BookSortField));
 const validSortDirections = new Set<string>(Object.values(SortDirection));
 
+export const isReadingStatus = (value: string): value is ReadingStatus => validReadingStatuses.has(value);
 export const isBookSortField = (value: string): value is BookSortField => validSortFields.has(value);
 export const isSortDirection = (value: string): value is SortDirection => validSortDirections.has(value);
 
