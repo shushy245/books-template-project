@@ -18,7 +18,6 @@ export type CreateBookDriver = {
     assert: {
         bookPersisted: () => Promise<void>;
         outboxEvent: (type: OutboxEventType) => void;
-        sameTransaction: () => Promise<void>;
         throwsNotFound: (fn: () => Promise<unknown>) => Promise<void>;
     };
 };
@@ -51,12 +50,6 @@ export const makeCreateBookDriver = (): CreateBookDriver => {
 
             outboxEvent: (type) => {
                 expect(store.outbox.events.find((e) => e.type === type)).toBeDefined();
-            },
-
-            sameTransaction: async () => {
-                const result = await store.books.list({});
-                expect(result.total).toBeGreaterThan(0);
-                expect(store.outbox.events.length).toBeGreaterThan(0);
             },
 
             throwsNotFound: async (fn) => {

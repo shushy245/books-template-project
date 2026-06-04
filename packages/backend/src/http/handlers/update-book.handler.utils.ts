@@ -2,11 +2,11 @@ import { z } from 'zod';
 
 import { ReadingStatus, UpdateBookDto } from '@reading-room/common';
 
-const UpdateBookParamsSchema = z.object({
+export const UpdateBookParamsSchema = z.object({
     id: z.string().uuid(),
 });
 
-const UpdateBookBodySchema = z
+export const UpdateBookBodySchema = z
     .object({
         updatedAt: z.string().datetime(),
         status: z.nativeEnum(ReadingStatus).optional(),

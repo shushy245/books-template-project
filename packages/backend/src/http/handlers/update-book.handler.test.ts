@@ -27,6 +27,15 @@ describe('PATCH /api/books/:id', () => {
         driver.assert.updated(res, { rating: 5 });
     });
 
+    it('returns 404 when the book does not exist', async () => {
+        const res = await driver.patch.withId('00000000-0000-0000-0000-000000000000', {
+            updatedAt: new Date().toISOString(),
+            status: ReadingStatus.Reading,
+        });
+
+        driver.assert.notFound(res);
+    });
+
     it('returns 400 when updatedAt is missing from the body', async () => {
         const res = await driver.patch.withId('00000000-0000-0000-0000-000000000000', {
             status: ReadingStatus.Reading,

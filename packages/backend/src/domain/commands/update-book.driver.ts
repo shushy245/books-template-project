@@ -30,6 +30,7 @@ export const makeUpdateBookDriver = (): UpdateBookDriver => {
 
     const requireBook = (): Book => {
         if (lastBook === undefined) throw new Error('updateBook driver: call given.book() first');
+
         return lastBook;
     };
 

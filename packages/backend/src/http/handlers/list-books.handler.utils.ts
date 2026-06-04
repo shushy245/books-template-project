@@ -4,7 +4,7 @@ import { BookQueryDto, BookSortField, ReadingStatus, SortDirection } from '@read
 
 // .transform() builds BookQueryDto explicitly — setting only defined fields — to satisfy
 // exactOptionalPropertyTypes (which rejects `T | undefined` assigned to an optional `T` property).
-const BookQueryParamsSchema = z
+export const BookQueryParamsSchema = z
     .object({
         shelfId: z.string().optional(),
         status: z.nativeEnum(ReadingStatus).optional(),

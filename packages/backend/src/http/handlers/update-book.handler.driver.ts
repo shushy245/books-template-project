@@ -34,6 +34,7 @@ export const makeUpdateBookDriver = (): UpdateBookDriver => {
 
     const book = (): Book => {
         if (lastBook === undefined) throw new Error('driver: call given.book() first');
+
         return lastBook;
     };
 

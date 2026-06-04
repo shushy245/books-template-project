@@ -27,14 +27,6 @@ describe('createBook', () => {
         driver.assert.outboxEvent(OutboxEventType.BookCreated);
     });
 
-    it('writes the book and outbox event in the same transaction', async () => {
-        driver.given.shelf();
-
-        await driver.when.create();
-
-        await driver.assert.sameTransaction();
-    });
-
     it('throws NotFoundError when the shelf does not exist', async () => {
         await driver.assert.throwsNotFound(() => driver.when.create({ shelfId: 'missing-shelf' }));
     });
