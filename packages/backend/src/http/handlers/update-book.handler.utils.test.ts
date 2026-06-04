@@ -1,42 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, it } from 'vitest';
 
 import { ReadingStatus } from '@reading-room/common';
 
-import { parseUpdateBookBody, parseUpdateBookParams } from './update-book.handler.utils.js';
-
-type ParseDriver = {
-    assert: {
-        bodyParsed: (raw: Record<string, unknown>, expected: Record<string, unknown>) => void;
-        paramsParsed: (raw: Record<string, unknown>, expected: { id: string }) => void;
-        bodyRejects: (raw: Record<string, unknown>) => void;
-        paramsReject: (raw: Record<string, unknown>) => void;
-    };
-};
-
-const makeParseDriver = (): ParseDriver => ({
-    assert: {
-        bodyParsed: (raw, expected) => {
-            const result = parseUpdateBookBody(raw);
-            expect(result).toMatchObject(expected);
-            expect(result.updatedAt).toBeInstanceOf(Date);
-        },
-
-        paramsParsed: (raw, expected) => {
-            expect(parseUpdateBookParams(raw)).toEqual(expected);
-        },
-
-        bodyRejects: (raw) => {
-            expect(() => parseUpdateBookBody(raw)).toThrow();
-        },
-
-        paramsReject: (raw) => {
-            expect(() => parseUpdateBookParams(raw)).toThrow();
-        },
-    },
-});
+import { ParseUpdateBookDriver, makeParseUpdateBookDriver } from './update-book.handler.utils.driver.js';
 
 describe('parseUpdateBookBody', () => {
-    const driver = makeParseDriver();
+    const driver: ParseUpdateBookDriver = makeParseUpdateBookDriver();
 
     it('parses updatedAt as a Date', () => {
         driver.assert.bodyParsed({ updatedAt: '2024-01-01T00:00:00.000Z' }, {});
@@ -67,7 +36,7 @@ describe('parseUpdateBookBody', () => {
 });
 
 describe('parseUpdateBookParams', () => {
-    const driver = makeParseDriver();
+    const driver: ParseUpdateBookDriver = makeParseUpdateBookDriver();
 
     it('parses a valid uuid', () => {
         driver.assert.paramsParsed(

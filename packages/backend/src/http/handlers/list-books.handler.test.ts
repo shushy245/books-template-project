@@ -1,57 +1,6 @@
-import type { Response } from 'supertest';
-import request from 'supertest';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, it } from 'vitest';
 
-import { buildApp } from '../../app.js';
-import { aBook } from '../../testing/builders/book.js';
-import { FakeStore } from '../../testing/fake-store.js';
-import { makeFakeLogger } from '../../testing/fake-logger.js';
-
-type ListBooksDriver = {
-    given: {
-        book: (title: string) => Promise<void>;
-    };
-    get: {
-        books: (query?: Record<string, string>) => Promise<Response>;
-    };
-    assert: {
-        paginatedResult: (res: Response, itemCount: number, total: number) => void;
-        badRequest: (res: Response) => void;
-    };
-};
-
-const makeListBooksDriver = (): ListBooksDriver => {
-    const store = new FakeStore();
-    const app = buildApp({ store, logger: makeFakeLogger() });
-
-    return {
-        given: {
-            book: async (title) => {
-                await store.books.insert(aBook({ title }).buildDTO());
-            },
-        },
-
-        get: {
-            books: (query = {}) => {
-                const qs = new URLSearchParams(query).toString();
-                return request(app).get(`/api/books${qs ? `?${qs}` : ''}`);
-            },
-        },
-
-        assert: {
-            paginatedResult: (res, itemCount, total) => {
-                expect(res.status).toBe(200);
-                expect(res.body.items).toHaveLength(itemCount);
-                expect(res.body.total).toBe(total);
-            },
-
-            badRequest: (res) => {
-                expect(res.status).toBe(400);
-                expect(res.body).toHaveProperty('error');
-            },
-        },
-    };
-};
+import { ListBooksDriver, makeListBooksDriver } from './list-books.handler.driver.js';
 
 describe('GET /api/books', () => {
     let driver: ListBooksDriver;
