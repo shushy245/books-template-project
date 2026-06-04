@@ -13,9 +13,9 @@ type UpdateBookDeps = {
 };
 
 export const makeUpdateBookHandler =
-    (deps: UpdateBookDeps): RequestHandler =>
+    ({ store, logger }: UpdateBookDeps): RequestHandler =>
     async (req: Request, res: Response): Promise<void> => {
-        deps.logger.info({}, 'updateBook: handler started', { id: req.params['id'] });
+        logger.info({}, 'updateBook: handler started', { id: req.params['id'] });
 
         const paramsResult = parseSafe(() => parseUpdateBookParams(req.params));
         if (paramsResult.error !== undefined) {
@@ -30,7 +30,7 @@ export const makeUpdateBookHandler =
         }
 
         try {
-            const book = await updateBook(deps, { id: paramsResult.data.id, ...bodyResult.data });
+            const book = await updateBook({ store, logger }, { id: paramsResult.data.id, ...bodyResult.data });
             res.json(book);
         } catch (err) {
             if (err instanceof Error) {

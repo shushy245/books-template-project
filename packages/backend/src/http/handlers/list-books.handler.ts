@@ -12,9 +12,9 @@ type ListBooksDeps = {
 };
 
 export const makeListBooksHandler =
-    (deps: ListBooksDeps): RequestHandler =>
+    ({ store, logger }: ListBooksDeps): RequestHandler =>
     async (req: Request, res: Response): Promise<void> => {
-        deps.logger.info({}, 'listBooks: started');
+        logger.info({}, 'listBooks: started');
 
         const queryResult = parseBookQuerySafe(req.query);
         if (queryResult.error !== undefined) {
@@ -22,7 +22,7 @@ export const makeListBooksHandler =
             return;
         }
 
-        const result = await listBooks({ bookRepo: deps.store.books }, queryResult.data);
+        const result = await listBooks({ bookRepo: store.books }, queryResult.data);
         res.json(result);
     };
 

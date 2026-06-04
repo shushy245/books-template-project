@@ -10,10 +10,10 @@ type UpdateBookDeps = {
     logger: LoggerPort;
 };
 
-export const updateBook = async (deps: UpdateBookDeps, dto: UpdateBookDto): Promise<Book> => {
-    deps.logger.info({}, 'updateBook: started', { bookId: dto.id });
+export const updateBook = async ({ store, logger }: UpdateBookDeps, dto: UpdateBookDto): Promise<Book> => {
+    logger.info({}, 'updateBook: started', { bookId: dto.id });
 
-    const current = await deps.store.books.findById(dto.id);
+    const current = await store.books.findById(dto.id);
     if (current === undefined) {
         throw new NotFoundError(notFoundMessage('updateBook', EntityKind.Book, dto.id));
     }
@@ -32,7 +32,7 @@ export const updateBook = async (deps: UpdateBookDeps, dto: UpdateBookDto): Prom
         );
     }
 
-    deps.logger.info({}, 'updateBook: validation passed, writing update', { bookId: dto.id });
+    logger.info({}, 'updateBook: validation passed, writing update', { bookId: dto.id });
 
-    return deps.store.books.updateWithToken(dto);
+    return store.books.updateWithToken(dto);
 };

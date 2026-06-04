@@ -9,16 +9,16 @@ export type AppDeps = {
     logger: LoggerPort;
 };
 
-export const buildApp = (deps: AppDeps): Application => {
+export const buildApp = ({ store, logger }: AppDeps): Application => {
     const app = express();
     app.use(json());
 
     app.get('/health', (req, res) => {
-        deps.logger.info({}, 'health: started');
+        logger.info({}, 'health: started');
         res.json({ status: 'ok' });
     });
 
-    app.use('/api', buildRouter(deps));
+    app.use('/api', buildRouter({ store, logger }));
 
     return app;
 };

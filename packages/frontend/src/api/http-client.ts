@@ -22,11 +22,13 @@ const normaliseNulls = (value: unknown): unknown => {
     if (isPlainObject(value)) {
         return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, normaliseNulls(v)]));
     }
+
     return value;
 };
 
 httpClient.interceptors.response.use((response) => {
     // Axios types response.data as `any` — safe to assign here at the null-normalisation boundary.
     response.data = normaliseNulls(response.data);
+
     return response;
 });

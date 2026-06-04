@@ -6,5 +6,5 @@ type ListBooksDeps = {
     bookRepo: BookRepositoryPort;
 };
 
-export const listBooks = (deps: ListBooksDeps, query: BookQueryDto): Promise<PaginatedResult<Book>> =>
-    deps.bookRepo.list(query);
+export const listBooks = ({ bookRepo }: ListBooksDeps, query: BookQueryDto): Promise<PaginatedResult<Book>> =>
+    bookRepo.list(query);

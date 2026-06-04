@@ -16,5 +16,6 @@ type DbConfig = {
 export const createDb = (config: DbConfig): { pool: Pool; db: Db } => {
     const pool = new Pool(config);
     const db = drizzle(pool, { schema });
+
     return { pool, db };
 };

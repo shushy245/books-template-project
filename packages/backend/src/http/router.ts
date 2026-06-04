@@ -10,11 +10,11 @@ type RouterDeps = {
     logger: LoggerPort;
 };
 
-export const buildRouter = (deps: RouterDeps): Router => {
+export const buildRouter = ({ store, logger }: RouterDeps): Router => {
     const router = Router();
 
-    router.get('/books', makeListBooksHandler({ store: deps.store, logger: deps.logger }));
-    router.patch('/books/:id', makeUpdateBookHandler({ store: deps.store, logger: deps.logger }));
+    router.get('/books', makeListBooksHandler({ store, logger }));
+    router.patch('/books/:id', makeUpdateBookHandler({ store, logger }));
 
     return router;
 };

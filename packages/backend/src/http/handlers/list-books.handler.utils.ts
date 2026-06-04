@@ -21,6 +21,7 @@ const BookQueryParamsSchema = z
         if (data.sortDir !== undefined) dto.sortDir = data.sortDir;
         if (data.page !== undefined) dto.page = data.page;
         if (data.pageSize !== undefined) dto.pageSize = data.pageSize;
+
         return dto;
     });
 

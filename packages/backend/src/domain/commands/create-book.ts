@@ -9,18 +9,18 @@ type CreateBookDeps = {
     logger: LoggerPort;
 };
 
-export const createBook = async (deps: CreateBookDeps, dto: CreateBookDto): Promise<Book> => {
-    deps.logger.info({}, 'createBook: started', { shelfId: dto.shelfId });
+export const createBook = async ({ store, logger }: CreateBookDeps, dto: CreateBookDto): Promise<Book> => {
+    logger.info({}, 'createBook: started', { shelfId: dto.shelfId });
 
-    const shelf = await deps.store.shelves.findById(dto.shelfId);
+    const shelf = await store.shelves.findById(dto.shelfId);
     if (shelf === undefined) {
-        deps.logger.info({}, 'createBook: shelf not found', { shelfId: dto.shelfId });
+        logger.info({}, 'createBook: shelf not found', { shelfId: dto.shelfId });
         throw new NotFoundError(notFoundMessage('createBook', EntityKind.Shelf, dto.shelfId));
     }
 
-    deps.logger.info({}, 'createBook: shelf validated, writing book and outbox event');
+    logger.info({}, 'createBook: shelf validated, writing book and outbox event');
 
-    return deps.store.transaction(async ({ books, outbox }) => {
+    return store.transaction(async ({ books, outbox }) => {
         const book = await books.insert(dto);
 
         await outbox.append({
@@ -29,7 +29,7 @@ export const createBook = async (deps: CreateBookDeps, dto: CreateBookDto): Prom
             payload: { bookId: book.id, title: book.title, status: book.status },
         });
 
-        deps.logger.info({}, 'createBook: book created', { bookId: book.id });
+        logger.info({}, 'createBook: book created', { bookId: book.id });
 
         return book;
     });

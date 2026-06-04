@@ -16,6 +16,7 @@ export const useBookListContext = (): BookListContextValue => {
     if (ctx === undefined) {
         throw new Error('useBookListContext: must be used inside BookListProvider');
     }
+
     return ctx;
 };
 
