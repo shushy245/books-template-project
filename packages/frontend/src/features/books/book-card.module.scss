@@ -24,3 +24,18 @@
   background: #f0f0f0;
   font-size: 0.75rem;
 }
+
+.deleteButton {
+  margin-left: auto;
+  padding: 2px 8px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #c00;
+  font-size: 0.75rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #fee;
+  }
+}

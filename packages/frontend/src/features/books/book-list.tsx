@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import { PaginatedResult, Book } from '@reading-room/common';
 
+import { deleteBook } from '../../api/books.api.js';
 import { Column, Row } from '../../ui/box.js';
 import { RestfulWrapper } from '../../data/restful-wrapper.js';
 import { useBooks } from '../../data/use-books.js';
@@ -10,11 +13,33 @@ import styles from './book-list.module.scss';
 
 export const BookList = (): JSX.Element => {
     const { query, setPage } = useBookListContext();
-    const { data, loading, error } = useBooks(query);
+    const { data, loading, error, refetch } = useBooks(query);
+    const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
+
+    const handleDelete = (id: string): void => {
+        setHiddenIds((prev) => new Set([...prev, id]));
+        deleteBook(id).catch(() => {
+            setHiddenIds((prev) => {
+                const next = new Set(prev);
+                next.delete(id);
+
+                return next;
+            });
+            refetch();
+        });
+    };
 
     return (
         <RestfulWrapper loading={loading} error={error} data={data}>
-            {(result) => <BookListContent result={result} page={query.page ?? 1} onPageChange={setPage} />}
+            {(result) => (
+                <BookListContent
+                    result={result}
+                    page={query.page ?? 1}
+                    onPageChange={setPage}
+                    hiddenIds={hiddenIds}
+                    onDelete={handleDelete}
+                />
+            )}
         </RestfulWrapper>
     );
 };
@@ -23,10 +48,14 @@ type BookListContentProps = {
     result: PaginatedResult<Book>;
     page: number;
     onPageChange: (page: number) => void;
+    hiddenIds: Set<string>;
+    onDelete: (id: string) => void;
 };
 
-const BookListContent = ({ result, page, onPageChange }: BookListContentProps): JSX.Element => {
-    if (result.items.length === 0) {
+const BookListContent = ({ result, page, onPageChange, hiddenIds, onDelete }: BookListContentProps): JSX.Element => {
+    const visibleItems = result.items.filter((b) => !hiddenIds.has(b.id));
+
+    if (visibleItems.length === 0) {
         return (
             <p className={styles.empty} data-testid={BookListTestIds.EmptyState}>
                 No books yet.
@@ -39,8 +68,8 @@ const BookListContent = ({ result, page, onPageChange }: BookListContentProps): 
     return (
         <Column>
             <Column className={styles.list} data-testid={BookListTestIds.List}>
-                {result.items.map((book) => (
-                    <BookCard key={book.id} book={book} />
+                {visibleItems.map((book) => (
+                    <BookCard key={book.id} book={book} onDelete={onDelete} />
                 ))}
             </Column>
 

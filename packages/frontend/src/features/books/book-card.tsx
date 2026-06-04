@@ -8,10 +8,14 @@ import { BookListTestIds } from './book-list.test-ids.js';
 import { isReadingStatus, readingStatusLabelMap } from './book-list.utils.js';
 import styles from './book-card.module.scss';
 
-type BookCardProps = { book: Book };
+type BookCardProps = { book: Book; onDelete: (id: string) => void };
 
-export const BookCard = ({ book }: BookCardProps): JSX.Element => {
+export const BookCard = ({ book, onDelete }: BookCardProps): JSX.Element => {
     const [localBook, setLocalBook] = useState(book);
+
+    const handleDelete = (): void => {
+        onDelete(localBook.id);
+    };
 
     const handleStatusChange = async (newStatus: ReadingStatus): Promise<void> => {
         const original = localBook;
@@ -38,6 +42,13 @@ export const BookCard = ({ book }: BookCardProps): JSX.Element => {
             <Row className={styles.meta}>
                 <StatusSelect book={localBook} onStatusChange={handleStatusChange} />
                 {localBook.rating !== undefined && <span>{localBook.rating} ★</span>}
+                <button
+                    className={styles.deleteButton}
+                    onClick={handleDelete}
+                    data-testid={BookListTestIds.CardDeleteButton(localBook.id)}
+                >
+                    Delete
+                </button>
             </Row>
         </Column>
     );

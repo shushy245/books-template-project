@@ -26,3 +26,7 @@ export const patchBook = async (req: UpdateBookRequest): Promise<Book> => {
 
     return response.data;
 };
+
+export const deleteBook = async (id: string): Promise<void> => {
+    await httpClient.delete(`/books/${id}`);
+};
