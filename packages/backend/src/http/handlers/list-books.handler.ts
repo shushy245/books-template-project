@@ -14,9 +14,9 @@ type ListBooksDeps = {
 
 export const makeListBooksHandler =
     ({ store, logger }: ListBooksDeps): RequestHandler =>
-    async (req: ValidatedRequest<BookQueryDto>, res: Response): Promise<void> => {
+    async (req: ValidatedRequest<{ query: BookQueryDto }>, res: Response): Promise<void> => {
         logger.info({}, 'listBooks: started');
 
-        const result = await listBooks({ bookRepo: store.books }, req.validated!);
+        const result = await listBooks({ bookRepo: store.books }, req.validated!.query);
         res.json(result);
     };

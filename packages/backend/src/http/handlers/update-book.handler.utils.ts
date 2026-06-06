@@ -20,6 +20,11 @@ export const UpdateBookBodySchema = z
         return result;
     });
 
+export const UpdateBookRequestSchema = z.object({
+    params: UpdateBookParamsSchema,
+    body: UpdateBookBodySchema,
+});
+
 export const parseUpdateBookParams = (raw: unknown): { id: string } => UpdateBookParamsSchema.parse(raw);
 
 export const parseUpdateBookBody = (raw: unknown): Omit<UpdateBookDto, 'id'> => UpdateBookBodySchema.parse(raw);

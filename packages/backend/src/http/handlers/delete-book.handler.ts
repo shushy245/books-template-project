@@ -13,8 +13,8 @@ type DeleteBookDeps = {
 
 export const makeDeleteBookHandler =
     ({ store, logger }: DeleteBookDeps): RequestHandler =>
-    async (req: ValidatedRequest<{ id: string }>, res: Response): Promise<void> => {
-        const { id } = req.validated!;
+    async (req: ValidatedRequest<{ params: { id: string } }>, res: Response): Promise<void> => {
+        const { id } = req.validated!.params;
         logger.info({}, 'deleteBook: handler started', { id });
 
         try {

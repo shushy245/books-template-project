@@ -25,4 +25,6 @@ export const BookQueryParamsSchema = z
         return dto;
     });
 
+export const ListBooksRequestSchema = z.object({ query: BookQueryParamsSchema });
+
 export const parseBookQuery = (raw: unknown): BookQueryDto => BookQueryParamsSchema.parse(raw);

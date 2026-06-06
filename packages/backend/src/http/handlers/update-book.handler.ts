@@ -13,14 +13,12 @@ type UpdateBookDeps = {
     logger: LoggerPort;
 };
 
-type UpdateBookValidated = {
-    params: { id: string };
-    body: Omit<UpdateBookDto, 'id'>;
-};
-
 export const makeUpdateBookHandler =
     ({ store, logger }: UpdateBookDeps): RequestHandler =>
-    async (req: ValidatedRequest<UpdateBookValidated>, res: Response): Promise<void> => {
+    async (
+        req: ValidatedRequest<{ params: { id: string }; body: Omit<UpdateBookDto, 'id'> }>,
+        res: Response,
+    ): Promise<void> => {
         const { params, body } = req.validated!;
         logger.info({}, 'updateBook: handler started', { id: params.id });
 
