@@ -8,6 +8,7 @@ import { outbox } from '../../db/schema.js';
 import { OutboxEvent, OutboxRecord, OutboxRepositoryPort } from '../../domain/ports/outbox-repository.port.js';
 
 const OutboxEventTypeSchema = z.nativeEnum(OutboxEventType);
+const OutboxPayloadSchema = z.record(z.string(), z.unknown());
 
 const FETCH_LIMIT = 100;
 
@@ -34,7 +35,7 @@ export class OutboxRepository implements OutboxRepositoryPort {
             id: row.id,
             aggregateId: row.aggregateId,
             type: OutboxEventTypeSchema.parse(row.type),
-            payload: row.payload as Record<string, unknown>,
+            payload: OutboxPayloadSchema.parse(row.payload),
             processedAt: row.processedAt ?? undefined,
         }));
     }

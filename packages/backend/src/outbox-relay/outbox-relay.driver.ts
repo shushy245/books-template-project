@@ -71,9 +71,7 @@ export const makeOutboxRelayDriver = (): OutboxRelayDriver => {
             },
 
             loggedError: (outboxId) => {
-                const entry = logger.entries.find(
-                    (e) => e.level === 'error' && e.fields?.['outboxId'] === outboxId,
-                );
+                const entry = logger.entries.find((e) => e.level === 'error' && e.fields?.['outboxId'] === outboxId);
                 expect(entry).toBeDefined();
             },
         },

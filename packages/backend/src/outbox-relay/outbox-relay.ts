@@ -31,7 +31,10 @@ export const pollOutbox = async ({ store, logger }: OutboxRelayDeps): Promise<vo
     }
 };
 
-export const startOutboxRelay = (deps: OutboxRelayDeps, { intervalMs = 5000 }: { intervalMs?: number } = {}): () => Promise<void> => {
+export const startOutboxRelay = (
+    deps: OutboxRelayDeps,
+    { intervalMs = 5000 }: { intervalMs?: number } = {},
+): (() => Promise<void>) => {
     let polling = false;
     let currentPoll: Promise<void> = Promise.resolve();
 

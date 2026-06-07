@@ -1,8 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run *)",
-      "Bash(npm outdated *)"
+      "Bash(xargs ls -la)",
+      "Bash(kill %1)",
+      "Bash(curl -s \"http://localhost:3000/api/books?sortBy=CreatedAt&sortDir=Desc&page=1&pageSize=20\")",
+      "Bash(psql -h localhost -p 5432 -U reading_room -d reading_room -c \"SELECT count\\(*\\) FROM books;\")",
+      "Bash(curl -s \"http://localhost:3000/api/health\")",
+      "Bash(PGPASSWORD=reading_room psql -h localhost -p 5432 -U reading_room -d reading_room -c \"\\\\d books;\")"
     ]
   },
   "hooks": {

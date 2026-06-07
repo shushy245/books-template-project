@@ -47,5 +47,9 @@ const shutdown = async (signal: string): Promise<void> => {
     process.exit(0);
 };
 
-process.on('SIGTERM', () => { shutdown('SIGTERM').catch(console.error); });
-process.on('SIGINT', () => { shutdown('SIGINT').catch(console.error); });
+process.on('SIGTERM', () => {
+    shutdown('SIGTERM').catch(console.error);
+});
+process.on('SIGINT', () => {
+    shutdown('SIGINT').catch(console.error);
+});
