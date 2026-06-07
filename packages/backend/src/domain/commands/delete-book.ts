@@ -24,7 +24,7 @@ export const deleteBook = async ({ store, logger }: DeleteBookDeps, id: string):
             type: OutboxEventType.BookDeleted,
             payload: { bookId: id, title: book.title },
         });
-    });
 
-    logger.info({}, 'deleteBook: book deleted', { bookId: id });
+        logger.info({}, 'deleteBook: book deleted', { bookId: id });
+    });
 };

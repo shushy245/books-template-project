@@ -40,7 +40,7 @@ export const updateBook = async ({ store, logger }: UpdateBookDeps, dto: UpdateB
         await outbox.append({
             aggregateId: updated.id,
             type: OutboxEventType.BookUpdated,
-            payload: { bookId: updated.id, title: updated.title, status: updated.status, rating: updated.rating ?? undefined },
+            payload: { bookId: updated.id, title: updated.title, status: updated.status, rating: updated.rating },
         });
 
         logger.info({}, 'updateBook: book updated', { bookId: updated.id });
