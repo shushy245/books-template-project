@@ -1,10 +1,15 @@
 import { eq, isNull } from 'drizzle-orm';
+import { z } from 'zod';
 
 import { OutboxEventType } from '@reading-room/common';
 
 import { Db } from '../../db/client.js';
 import { outbox } from '../../db/schema.js';
 import { OutboxEvent, OutboxRecord, OutboxRepositoryPort } from '../../domain/ports/outbox-repository.port.js';
+
+const OutboxEventTypeSchema = z.nativeEnum(OutboxEventType);
+
+const FETCH_LIMIT = 100;
 
 export class OutboxRepository implements OutboxRepositoryPort {
     constructor(private readonly db: Db) {}
@@ -22,12 +27,13 @@ export class OutboxRepository implements OutboxRepositoryPort {
             .select()
             .from(outbox)
             .where(isNull(outbox.processedAt))
-            .orderBy(outbox.createdAt);
+            .orderBy(outbox.createdAt)
+            .limit(FETCH_LIMIT);
 
         return rows.map((row) => ({
             id: row.id,
             aggregateId: row.aggregateId,
-            type: row.type as OutboxEventType,
+            type: OutboxEventTypeSchema.parse(row.type),
             payload: row.payload as Record<string, unknown>,
             processedAt: row.processedAt ?? undefined,
         }));

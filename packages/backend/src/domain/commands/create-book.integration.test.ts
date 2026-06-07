@@ -12,6 +12,7 @@ import { Store } from '../../adapters/store.js';
 import { StorePort } from '../ports/store.port.js';
 import { aBook } from '../../testing/builders/book.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
+import { FakeOutboxRepository } from '../../testing/fake-outbox.repository.js';
 import { createBook } from './create-book.js';
 
 const makeTestDb = (): { pool: Pool; db: Db } =>
@@ -79,11 +80,7 @@ describe('createBook integration', () => {
                     updatedAt: new Date(),
                 }),
             },
-            outbox: {
-                append: async () => {},
-                fetchUnprocessed: async () => [],
-                markProcessed: async () => {},
-            },
+            outbox: new FakeOutboxRepository(),
             transaction: (work) =>
                 db.transaction(async (tx) =>
                     work({
