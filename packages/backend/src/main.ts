@@ -31,16 +31,21 @@ const store = new Store(db);
 const app = buildApp({ store, logger });
 const port = Number(process.env['PORT'] ?? 3000);
 
-const relayIntervalMs = Number(process.env['OUTBOX_RELAY_INTERVAL_MS'] ?? 5000);
+// || rather than ?? so an empty-string env var falls back to the default
+// instead of producing 0 (which would make setInterval fire on every tick).
+const relayIntervalMs = Number(process.env['OUTBOX_RELAY_INTERVAL_MS'] || 5000);
 const stopRelay = startOutboxRelay({ store, logger }, { intervalMs: relayIntervalMs });
+logger.info({ intervalMs: relayIntervalMs }, 'main: outbox relay started');
 
 app.listen(port, () => {
     logger.info({ port }, 'main: server started');
-    logger.info({ intervalMs: relayIntervalMs }, 'main: outbox relay started');
 });
 
-process.on('SIGTERM', () => {
-    logger.info({}, 'main: SIGTERM received, stopping relay');
-    stopRelay();
+const shutdown = async (signal: string): Promise<void> => {
+    logger.info({}, `main: ${signal} received, draining relay`);
+    await stopRelay();
     process.exit(0);
-});
+};
+
+process.on('SIGTERM', () => { shutdown('SIGTERM').catch(console.error); });
+process.on('SIGINT', () => { shutdown('SIGINT').catch(console.error); });

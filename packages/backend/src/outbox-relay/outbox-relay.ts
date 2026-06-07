@@ -31,13 +31,14 @@ export const pollOutbox = async ({ store, logger }: OutboxRelayDeps): Promise<vo
     }
 };
 
-export const startOutboxRelay = (deps: OutboxRelayDeps, { intervalMs = 5000 }: { intervalMs?: number } = {}): () => void => {
+export const startOutboxRelay = (deps: OutboxRelayDeps, { intervalMs = 5000 }: { intervalMs?: number } = {}): () => Promise<void> => {
     let polling = false;
+    let currentPoll: Promise<void> = Promise.resolve();
 
     const handle = setInterval(() => {
         if (polling) return;
         polling = true;
-        pollOutbox(deps)
+        currentPoll = pollOutbox(deps)
             .catch((err: unknown) => {
                 deps.logger.error({}, 'pollOutbox: poll error', { error: String(err) });
             })
@@ -46,5 +47,8 @@ export const startOutboxRelay = (deps: OutboxRelayDeps, { intervalMs = 5000 }: {
             });
     }, intervalMs);
 
-    return () => clearInterval(handle);
+    return () => {
+        clearInterval(handle);
+        return currentPoll;
+    };
 };
