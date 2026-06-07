@@ -4,6 +4,7 @@
 import { buildApp } from './app.js';
 import { Store } from './adapters/store.js';
 import { createDb } from './db/client.js';
+import { startOutboxRelay } from './outbox-relay/outbox-relay.js';
 
 // TODO (S8 T8.1): replace with the real OTel-backed structured logger.
 const logger = {
@@ -26,9 +27,20 @@ const { db } = createDb({
     database: process.env['DB_NAME'] ?? 'reading_room',
 });
 
-const app = buildApp({ store: new Store(db), logger });
+const store = new Store(db);
+const app = buildApp({ store, logger });
 const port = Number(process.env['PORT'] ?? 3000);
+
+const relayIntervalMs = Number(process.env['OUTBOX_RELAY_INTERVAL_MS'] ?? 5000);
+const stopRelay = startOutboxRelay({ store, logger }, { intervalMs: relayIntervalMs });
 
 app.listen(port, () => {
     logger.info({ port }, 'main: server started');
+    logger.info({ intervalMs: relayIntervalMs }, 'main: outbox relay started');
+});
+
+process.on('SIGTERM', () => {
+    logger.info({}, 'main: SIGTERM received, stopping relay');
+    stopRelay();
+    process.exit(0);
 });
