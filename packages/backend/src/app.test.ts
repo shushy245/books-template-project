@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from 'vitest';
 
 import { HealthDriver, makeHealthDriver } from './app.driver.js';
 
-describe('GET /health', () => {
+describe('GET /api/health', () => {
     let driver: HealthDriver;
 
     beforeEach(() => {

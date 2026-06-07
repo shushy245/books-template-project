@@ -22,7 +22,7 @@ export const makeHealthDriver = (): HealthDriver => {
 
     return {
         get: {
-            health: () => request(app).get('/health'),
+            health: () => request(app).get('/api/health'),
         },
 
         assert: {

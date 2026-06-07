@@ -13,7 +13,7 @@ export const buildApp = ({ store, logger }: AppDeps): Application => {
     const app = express();
     app.use(json());
 
-    app.get('/health', (req, res) => {
+    app.get('/api/health', (_req, res) => {
         logger.info({}, 'health: started');
         res.json({ status: 'ok' });
     });
