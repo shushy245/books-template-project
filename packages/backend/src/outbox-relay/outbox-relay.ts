@@ -12,23 +12,38 @@ export const pollOutbox = async ({ store, logger }: OutboxRelayDeps): Promise<vo
     logger.info({}, 'pollOutbox: poll', { count: records.length });
 
     for (const record of records) {
-        logger.info({}, `pollOutbox: dispatching ${record.type}`, {
-            outboxId: record.id,
-            aggregateId: record.aggregateId,
-            type: record.type,
-        });
+        try {
+            logger.info({}, 'pollOutbox: dispatching', {
+                outboxId: record.id,
+                aggregateId: record.aggregateId,
+                type: record.type,
+            });
 
-        await store.outbox.markProcessed(record.id);
+            await store.outbox.markProcessed(record.id);
 
-        logger.info({}, 'pollOutbox: marked processed', { outboxId: record.id });
+            logger.info({}, 'pollOutbox: marked processed', { outboxId: record.id });
+        } catch (err: unknown) {
+            logger.error({}, 'pollOutbox: failed to process record', {
+                outboxId: record.id,
+                error: String(err),
+            });
+        }
     }
 };
 
 export const startOutboxRelay = (deps: OutboxRelayDeps, { intervalMs = 5000 }: { intervalMs?: number } = {}): () => void => {
+    let polling = false;
+
     const handle = setInterval(() => {
-        pollOutbox(deps).catch((err: unknown) => {
-            deps.logger.error({}, 'pollOutbox: poll error', { error: String(err) });
-        });
+        if (polling) return;
+        polling = true;
+        pollOutbox(deps)
+            .catch((err: unknown) => {
+                deps.logger.error({}, 'pollOutbox: poll error', { error: String(err) });
+            })
+            .finally(() => {
+                polling = false;
+            });
     }, intervalMs);
 
     return () => clearInterval(handle);

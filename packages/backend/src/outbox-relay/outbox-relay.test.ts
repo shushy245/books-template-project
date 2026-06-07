@@ -38,17 +38,23 @@ describe('pollOutbox', () => {
         await driver.assert.noUnprocessedEvents();
     });
 
-    it('leaves unprocessed events untouched when there are none to process', async () => {
-        await driver.when.poll();
-
-        await driver.assert.noUnprocessedEvents();
-    });
-
-    it('logs a dispatch entry for each event type processed', async () => {
+    it('logs a dispatch entry containing the event type for each processed event', async () => {
         await driver.given.unprocessedEvent(OutboxEventType.BookCreated);
 
         await driver.when.poll();
 
         driver.assert.loggedDispatch(OutboxEventType.BookCreated);
+    });
+
+    it('continues processing subsequent records when one record fails to mark processed', async () => {
+        const failingId = await driver.given.unprocessedEvent(OutboxEventType.BookCreated);
+        await driver.given.unprocessedEvent(OutboxEventType.BookUpdated);
+
+        driver.given.failingMarkProcessedFor(failingId);
+
+        await driver.when.poll();
+
+        driver.assert.loggedError(failingId);
+        await driver.assert.unprocessedCount(1);
     });
 });

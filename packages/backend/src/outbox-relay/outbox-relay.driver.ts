@@ -8,7 +8,8 @@ import { pollOutbox } from './outbox-relay.js';
 
 export type OutboxRelayDriver = {
     given: {
-        unprocessedEvent: (type: OutboxEventType) => Promise<void>;
+        unprocessedEvent: (type: OutboxEventType, aggregateId?: string) => Promise<string>;
+        failingMarkProcessedFor: (outboxId: string) => void;
     };
     when: {
         poll: () => Promise<void>;
@@ -17,6 +18,7 @@ export type OutboxRelayDriver = {
         noUnprocessedEvents: () => Promise<void>;
         unprocessedCount: (count: number) => Promise<void>;
         loggedDispatch: (type: OutboxEventType) => void;
+        loggedError: (outboxId: string) => void;
     };
 };
 
@@ -26,12 +28,21 @@ export const makeOutboxRelayDriver = (): OutboxRelayDriver => {
 
     return {
         given: {
-            unprocessedEvent: async (type) => {
+            unprocessedEvent: async (type, aggregateId = 'aggregate-1') => {
                 await store.outbox.append({
-                    aggregateId: 'aggregate-1',
+                    aggregateId,
                     type,
-                    payload: { bookId: 'aggregate-1' },
+                    payload: { bookId: aggregateId },
                 });
+                const records = await store.outbox.fetchUnprocessed();
+                const last = records[records.length - 1];
+                if (last === undefined) throw new Error('outbox relay driver: append produced no record');
+
+                return last.id;
+            },
+
+            failingMarkProcessedFor: (outboxId) => {
+                store.outbox.failOnMarkProcessed.add(outboxId);
             },
         },
 
@@ -53,7 +64,17 @@ export const makeOutboxRelayDriver = (): OutboxRelayDriver => {
             },
 
             loggedDispatch: (type) => {
-                expect(logger.entries.some((e) => e.message.includes(type))).toBe(true);
+                const dispatched = logger.entries.find(
+                    (e) => e.message === 'pollOutbox: dispatching' && e.fields?.['type'] === type,
+                );
+                expect(dispatched).toBeDefined();
+            },
+
+            loggedError: (outboxId) => {
+                const entry = logger.entries.find(
+                    (e) => e.level === 'error' && e.fields?.['outboxId'] === outboxId,
+                );
+                expect(entry).toBeDefined();
             },
         },
     };
