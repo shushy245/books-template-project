@@ -7,10 +7,12 @@ import { ShelfRepository } from './repositories/shelf.repository.js';
 export class Store implements StorePort {
     readonly books: BookRepository;
     readonly shelves: ShelfRepository;
+    readonly outbox: OutboxRepository;
 
     constructor(private readonly db: Db) {
         this.books = new BookRepository(db);
         this.shelves = new ShelfRepository(db);
+        this.outbox = new OutboxRepository(db);
     }
 
     async transaction<T>(work: (repos: TransactionRepos) => Promise<T>): Promise<T> {

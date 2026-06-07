@@ -79,6 +79,11 @@ describe('createBook integration', () => {
                     updatedAt: new Date(),
                 }),
             },
+            outbox: {
+                append: async () => {},
+                fetchUnprocessed: async () => [],
+                markProcessed: async () => {},
+            },
             transaction: (work) =>
                 db.transaction(async (tx) =>
                     work({
@@ -87,6 +92,8 @@ describe('createBook integration', () => {
                             append: async () => {
                                 throw new Error('forced failure');
                             },
+                            fetchUnprocessed: async () => [],
+                            markProcessed: async () => {},
                         },
                     }),
                 ),

@@ -10,5 +10,6 @@ export type TransactionRepos = {
 export interface StorePort {
     books: BookRepositoryPort;
     shelves: ShelfRepositoryPort;
+    outbox: OutboxRepositoryPort;
     transaction: <T>(work: (repos: TransactionRepos) => Promise<T>) => Promise<T>;
 }
