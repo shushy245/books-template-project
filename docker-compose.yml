@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: reading_room
       POSTGRES_DB: reading_room
     ports:
-      - '5432:5432'
+      - '5434:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
