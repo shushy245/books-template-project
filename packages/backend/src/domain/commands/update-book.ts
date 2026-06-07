@@ -1,4 +1,4 @@
-import { Book, EntityKind, ReadingStatus, UpdateBookDto } from '@reading-room/common';
+import { Book, EntityKind, OutboxEventType, ReadingStatus, UpdateBookDto } from '@reading-room/common';
 
 import { LoggerPort } from '../../telemetry/logger.port.js';
 import { canRate, canTransition } from '../book-rules/book-rules.js';
@@ -32,7 +32,19 @@ export const updateBook = async ({ store, logger }: UpdateBookDeps, dto: UpdateB
         );
     }
 
-    logger.info({}, 'updateBook: validation passed, writing update', { bookId: dto.id });
+    logger.info({}, 'updateBook: validation passed, writing update and outbox event', { bookId: dto.id });
 
-    return store.books.updateWithToken(dto);
+    return store.transaction(async ({ books, outbox }) => {
+        const updated = await books.updateWithToken(dto);
+
+        await outbox.append({
+            aggregateId: updated.id,
+            type: OutboxEventType.BookUpdated,
+            payload: { bookId: updated.id, title: updated.title, status: updated.status, rating: updated.rating ?? undefined },
+        });
+
+        logger.info({}, 'updateBook: book updated', { bookId: updated.id });
+
+        return updated;
+    });
 };

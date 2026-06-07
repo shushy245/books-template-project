@@ -1,5 +1,5 @@
 import { expect } from 'vitest';
-import { Book, ReadingStatus, UpdateBookDto } from '@reading-room/common';
+import { Book, OutboxEventType, ReadingStatus, UpdateBookDto } from '@reading-room/common';
 
 import { aBook } from '../../testing/builders/book.js';
 import { FakeStore } from '../../testing/fake-store.js';
@@ -17,6 +17,7 @@ export type UpdateBookDriver = {
     assert: {
         status: (expected: ReadingStatus) => void;
         rating: (expected: number) => void;
+        outboxEvent: (type: OutboxEventType) => void;
         throwsRule: (fn: () => Promise<unknown>) => Promise<void>;
         throwsNotFound: (fn: () => Promise<unknown>) => Promise<void>;
         throwsConflict: (fn: () => Promise<unknown>) => Promise<void>;
@@ -59,6 +60,10 @@ export const makeUpdateBookDriver = (): UpdateBookDriver => {
 
             rating: (expected) => {
                 expect(requireBook().rating).toBe(expected);
+            },
+
+            outboxEvent: (type) => {
+                expect(store.outbox.events.find((e) => e.type === type)).toBeDefined();
             },
 
             throwsRule: async (fn) => {

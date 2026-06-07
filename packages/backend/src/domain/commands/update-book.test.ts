@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'vitest';
 
-import { ReadingStatus } from '@reading-room/common';
+import { OutboxEventType, ReadingStatus } from '@reading-room/common';
 
 import { UpdateBookDriver, makeUpdateBookDriver } from './update-book.driver.js';
 
@@ -56,5 +56,13 @@ describe('updateBook', () => {
         await driver.given.book();
 
         await driver.assert.throwsConflict(() => driver.when.update({ updatedAt: new Date(0) }));
+    });
+
+    it('records a BookUpdated outbox event on a successful update', async () => {
+        await driver.given.book(ReadingStatus.WantToRead);
+
+        await driver.when.update({ status: ReadingStatus.Reading });
+
+        driver.assert.outboxEvent(OutboxEventType.BookUpdated);
     });
 });
