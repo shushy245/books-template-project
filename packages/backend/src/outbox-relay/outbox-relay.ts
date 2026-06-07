@@ -13,12 +13,13 @@ export const pollOutbox = async ({ store, logger }: OutboxRelayDeps): Promise<vo
 
     for (const record of records) {
         try {
-            logger.info({}, 'pollOutbox: dispatching', {
+            logger.info({}, 'pollOutbox: processing', {
                 outboxId: record.id,
                 aggregateId: record.aggregateId,
                 type: record.type,
             });
 
+            // TODO: dispatch event to message bus before marking processed
             await store.outbox.markProcessed(record.id);
 
             logger.info({}, 'pollOutbox: marked processed', { outboxId: record.id });

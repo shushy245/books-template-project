@@ -20,7 +20,9 @@ export class FakeOutboxRepository implements OutboxRepositoryPort {
     async markProcessed(id: string): Promise<void> {
         if (this.failOnMarkProcessed.has(id))
             throw new Error(`FakeOutboxRepository: markProcessed forced failure for id=${id}`);
-        const idx = this.records.findIndex((r) => r.id === id);
-        if (idx !== -1) this.records[idx] = { ...this.records[idx]!, processedAt: new Date() };
+        const record = this.records.find((r) => r.id === id);
+        if (record === undefined) return;
+        const idx = this.records.indexOf(record);
+        this.records[idx] = { ...record, processedAt: new Date() };
     }
 }

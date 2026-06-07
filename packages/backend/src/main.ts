@@ -21,7 +21,7 @@ const logger = {
 
 const { db } = createDb({
     host: process.env['DB_HOST'] ?? 'localhost',
-    port: Number(process.env['DB_PORT'] ?? 5432),
+    port: Number(process.env['DB_PORT'] ?? 5434),
     user: process.env['DB_USER'] ?? 'reading_room',
     password: process.env['DB_PASSWORD'] ?? 'reading_room',
     database: process.env['DB_NAME'] ?? 'reading_room',
@@ -31,9 +31,8 @@ const store = new Store(db);
 const app = buildApp({ store, logger });
 const port = Number(process.env['PORT'] ?? 3000);
 
-// || rather than ?? so an empty-string env var falls back to the default
-// instead of producing 0 (which would make setInterval fire on every tick).
-const relayIntervalMs = Number(process.env['OUTBOX_RELAY_INTERVAL_MS'] || 5000);
+const rawRelayInterval = process.env['OUTBOX_RELAY_INTERVAL_MS'];
+const relayIntervalMs = rawRelayInterval !== undefined && rawRelayInterval !== '' ? Number(rawRelayInterval) : 5000;
 const stopRelay = startOutboxRelay({ store, logger }, { intervalMs: relayIntervalMs });
 logger.info({ intervalMs: relayIntervalMs }, 'main: outbox relay started');
 

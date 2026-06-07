@@ -38,12 +38,12 @@ describe('pollOutbox', () => {
         await driver.assert.noUnprocessedEvents();
     });
 
-    it('logs a dispatch entry containing the event type for each processed event', async () => {
+    it('logs a processing entry containing the event type for each processed event', async () => {
         await driver.given.unprocessedEvent(OutboxEventType.BookCreated);
 
         await driver.when.poll();
 
-        driver.assert.loggedDispatch(OutboxEventType.BookCreated);
+        driver.assert.loggedProcessed(OutboxEventType.BookCreated);
     });
 
     it('continues processing subsequent records when one record fails to mark processed', async () => {

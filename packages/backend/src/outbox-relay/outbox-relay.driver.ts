@@ -17,7 +17,7 @@ export type OutboxRelayDriver = {
     assert: {
         noUnprocessedEvents: () => Promise<void>;
         unprocessedCount: (count: number) => Promise<void>;
-        loggedDispatch: (type: OutboxEventType) => void;
+        loggedProcessed: (type: OutboxEventType) => void;
         loggedError: (outboxId: string) => void;
     };
 };
@@ -63,11 +63,11 @@ export const makeOutboxRelayDriver = (): OutboxRelayDriver => {
                 expect(remaining).toHaveLength(count);
             },
 
-            loggedDispatch: (type) => {
-                const dispatched = logger.entries.find(
-                    (e) => e.message === 'pollOutbox: dispatching' && e.fields?.['type'] === type,
+            loggedProcessed: (type) => {
+                const entry = logger.entries.find(
+                    (e) => e.message === 'pollOutbox: processing' && e.fields?.['type'] === type,
                 );
-                expect(dispatched).toBeDefined();
+                expect(entry).toBeDefined();
             },
 
             loggedError: (outboxId) => {
