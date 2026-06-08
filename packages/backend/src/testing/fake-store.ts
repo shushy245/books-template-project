@@ -12,6 +12,6 @@ export class FakeStore implements StorePort {
     readonly deadLetters = new FakeDeadLetterStore();
 
     async transaction<T>(work: (repos: TransactionRepos) => Promise<T>): Promise<T> {
-        return work({ books: this.books, outbox: this.outbox });
+        return work({ books: this.books, outbox: this.outbox, deadLetters: this.deadLetters });
     }
 }

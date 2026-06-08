@@ -94,6 +94,7 @@ describe('createBook integration', () => {
                             markProcessed: async () => {},
                             incrementDeliveryCount: async () => {},
                         },
+                        deadLetters: { append: async () => {} },
                     }),
                 ),
         };

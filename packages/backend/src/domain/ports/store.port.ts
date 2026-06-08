@@ -6,6 +6,7 @@ import { DeadLetterStorePort } from './dead-letter-store.port.js';
 export type TransactionRepos = {
     books: BookRepositoryPort;
     outbox: OutboxRepositoryPort;
+    deadLetters: DeadLetterStorePort;
 };
 
 export interface StorePort {

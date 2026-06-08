@@ -60,15 +60,19 @@ const handleDispatchFailure = async (
             maxRetries,
             error: String(err),
         });
-        await store.deadLetters.append({
-            outboxId: record.id,
-            aggregateId: record.aggregateId,
-            type: record.type,
-            payload: record.payload,
-            deliveryCount,
-            error: String(err),
+        // Park and mark-processed atomically: a crash between the two would otherwise
+        // re-dispatch the event next poll and append a duplicate dlq_event row.
+        await store.transaction(async ({ outbox, deadLetters }) => {
+            await deadLetters.append({
+                outboxId: record.id,
+                aggregateId: record.aggregateId,
+                type: record.type,
+                payload: record.payload,
+                deliveryCount,
+                error: String(err),
+            });
+            await outbox.markProcessed(record.id);
         });
-        await store.outbox.markProcessed(record.id);
 
         return;
     }

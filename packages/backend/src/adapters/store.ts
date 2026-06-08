@@ -23,6 +23,7 @@ export class Store implements StorePort {
             work({
                 books: new BookRepository(tx),
                 outbox: new OutboxRepository(tx),
+                deadLetters: new DeadLetterStore(tx),
             }),
         );
     }
