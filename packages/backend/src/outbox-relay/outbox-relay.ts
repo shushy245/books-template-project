@@ -31,14 +31,19 @@ export const pollOutbox = async (
             deliveryCount: record.deliveryCount,
         });
 
+        // Only the dispatch is guarded by the failure path. markProcessed runs after a
+        // confirmed dispatch — if it throws, the event is simply re-dispatched next poll
+        // (consumers are idempotent) rather than being counted as a dispatch failure.
         try {
             await dispatcher.dispatch(record);
-            await store.outbox.markProcessed(record.id);
-
-            logger.info({}, 'pollOutbox: dispatched', { outboxId: record.id });
         } catch (err: unknown) {
             await handleDispatchFailure({ store, logger }, record, maxRetries, err);
+            continue;
         }
+
+        await store.outbox.markProcessed(record.id);
+
+        logger.info({}, 'pollOutbox: dispatched', { outboxId: record.id });
     }
 };
 
