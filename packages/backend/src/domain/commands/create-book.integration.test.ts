@@ -8,6 +8,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { Db, createDb } from '../../db/client.js';
 import { authors, books, outbox, shelves } from '../../db/schema.js';
 import { BookRepository } from '../../adapters/repositories/book.repository.js';
+import { AuthorRepository } from '../../adapters/repositories/author.repository.js';
 import { Store } from '../../adapters/store.js';
 import { StorePort } from '../ports/store.port.js';
 import { aBook } from '../../testing/builders/book.js';
@@ -72,6 +73,7 @@ describe('createBook integration', () => {
 
         const store: StorePort = {
             books: new BookRepository(db),
+            authors: new AuthorRepository(db),
             shelves: {
                 findById: async () => ({
                     id: shelfId,

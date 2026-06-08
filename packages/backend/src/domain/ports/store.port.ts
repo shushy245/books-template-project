@@ -1,4 +1,5 @@
 import { BookRepositoryPort } from './book-repository.port.js';
+import { AuthorRepositoryPort } from './author-repository.port.js';
 import { OutboxRepositoryPort } from './outbox-repository.port.js';
 import { ShelfRepositoryPort } from './shelf-repository.port.js';
 import { DeadLetterStorePort } from './dead-letter-store.port.js';
@@ -11,6 +12,7 @@ export type TransactionRepos = {
 
 export interface StorePort {
     books: BookRepositoryPort;
+    authors: AuthorRepositoryPort;
     shelves: ShelfRepositoryPort;
     outbox: OutboxRepositoryPort;
     deadLetters: DeadLetterStorePort;

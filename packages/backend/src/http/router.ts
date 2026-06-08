@@ -5,6 +5,7 @@ import { LoggerPort } from '../telemetry/logger.port.js';
 import { validate } from './middleware/validate.middleware.js';
 import { makeDeleteBookHandler } from './handlers/delete-book.handler.js';
 import { DeleteBookRequestSchema } from './handlers/delete-book.handler.utils.js';
+import { makeListAuthorsHandler } from './handlers/list-authors.handler.js';
 import { makeListBooksHandler } from './handlers/list-books.handler.js';
 import { ListBooksRequestSchema } from './handlers/list-books.handler.utils.js';
 import { makeUpdateBookHandler } from './handlers/update-book.handler.js';
@@ -21,6 +22,8 @@ export const buildRouter = ({ store, logger }: RouterDeps): Router => {
     router.get('/books', validate(ListBooksRequestSchema), makeListBooksHandler({ store, logger }));
     router.patch('/books/:id', validate(UpdateBookRequestSchema), makeUpdateBookHandler({ store, logger }));
     router.delete('/books/:id', validate(DeleteBookRequestSchema), makeDeleteBookHandler({ store, logger }));
+
+    router.get('/authors', makeListAuthorsHandler({ store, logger }));
 
     return router;
 };
