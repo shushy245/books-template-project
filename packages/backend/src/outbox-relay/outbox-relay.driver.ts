@@ -22,6 +22,7 @@ export type OutboxRelayDriver = {
         deliveryCount: (outboxId: string, count: number) => Promise<void>;
         deadLettered: (outboxId: string, deliveryCount: number) => void;
         loggedProcessed: (type: OutboxEventType) => void;
+        loggedWarn: (outboxId: string) => void;
         loggedError: (outboxId: string) => void;
     };
 };
@@ -89,6 +90,11 @@ export const makeOutboxRelayDriver = ({ maxRetries = 10 }: { maxRetries?: number
                 const entry = logger.entries.find(
                     (e) => e.message === 'pollOutbox: processing' && e.fields?.['type'] === type,
                 );
+                expect(entry).toBeDefined();
+            },
+
+            loggedWarn: (outboxId) => {
+                const entry = logger.entries.find((e) => e.level === 'warn' && e.fields?.['outboxId'] === outboxId);
                 expect(entry).toBeDefined();
             },
 

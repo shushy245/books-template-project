@@ -53,7 +53,7 @@ describe('pollOutbox', () => {
 
         await driver.when.poll();
 
-        driver.assert.loggedError(failingId);
+        driver.assert.loggedWarn(failingId);
         await driver.assert.deliveryCount(failingId, 1);
         await driver.assert.unprocessedCount(1);
     });
@@ -79,6 +79,7 @@ describe('pollOutbox', () => {
         await failingDriver.when.poll();
 
         failingDriver.assert.deadLettered(failingId, 2);
+        failingDriver.assert.loggedError(failingId);
         await failingDriver.assert.noUnprocessedEvents();
     });
 });

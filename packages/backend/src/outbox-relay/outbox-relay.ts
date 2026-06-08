@@ -82,7 +82,7 @@ const handleDispatchFailure = async (
         return;
     }
 
-    logger.error({}, 'pollOutbox: dispatch failed, will retry', {
+    logger.warn({}, 'pollOutbox: dispatch failed, will retry', {
         outboxId: record.id,
         deliveryCount,
         maxRetries,
