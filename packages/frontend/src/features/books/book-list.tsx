@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PaginatedResult, Book } from '@reading-room/common';
 
@@ -12,9 +12,17 @@ import { BookListTestIds } from './book-list.test-ids.js';
 import styles from './book-list.module.scss';
 
 export const BookList = (): JSX.Element => {
-    const { query, setPage } = useBookListContext();
+    const { query, setPage, refreshToken } = useBookListContext();
     const { data, loading, error, refetch } = useBooks(query);
     const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
+
+    // A sibling (the Add Book form) bumps refreshToken after creating a book; re-fetch the
+    // server-sorted list so the new book appears. Skip the initial mount (token starts at 0).
+    useEffect(() => {
+        if (refreshToken === 0) return;
+
+        refetch();
+    }, [refreshToken, refetch]);
 
     const handleDelete = (id: string): void => {
         setHiddenIds((prev) => new Set([...prev, id]));

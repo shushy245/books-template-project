@@ -7,6 +7,8 @@ type BookListContextValue = {
     setSortBy: (sortBy: BookSortField) => void;
     setSortDir: (sortDir: SortDirection) => void;
     setPage: (page: number) => void;
+    refreshToken: number;
+    triggerRefresh: () => void;
 };
 
 const BookListContext = createContext<BookListContextValue | undefined>(undefined);
@@ -26,11 +28,16 @@ export const BookListProvider = ({ children }: BookListProviderProps): JSX.Eleme
     const [sortBy, setSortBy] = useState<BookSortField>(BookSortField.CreatedAt);
     const [sortDir, setSortDir] = useState<SortDirection>(SortDirection.Desc);
     const [page, setPage] = useState(1);
+    const [refreshToken, setRefreshToken] = useState(0);
+
+    const triggerRefresh = (): void => {
+        setRefreshToken((token) => token + 1);
+    };
 
     const query: BookQueryDto = { sortBy, sortDir, page, pageSize: 20 };
 
     return (
-        <BookListContext.Provider value={{ query, setSortBy, setSortDir, setPage }}>
+        <BookListContext.Provider value={{ query, setSortBy, setSortDir, setPage, refreshToken, triggerRefresh }}>
             {children}
         </BookListContext.Provider>
     );

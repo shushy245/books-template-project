@@ -47,7 +47,10 @@ export const makeCreateBookDriver = (): CreateBookDriver => {
         },
 
         post: {
-            book: (overrides = {}) => request(app).post('/api/books').send({ ...validBody(), ...overrides }),
+            book: (overrides = {}) =>
+                request(app)
+                    .post('/api/books')
+                    .send({ ...validBody(), ...overrides }),
         },
 
         assert: {

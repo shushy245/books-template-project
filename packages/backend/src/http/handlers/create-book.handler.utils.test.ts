@@ -35,6 +35,10 @@ describe('parseCreateBookBody', () => {
     });
 
     it('rejects a missing title', () => {
-        driver.assert.bodyRejects({ authorId: validBody.authorId, shelfId: validBody.shelfId, status: validBody.status });
+        driver.assert.bodyRejects({
+            authorId: validBody.authorId,
+            shelfId: validBody.shelfId,
+            status: validBody.status,
+        });
     });
 });

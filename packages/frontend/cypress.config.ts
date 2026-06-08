@@ -13,6 +13,7 @@ const makePool = (): Pool =>
     });
 
 type SeedBooksInput = { titles: string[] };
+type SeedNamedInput = { name: string };
 
 export default defineConfig({
     e2e: {
@@ -41,6 +42,32 @@ export default defineConfig({
                                 [randomUUID(), title, authorId, shelfId],
                             );
                         }
+                    } finally {
+                        await pool.end();
+                    }
+                    return null;
+                },
+
+                async seedAuthor({ name }: SeedNamedInput): Promise<null> {
+                    const pool = makePool();
+                    try {
+                        await pool.query(
+                            `INSERT INTO authors (id, name, created_at, updated_at) VALUES ($1, $2, now(), now())`,
+                            [randomUUID(), name],
+                        );
+                    } finally {
+                        await pool.end();
+                    }
+                    return null;
+                },
+
+                async seedShelf({ name }: SeedNamedInput): Promise<null> {
+                    const pool = makePool();
+                    try {
+                        await pool.query(
+                            `INSERT INTO shelves (id, name, created_at, updated_at) VALUES ($1, $2, now(), now())`,
+                            [randomUUID(), name],
+                        );
                     } finally {
                         await pool.end();
                     }
