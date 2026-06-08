@@ -30,7 +30,11 @@ describe('Drizzle migrations', () => {
     beforeAll(async () => {
         pool = makeTestPool();
         db = drizzle(pool);
-        await db.execute(sql`DROP SCHEMA public CASCADE`);
+        // Drop the drizzle migrations journal alongside public so the journal and the
+        // actual tables reset together — otherwise migrate() sees the journal as complete
+        // and skips recreating the tables this just dropped.
+        await db.execute(sql`DROP SCHEMA IF EXISTS public CASCADE`);
+        await db.execute(sql`DROP SCHEMA IF EXISTS drizzle CASCADE`);
         await db.execute(sql`CREATE SCHEMA public`);
         await migrate(db, { migrationsFolder: './drizzle' });
     });
@@ -63,7 +67,19 @@ describe('Drizzle migrations', () => {
         ]);
     });
 
-    it('creates the outbox table with aggregate_id and processed_at columns', async () => {
-        await assertTableHasColumns('outbox', ['aggregate_id', 'processed_at']);
+    it('creates the outbox table with aggregate_id, processed_at and delivery_count columns', async () => {
+        await assertTableHasColumns('outbox', ['aggregate_id', 'processed_at', 'delivery_count']);
+    });
+
+    it('creates the dlq_event table with the failure-record columns', async () => {
+        await assertTableHasColumns('dlq_event', [
+            'outbox_id',
+            'aggregate_id',
+            'type',
+            'payload',
+            'delivery_count',
+            'error',
+            'created_at',
+        ]);
     });
 });

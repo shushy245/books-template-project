@@ -37,6 +37,21 @@ export const outbox = pgTable('outbox', {
     type: text('type').notNull(),
     payload: jsonb('payload').notNull(),
     createdAt: timestamp('created_at').notNull().defaultNow(),
-    // Null until the relay processes the event.
+    // Incremented on every failed dispatch; the relay dead-letters once it hits the retry limit.
+    deliveryCount: integer('delivery_count').notNull().default(0),
+    // Null until the relay processes the event (dispatched successfully, or dead-lettered).
     processedAt: timestamp('processed_at'),
+});
+
+// Parked copy of an event the relay gave up on after exhausting its retries.
+// Source of truth for monitoring and deliberate, operator-driven replay.
+export const dlqEvents = pgTable('dlq_event', {
+    id: uuid('id').primaryKey().defaultRandom(),
+    outboxId: uuid('outbox_id').notNull(),
+    aggregateId: text('aggregate_id').notNull(),
+    type: text('type').notNull(),
+    payload: jsonb('payload').notNull(),
+    deliveryCount: integer('delivery_count').notNull(),
+    error: text('error').notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
 });

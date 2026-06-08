@@ -10,7 +10,7 @@ export class FakeOutboxRepository implements OutboxRepositoryPort {
     }
 
     async append(event: OutboxEvent): Promise<void> {
-        this.records.push({ ...event, id: String(this.nextId++), processedAt: undefined });
+        this.records.push({ ...event, id: String(this.nextId++), deliveryCount: 0, processedAt: undefined });
     }
 
     async fetchUnprocessed(): Promise<OutboxRecord[]> {
@@ -24,5 +24,12 @@ export class FakeOutboxRepository implements OutboxRepositoryPort {
         if (record === undefined) return;
         const idx = this.records.indexOf(record);
         this.records[idx] = { ...record, processedAt: new Date() };
+    }
+
+    async incrementDeliveryCount(id: string): Promise<void> {
+        const record = this.records.find((r) => r.id === id);
+        if (record === undefined) return;
+        const idx = this.records.indexOf(record);
+        this.records[idx] = { ...record, deliveryCount: record.deliveryCount + 1 };
     }
 }

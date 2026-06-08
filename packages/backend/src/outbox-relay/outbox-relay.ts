@@ -1,35 +1,86 @@
 import { LoggerPort } from '../telemetry/logger.port.js';
 import { StorePort } from '../domain/ports/store.port.js';
+import { EventDispatcherPort } from '../domain/ports/event-dispatcher.port.js';
+import { OutboxRecord } from '../domain/ports/outbox-repository.port.js';
 
 type OutboxRelayDeps = {
     store: StorePort;
+    dispatcher: EventDispatcherPort;
     logger: LoggerPort;
 };
 
-export const pollOutbox = async ({ store, logger }: OutboxRelayDeps): Promise<void> => {
+type PollOptions = {
+    maxRetries?: number;
+};
+
+const DEFAULT_MAX_RETRIES = 10;
+
+export const pollOutbox = async (
+    { store, dispatcher, logger }: OutboxRelayDeps,
+    { maxRetries = DEFAULT_MAX_RETRIES }: PollOptions = {},
+): Promise<void> => {
     const records = await store.outbox.fetchUnprocessed();
 
     logger.info({}, 'pollOutbox: poll', { count: records.length });
 
     for (const record of records) {
-        try {
-            logger.info({}, 'pollOutbox: processing', {
-                outboxId: record.id,
-                aggregateId: record.aggregateId,
-                type: record.type,
-            });
+        logger.info({}, 'pollOutbox: processing', {
+            outboxId: record.id,
+            aggregateId: record.aggregateId,
+            type: record.type,
+            deliveryCount: record.deliveryCount,
+        });
 
-            // TODO: dispatch event to message bus before marking processed
+        try {
+            await dispatcher.dispatch(record);
             await store.outbox.markProcessed(record.id);
 
-            logger.info({}, 'pollOutbox: marked processed', { outboxId: record.id });
+            logger.info({}, 'pollOutbox: dispatched', { outboxId: record.id });
         } catch (err: unknown) {
-            logger.error({}, 'pollOutbox: failed to process record', {
-                outboxId: record.id,
-                error: String(err),
-            });
+            await handleDispatchFailure({ store, logger }, record, maxRetries, err);
         }
     }
+};
+
+// Bounded redelivery: each failed dispatch bumps the delivery count; once it reaches
+// the limit the event is dead-lettered (parked in dlq_event, marked processed so the
+// relay stops retrying it) rather than looping forever.
+const handleDispatchFailure = async (
+    { store, logger }: Pick<OutboxRelayDeps, 'store' | 'logger'>,
+    record: OutboxRecord,
+    maxRetries: number,
+    err: unknown,
+): Promise<void> => {
+    const deliveryCount = record.deliveryCount + 1;
+
+    if (deliveryCount >= maxRetries) {
+        logger.error({}, 'pollOutbox: dead-lettering event after retry limit', {
+            outboxId: record.id,
+            deliveryCount,
+            maxRetries,
+            error: String(err),
+        });
+        await store.deadLetters.append({
+            outboxId: record.id,
+            aggregateId: record.aggregateId,
+            type: record.type,
+            payload: record.payload,
+            deliveryCount,
+            error: String(err),
+        });
+        await store.outbox.markProcessed(record.id);
+
+        return;
+    }
+
+    logger.error({}, 'pollOutbox: dispatch failed, will retry', {
+        outboxId: record.id,
+        deliveryCount,
+        maxRetries,
+        error: String(err),
+    });
+
+    await store.outbox.incrementDeliveryCount(record.id);
 };
 
 export const startOutboxRelay = (

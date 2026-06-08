@@ -8,6 +8,7 @@ export type OutboxEvent = {
 
 export type OutboxRecord = OutboxEvent & {
     id: string;
+    deliveryCount: number;
     processedAt: Date | undefined;
 };
 
@@ -15,4 +16,5 @@ export interface OutboxRepositoryPort {
     append(event: OutboxEvent): Promise<void>;
     fetchUnprocessed(): Promise<OutboxRecord[]>;
     markProcessed(id: string): Promise<void>;
+    incrementDeliveryCount(id: string): Promise<void>;
 }

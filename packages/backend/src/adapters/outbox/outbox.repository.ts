@@ -1,4 +1,4 @@
-import { eq, isNull } from 'drizzle-orm';
+import { eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { OutboxEventType } from '@reading-room/common';
@@ -36,11 +36,19 @@ export class OutboxRepository implements OutboxRepositoryPort {
             aggregateId: row.aggregateId,
             type: OutboxEventTypeSchema.parse(row.type),
             payload: OutboxPayloadSchema.parse(row.payload),
+            deliveryCount: row.deliveryCount,
             processedAt: row.processedAt ?? undefined,
         }));
     }
 
     async markProcessed(id: string): Promise<void> {
         await this.db.update(outbox).set({ processedAt: new Date() }).where(eq(outbox.id, id));
+    }
+
+    async incrementDeliveryCount(id: string): Promise<void> {
+        await this.db
+            .update(outbox)
+            .set({ deliveryCount: sql`${outbox.deliveryCount} + 1` })
+            .where(eq(outbox.id, id));
     }
 }

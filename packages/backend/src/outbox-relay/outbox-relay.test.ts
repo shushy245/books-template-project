@@ -11,11 +11,12 @@ describe('pollOutbox', () => {
         driver = makeOutboxRelayDriver();
     });
 
-    it('marks an unprocessed event as processed after a poll', async () => {
+    it('dispatches an unprocessed event then marks it processed', async () => {
         await driver.given.unprocessedEvent(OutboxEventType.BookCreated);
 
         await driver.when.poll();
 
+        driver.assert.dispatched(OutboxEventType.BookCreated);
         await driver.assert.noUnprocessedEvents();
     });
 
@@ -46,15 +47,38 @@ describe('pollOutbox', () => {
         driver.assert.loggedProcessed(OutboxEventType.BookCreated);
     });
 
-    it('continues processing subsequent records when one record fails to mark processed', async () => {
+    it('increments the delivery count and leaves the event unprocessed when dispatch fails', async () => {
         const failingId = await driver.given.unprocessedEvent(OutboxEventType.BookCreated);
-        await driver.given.unprocessedEvent(OutboxEventType.BookUpdated);
-
-        driver.given.failingMarkProcessedFor(failingId);
+        driver.given.failingDispatchFor(failingId);
 
         await driver.when.poll();
 
         driver.assert.loggedError(failingId);
+        await driver.assert.deliveryCount(failingId, 1);
         await driver.assert.unprocessedCount(1);
+    });
+
+    it('continues dispatching other events when one event fails to dispatch', async () => {
+        const failingId = await driver.given.unprocessedEvent(OutboxEventType.BookCreated);
+        await driver.given.unprocessedEvent(OutboxEventType.BookUpdated);
+
+        driver.given.failingDispatchFor(failingId);
+
+        await driver.when.poll();
+
+        driver.assert.dispatched(OutboxEventType.BookUpdated);
+        await driver.assert.unprocessedCount(1);
+    });
+
+    it('dead-letters the event and stops retrying after the retry limit is reached', async () => {
+        const failingDriver = makeOutboxRelayDriver({ maxRetries: 2 });
+        const failingId = await failingDriver.given.unprocessedEvent(OutboxEventType.BookCreated);
+        failingDriver.given.failingDispatchFor(failingId);
+
+        await failingDriver.when.poll();
+        await failingDriver.when.poll();
+
+        failingDriver.assert.deadLettered(failingId, 2);
+        await failingDriver.assert.noUnprocessedEvents();
     });
 });

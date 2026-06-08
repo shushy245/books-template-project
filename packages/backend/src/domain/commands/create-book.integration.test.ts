@@ -81,6 +81,7 @@ describe('createBook integration', () => {
                 }),
             },
             outbox: new FakeOutboxRepository(),
+            deadLetters: { append: async () => {} },
             transaction: (work) =>
                 db.transaction(async (tx) =>
                     work({
@@ -91,6 +92,7 @@ describe('createBook integration', () => {
                             },
                             fetchUnprocessed: async () => [],
                             markProcessed: async () => {},
+                            incrementDeliveryCount: async () => {},
                         },
                     }),
                 ),
