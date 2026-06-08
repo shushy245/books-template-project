@@ -38,7 +38,9 @@ export const AddBookForm = (): JSX.Element => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        if (!isAddBookFormValid(form)) return;
+        // Guard re-entrancy directly: the button's disabled state only applies on the next
+        // render, so a rapid double-submit (e.g. Enter twice) could otherwise fire two creates.
+        if (submitting || !isAddBookFormValid(form)) return;
 
         setSubmitting(true);
         setError(undefined);

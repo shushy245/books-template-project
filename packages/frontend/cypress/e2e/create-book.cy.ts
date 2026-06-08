@@ -1,7 +1,9 @@
+import { BookListDriver } from '../support/drivers/book-list.driver.js';
 import { AddBookFormDriver } from '../support/drivers/add-book-form.driver.js';
 
 describe('Add a book', () => {
     const driver = new AddBookFormDriver();
+    const list = new BookListDriver();
 
     beforeEach(() => {
         driver.given.clear();
@@ -17,8 +19,8 @@ describe('Add a book', () => {
         driver.select.status('Want to read');
         driver.click.submit();
 
-        driver.assert.cardVisible('Dune');
-        driver.assert.cardCount(1);
+        list.assertCardCount(1);
+        list.assertCardTitleAt(0, 'Dune');
     });
 
     it('keeps the submit button disabled until title, author and shelf are chosen', () => {

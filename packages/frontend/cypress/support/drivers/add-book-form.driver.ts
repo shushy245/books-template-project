@@ -40,13 +40,9 @@ export class AddBookFormDriver {
         },
     };
 
+    // Card assertions live on BookListDriver, which owns the list — the e2e composes both
+    // drivers rather than duplicating the card selector here.
     assert = {
-        cardVisible: (title: string): void => {
-            cy.findAllByTestId(/^BookListTestIds\.Card\./).should('contain.text', title);
-        },
-        cardCount: (count: number): void => {
-            cy.findAllByTestId(/^BookListTestIds\.Card\./).should('have.length', count);
-        },
         submitDisabled: (): void => {
             cy.findByTestId(AddBookFormTestIds.SubmitButton).should('be.disabled');
         },
