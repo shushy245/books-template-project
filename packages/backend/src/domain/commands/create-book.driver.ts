@@ -3,6 +3,7 @@ import { OutboxEventType } from '@reading-room/common';
 
 import { aBook } from '../../testing/builders/book.js';
 import { aShelf } from '../../testing/builders/shelf.js';
+import { anAuthor } from '../../testing/builders/author.js';
 import { FakeStore } from '../../testing/fake-store.js';
 import { makeFakeLogger } from '../../testing/fake-logger.js';
 import { NotFoundError } from '../errors/index.js';
@@ -11,9 +12,10 @@ import { createBook } from './create-book.js';
 export type CreateBookDriver = {
     given: {
         shelf: (shelfId?: string) => void;
+        author: (authorId?: string) => void;
     };
     when: {
-        create: (overrides?: { shelfId?: string }) => Promise<void>;
+        create: (overrides?: { shelfId?: string; authorId?: string }) => Promise<void>;
     };
     assert: {
         bookPersisted: () => Promise<void>;
@@ -30,6 +32,9 @@ export const makeCreateBookDriver = (): CreateBookDriver => {
         given: {
             shelf: (shelfId = 'shelf-1') => {
                 store.shelves.seed(aShelf({ id: shelfId }).build());
+            },
+            author: (authorId = 'author-id') => {
+                store.authors.seed(anAuthor({ id: authorId }).build());
             },
         },
 

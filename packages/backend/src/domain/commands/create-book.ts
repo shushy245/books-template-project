@@ -18,7 +18,13 @@ export const createBook = async ({ store, logger }: CreateBookDeps, dto: CreateB
         throw new NotFoundError(notFoundMessage('createBook', EntityKind.Shelf, dto.shelfId));
     }
 
-    logger.info({}, 'createBook: shelf validated, writing book and outbox event');
+    const author = await store.authors.findById(dto.authorId);
+    if (author === undefined) {
+        logger.info({}, 'createBook: author not found', { authorId: dto.authorId });
+        throw new NotFoundError(notFoundMessage('createBook', EntityKind.Author, dto.authorId));
+    }
+
+    logger.info({}, 'createBook: shelf and author validated, writing book and outbox event');
 
     return store.transaction(async ({ books, outbox }) => {
         const book = await books.insert(dto);
