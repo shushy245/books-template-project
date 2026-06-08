@@ -81,6 +81,7 @@ describe('createBook integration', () => {
                     createdAt: new Date(),
                     updatedAt: new Date(),
                 }),
+                list: async () => [],
             },
             outbox: new FakeOutboxRepository(),
             deadLetters: { append: async () => {} },

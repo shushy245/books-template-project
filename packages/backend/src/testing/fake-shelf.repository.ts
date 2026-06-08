@@ -12,4 +12,9 @@ export class FakeShelfRepository implements ShelfRepositoryPort {
     async findById(id: string): Promise<Shelf | undefined> {
         return this.store.get(id);
     }
+
+    async list(): Promise<Shelf[]> {
+        // Mirror the real ShelfRepository, which orders by name ascending.
+        return [...this.store.values()].sort((a, b) => a.name.localeCompare(b.name));
+    }
 }

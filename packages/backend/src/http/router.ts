@@ -6,6 +6,7 @@ import { validate } from './middleware/validate.middleware.js';
 import { makeDeleteBookHandler } from './handlers/delete-book.handler.js';
 import { DeleteBookRequestSchema } from './handlers/delete-book.handler.utils.js';
 import { makeListAuthorsHandler } from './handlers/list-authors.handler.js';
+import { makeListShelvesHandler } from './handlers/list-shelves.handler.js';
 import { makeListBooksHandler } from './handlers/list-books.handler.js';
 import { ListBooksRequestSchema } from './handlers/list-books.handler.utils.js';
 import { makeUpdateBookHandler } from './handlers/update-book.handler.js';
@@ -24,6 +25,7 @@ export const buildRouter = ({ store, logger }: RouterDeps): Router => {
     router.delete('/books/:id', validate(DeleteBookRequestSchema), makeDeleteBookHandler({ store, logger }));
 
     router.get('/authors', makeListAuthorsHandler({ store, logger }));
+    router.get('/shelves', makeListShelvesHandler({ store, logger }));
 
     return router;
 };

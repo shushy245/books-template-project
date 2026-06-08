@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 
 import { Shelf } from '@reading-room/common';
 
@@ -13,5 +13,11 @@ export class ShelfRepository implements ShelfRepositoryPort {
         const row = await this.db.query.shelves.findFirst({ where: eq(shelves.id, id) });
         if (row === undefined) return undefined;
         return { id: row.id, name: row.name, createdAt: row.createdAt, updatedAt: row.updatedAt };
+    }
+
+    async list(): Promise<Shelf[]> {
+        const rows = await this.db.query.shelves.findMany({ orderBy: asc(shelves.name) });
+
+        return rows.map((row) => ({ id: row.id, name: row.name, createdAt: row.createdAt, updatedAt: row.updatedAt }));
     }
 }
