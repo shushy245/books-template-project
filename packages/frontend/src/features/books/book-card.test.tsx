@@ -1,7 +1,6 @@
-import { afterEach, beforeEach, describe, it, vi } from 'vitest';
-import { act, cleanup, waitFor } from '@testing-library/react';
+import { beforeEach, describe, it, vi } from 'vitest';
 
-import { Book, ReadingStatus } from '@reading-room/common';
+import { ReadingStatus } from '@reading-room/common';
 
 import * as booksApi from '../../api/books.api.ts';
 import { BookCardDriver, makeBookCardDriver } from './book-card.driver.tsx';
@@ -15,69 +14,56 @@ describe('BookCard', () => {
         driver = makeBookCardDriver();
     });
 
-    afterEach(() => {
-        cleanup();
-        vi.resetAllMocks();
-    });
+    it('renders the book title', async () => {
+        driver.given.book({ title: 'Dune' });
 
-    it('renders the book title', () => {
-        driver.given.render({ title: 'Dune' });
+        await driver.when.created();
 
         driver.assert.title('Dune');
     });
 
     it('clicking delete calls onDelete with the book id', async () => {
-        const { book, onDelete } = driver.given.render({ id: 'book-42' });
+        driver.given.book({ id: 'book-42' });
 
-        await driver.click.delete(book.id);
+        await driver.when.created();
 
-        driver.assert.onDeleteCalledWith(onDelete, 'book-42');
+        await driver.click.delete();
+
+        driver.assert.onDeleteCalledWith('book-42');
     });
 
     it('status change updates the select immediately before patchBook resolves', async () => {
-        let resolvePatch!: (value: Book | PromiseLike<Book>) => void;
-        vi.spyOn(booksApi, 'patchBook').mockReturnValue(
-            new Promise<Book>((res) => {
-                resolvePatch = res;
-            }),
-        );
+        driver.given.book({ status: ReadingStatus.WantToRead });
+        driver.given.patchBookPending();
 
-        const { book } = driver.given.render({ status: ReadingStatus.WantToRead });
+        await driver.when.created();
 
-        // userEvent runs the handler up to the first await (the patchBook call), then flushes
-        // React state — so the optimistic setLocalBook is committed before this line returns.
-        await driver.select.status(book.id, ReadingStatus.Reading);
+        await driver.select.status(ReadingStatus.Reading);
 
-        driver.assert.status(book.id, ReadingStatus.Reading);
+        driver.assert.status(ReadingStatus.Reading);
 
-        await act(async () => {
-            resolvePatch({
-                ...book,
-                status: ReadingStatus.Reading,
-                updatedAt: new Date(),
-            });
-        });
+        await driver.when.resolvePatch({ status: ReadingStatus.Reading });
     });
 
     it('status change success: select reflects the value returned from patchBook', async () => {
-        const { book } = driver.given.render({ status: ReadingStatus.WantToRead });
-        vi.spyOn(booksApi, 'patchBook').mockResolvedValue({
-            ...book,
-            status: ReadingStatus.Reading,
-            updatedAt: new Date(),
-        });
+        driver.given.book({ status: ReadingStatus.WantToRead });
+        driver.given.patchBookResolvesWith({ status: ReadingStatus.Reading });
 
-        await driver.select.status(book.id, ReadingStatus.Reading);
+        await driver.when.created();
 
-        await waitFor(() => driver.assert.status(book.id, ReadingStatus.Reading));
+        await driver.select.status(ReadingStatus.Reading);
+
+        await driver.assert.statusEventually(ReadingStatus.Reading);
     });
 
     it('status change rollback: select reverts to original status when patchBook rejects', async () => {
-        const { book } = driver.given.render({ status: ReadingStatus.WantToRead });
-        vi.spyOn(booksApi, 'patchBook').mockRejectedValue(new Error('network error'));
+        driver.given.book({ status: ReadingStatus.WantToRead });
+        driver.given.patchBookRejectsWith();
 
-        await driver.select.status(book.id, ReadingStatus.Reading);
+        await driver.when.created();
 
-        await waitFor(() => driver.assert.status(book.id, ReadingStatus.WantToRead));
+        await driver.select.status(ReadingStatus.Reading);
+
+        await driver.assert.statusEventually(ReadingStatus.WantToRead);
     });
 });

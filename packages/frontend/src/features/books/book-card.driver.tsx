@@ -1,78 +1,106 @@
-import { expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { expect, vi } from 'vitest';
 
 import { Book, ReadingStatus } from '@reading-room/common';
 
+import * as booksApi from '../../api/books.api.ts';
+import { aBook } from '../../testing/builders/index.ts';
 import { BookCard } from './book-card.tsx';
 import { BookListTestIds } from './book-list.test-ids.ts';
 import { readingStatusLabelMap } from './book-list.utils.ts';
 
-const aBook = (overrides: Partial<Book> = {}): Book => ({
-    id: 'book-1',
-    title: 'Dune',
-    authorId: 'author-1',
-    shelfId: 'shelf-1',
-    status: ReadingStatus.WantToRead,
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01'),
-    ...overrides,
-});
-
 export type BookCardDriver = {
     given: {
-        render: (overrides?: Partial<Book>) => { book: Book; onDelete: ReturnType<typeof vi.fn> };
+        book: (overrides?: Partial<Book>) => void;
+        patchBookResolvesWith: (overrides?: Partial<Book>) => void;
+        patchBookPending: () => void;
+        patchBookRejectsWith: (error?: Error) => void;
+    };
+    when: {
+        created: () => Promise<void>;
+        resolvePatch: (overrides?: Partial<Book>) => Promise<void>;
     };
     click: {
-        delete: (id: string) => Promise<void>;
+        delete: () => Promise<void>;
     };
     select: {
-        status: (id: string, status: ReadingStatus) => Promise<void>;
+        status: (status: ReadingStatus) => Promise<void>;
     };
     assert: {
         title: (title: string) => void;
-        status: (id: string, status: ReadingStatus) => void;
-        onDeleteCalledWith: (onDelete: ReturnType<typeof vi.fn>, id: string) => void;
+        status: (status: ReadingStatus) => void;
+        statusEventually: (status: ReadingStatus) => Promise<void>;
+        onDeleteCalledWith: (id: string) => void;
     };
 };
 
 export const makeBookCardDriver = (): BookCardDriver => {
     const user = userEvent.setup();
+    let _book = aBook().build();
+    const _onDelete = vi.fn();
+    let _resolvePatch!: (value: Book | PromiseLike<Book>) => void;
 
     return {
         given: {
-            render: (overrides = {}) => {
-                const book = aBook(overrides);
-                const onDelete = vi.fn();
-                render(<BookCard book={book} onDelete={onDelete} />);
-
-                return { book, onDelete };
+            book: (overrides = {}) => {
+                _book = aBook(overrides).build();
+            },
+            patchBookResolvesWith: (overrides = {}) => {
+                vi.spyOn(booksApi, 'patchBook').mockImplementation(() =>
+                    Promise.resolve({ ..._book, updatedAt: new Date(), ...overrides }),
+                );
+            },
+            patchBookPending: () => {
+                vi.spyOn(booksApi, 'patchBook').mockReturnValue(
+                    new Promise<Book>((resolve) => { _resolvePatch = resolve; }),
+                );
+            },
+            patchBookRejectsWith: (error = new Error('network error')) => {
+                vi.spyOn(booksApi, 'patchBook').mockRejectedValue(error);
+            },
+        },
+        when: {
+            created: async () => {
+                render(<BookCard book={_book} onDelete={_onDelete} />);
+            },
+            resolvePatch: async (overrides = {}) => {
+                await act(async () => {
+                    _resolvePatch({ ..._book, updatedAt: new Date(), ...overrides });
+                });
             },
         },
         click: {
-            delete: async (id) => {
-                await user.click(screen.getByTestId(BookListTestIds.CardDeleteButton(id)));
+            delete: async () => {
+                await user.click(screen.getByTestId(BookListTestIds.CardDeleteButton(_book.id)));
             },
         },
         select: {
-            status: async (id, status) => {
+            status: async (status) => {
                 await user.selectOptions(
-                    screen.getByTestId(BookListTestIds.CardStatus(id)),
+                    screen.getByTestId(BookListTestIds.CardStatus(_book.id)),
                     readingStatusLabelMap[status],
                 );
             },
         },
         assert: {
             title: (title) => {
-                expect(screen.getByText(title)).toBeTruthy();
+                expect(screen.getByText(title)).toBeInTheDocument();
             },
-            status: (id, status) => {
-                const el = screen.getByTestId(BookListTestIds.CardStatus(id));
-                if (!(el instanceof HTMLSelectElement)) throw new Error(`book-card driver: expected select at ${id}`);
+            status: (status) => {
+                const el = screen.getByTestId(BookListTestIds.CardStatus(_book.id));
+                if (!(el instanceof HTMLSelectElement)) throw new Error(`book-card driver: expected select at ${_book.id}`);
                 expect(el.value).toBe(status);
             },
-            onDeleteCalledWith: (onDelete, id) => {
-                expect(onDelete).toHaveBeenCalledWith(id);
+            statusEventually: async (status) => {
+                await waitFor(() => {
+                    const el = screen.getByTestId(BookListTestIds.CardStatus(_book.id));
+                    if (!(el instanceof HTMLSelectElement)) throw new Error(`book-card driver: expected select at ${_book.id}`);
+                    expect(el.value).toBe(status);
+                });
+            },
+            onDeleteCalledWith: (id) => {
+                expect(_onDelete).toHaveBeenCalledWith(id);
             },
         },
     };

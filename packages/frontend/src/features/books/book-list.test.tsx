@@ -1,76 +1,60 @@
-import { afterEach, beforeEach, describe, it, vi } from 'vitest';
-import { cleanup, waitFor } from '@testing-library/react';
+import { beforeEach, describe, it, vi } from 'vitest';
 
-import { Book, ReadingStatus } from '@reading-room/common';
+import { ReadingStatus } from '@reading-room/common';
 
 import * as booksApi from '../../api/books.api.ts';
+import { aBook } from '../../testing/builders/index.ts';
 import { BookListDriver, makeBookListDriver } from './book-list.driver.tsx';
 
 vi.mock('../../api/books.api.ts');
-
-const aBook = (overrides: Partial<Book> = {}): Book => ({
-    id: 'a',
-    title: 'Dune',
-    authorId: 'au',
-    shelfId: 'sh',
-    status: ReadingStatus.WantToRead,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    ...overrides,
-});
 
 describe('BookList', () => {
     let driver: BookListDriver;
 
     beforeEach(() => {
-        vi.mocked(booksApi.deleteBook).mockResolvedValue(undefined);
         driver = makeBookListDriver();
-    });
-
-    afterEach(() => {
-        cleanup();
-        vi.resetAllMocks();
+        driver.given.deleteBookResolves();
     });
 
     it('shows the empty-state message when the result has no items', async () => {
         driver.given.noBooks();
 
-        await driver.given.render();
+        await driver.when.created();
 
         driver.assert.emptyState();
     });
 
     it('renders one card per book in the result', async () => {
         driver.given.books([
-            aBook({ id: 'a', title: 'Dune' }),
-            aBook({ id: 'b', title: 'Foundation', status: ReadingStatus.Reading }),
+            aBook({ id: 'a', title: 'Dune' }).build(),
+            aBook({ id: 'b', title: 'Foundation', status: ReadingStatus.Reading }).build(),
         ]);
 
-        await driver.given.render();
+        await driver.when.created();
 
         driver.assert.cardCount(2);
     });
 
     it('Prev button is disabled on page 1', async () => {
-        driver.given.books([aBook()], 1);
+        driver.given.books([aBook().build()], 1);
 
-        await driver.given.render();
+        await driver.when.created();
 
         driver.assert.prevDisabled();
     });
 
     it('Next button is disabled when total fits in a single page', async () => {
-        driver.given.books([aBook()], 1);
+        driver.given.books([aBook().build()], 1);
 
-        await driver.given.render();
+        await driver.when.created();
 
         driver.assert.nextDisabled();
     });
 
     it('Next button is enabled when there are more pages', async () => {
-        driver.given.books([aBook()], 100);
+        driver.given.books([aBook().build()], 100);
 
-        await driver.given.render();
+        await driver.when.created();
 
         driver.assert.nextEnabled();
     });
@@ -78,10 +62,10 @@ describe('BookList', () => {
     it('triggerRefresh causes fetchBooks to be called a second time', async () => {
         driver.given.noBooks();
 
-        await driver.given.render();
+        await driver.when.created();
 
         await driver.click.triggerRefresh();
 
-        await waitFor(() => driver.assert.fetchCallCount(2));
+        await driver.assert.fetchCallCountEventually(2);
     });
 });

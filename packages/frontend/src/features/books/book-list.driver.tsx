@@ -1,6 +1,6 @@
-import { expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { expect, vi } from 'vitest';
 
 import { Book, PaginatedResult } from '@reading-room/common';
 
@@ -37,7 +37,10 @@ export type BookListDriver = {
     given: {
         books: (books: Book[], total?: number) => void;
         noBooks: () => void;
-        render: () => Promise<void>;
+        deleteBookResolves: () => void;
+    };
+    when: {
+        created: () => Promise<void>;
     };
     click: {
         nextPage: () => Promise<void>;
@@ -51,6 +54,7 @@ export type BookListDriver = {
         nextDisabled: () => void;
         nextEnabled: () => void;
         fetchCallCount: (count: number) => void;
+        fetchCallCountEventually: (count: number) => Promise<void>;
     };
 };
 
@@ -65,7 +69,12 @@ export const makeBookListDriver = (): BookListDriver => {
             noBooks: () => {
                 vi.mocked(booksApi.fetchBooks).mockResolvedValue(makePaginatedResult([]));
             },
-            render: async () => {
+            deleteBookResolves: () => {
+                vi.mocked(booksApi.deleteBook).mockResolvedValue(undefined);
+            },
+        },
+        when: {
+            created: async () => {
                 render(
                     <BookListProvider>
                         <BookList />
@@ -73,7 +82,7 @@ export const makeBookListDriver = (): BookListDriver => {
                     </BookListProvider>,
                 );
                 await waitFor(() => {
-                    expect(screen.queryByText('Loading…')).toBeNull();
+                    expect(screen.queryByText('Loading…')).not.toBeInTheDocument();
                 });
             },
         },
@@ -93,7 +102,7 @@ export const makeBookListDriver = (): BookListDriver => {
                 expect(screen.getAllByTestId(/^BookListTestIds\.Card\./)).toHaveLength(count);
             },
             emptyState: () => {
-                expect(screen.getByTestId(BookListTestIds.EmptyState)).toBeTruthy();
+                expect(screen.getByTestId(BookListTestIds.EmptyState)).toBeInTheDocument();
             },
             prevDisabled: () => {
                 expect(requireButton(BookListTestIds.PrevPage).disabled).toBe(true);
@@ -106,6 +115,11 @@ export const makeBookListDriver = (): BookListDriver => {
             },
             fetchCallCount: (count) => {
                 expect(booksApi.fetchBooks).toHaveBeenCalledTimes(count);
+            },
+            fetchCallCountEventually: async (count) => {
+                await waitFor(() => {
+                    expect(booksApi.fetchBooks).toHaveBeenCalledTimes(count);
+                });
             },
         },
     };
