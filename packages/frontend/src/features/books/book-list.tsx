@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import { PaginatedResult, Book } from '@reading-room/common';
 
 import { deleteBook } from '../../api/books.api.ts';
-import { Column, Row } from '../../ui/box.ts';
-import { RestfulWrapper } from '../../data/restful-wrapper.ts';
+import { Column, Row } from '../../ui/box.tsx';
+import { RestfulWrapper } from '../../data/restful-wrapper.tsx';
 import { useBooks } from '../../data/use-books.ts';
-import { useBookListContext } from './book-list-context.ts';
-import { BookCard } from './book-card.ts';
+import { useBookListContext } from './book-list-context.tsx';
+import { BookCard } from './book-card.tsx';
 import { BookListTestIds } from './book-list.test-ids.ts';
 import styles from './book-list.module.scss';
 
