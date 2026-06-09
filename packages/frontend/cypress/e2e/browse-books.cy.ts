@@ -1,4 +1,4 @@
-import { BookListDriver } from '../support/drivers/book-list.driver.js';
+import { BookListDriver } from '../support/drivers/book-list.driver.ts';
 
 describe('Browse books', () => {
     const driver = new BookListDriver();

@@ -1,5 +1,5 @@
-import { BookListDriver } from '../support/drivers/book-list.driver.js';
-import { AddBookFormDriver } from '../support/drivers/add-book-form.driver.js';
+import { BookListDriver } from '../support/drivers/book-list.driver.ts';
+import { AddBookFormDriver } from '../support/drivers/add-book-form.driver.ts';
 
 describe('Add a book', () => {
     const driver = new AddBookFormDriver();

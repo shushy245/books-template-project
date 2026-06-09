@@ -1,4 +1,4 @@
-import { BookListTestIds } from '../../../src/features/books/book-list.test-ids.js';
+import { BookListTestIds } from '../../../src/features/books/book-list.test-ids.ts';
 
 export class BookListDriver {
     visit(): void {
