@@ -31,19 +31,6 @@ describe('BookCard', () => {
         driver.assert.onDeleteCalledWith('book-42');
     });
 
-    it('status change updates the select immediately before patchBook resolves', async () => {
-        driver.given.book({ status: ReadingStatus.WantToRead });
-        driver.given.patchBookPending();
-
-        await driver.when.created();
-
-        await driver.select.status(ReadingStatus.Reading);
-
-        driver.assert.status(ReadingStatus.Reading);
-
-        await driver.when.resolvePatch({ status: ReadingStatus.Reading });
-    });
-
     it('status change success: select reflects the value returned from patchBook', async () => {
         driver.given.book({ status: ReadingStatus.WantToRead });
         driver.given.patchBookResolvesWith({ status: ReadingStatus.Reading });

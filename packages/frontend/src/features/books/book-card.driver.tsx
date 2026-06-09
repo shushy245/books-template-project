@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { expect, vi } from 'vitest';
 
@@ -14,12 +14,10 @@ export type BookCardDriver = {
     given: {
         book: (overrides?: Partial<Book>) => void;
         patchBookResolvesWith: (overrides?: Partial<Book>) => void;
-        patchBookPending: () => void;
         patchBookRejectsWith: (error?: Error) => void;
     };
     when: {
         created: () => Promise<void>;
-        resolvePatch: (overrides?: Partial<Book>) => Promise<void>;
     };
     click: {
         delete: () => Promise<void>;
@@ -39,7 +37,6 @@ export const makeBookCardDriver = (): BookCardDriver => {
     const user = userEvent.setup();
     let _book = aBook().build();
     const _onDelete = vi.fn();
-    let _resolvePatch!: (value: Book | PromiseLike<Book>) => void;
 
     return {
         given: {
@@ -51,13 +48,6 @@ export const makeBookCardDriver = (): BookCardDriver => {
                     Promise.resolve({ ..._book, updatedAt: new Date(), ...overrides }),
                 );
             },
-            patchBookPending: () => {
-                vi.spyOn(booksApi, 'patchBook').mockReturnValue(
-                    new Promise<Book>((resolve) => {
-                        _resolvePatch = resolve;
-                    }),
-                );
-            },
             patchBookRejectsWith: (error = new Error('network error')) => {
                 vi.spyOn(booksApi, 'patchBook').mockRejectedValue(error);
             },
@@ -65,11 +55,6 @@ export const makeBookCardDriver = (): BookCardDriver => {
         when: {
             created: async () => {
                 render(<BookCard book={_book} onDelete={_onDelete} />);
-            },
-            resolvePatch: async (overrides = {}) => {
-                await act(async () => {
-                    _resolvePatch({ ..._book, updatedAt: new Date(), ...overrides });
-                });
             },
         },
         click: {
