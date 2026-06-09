@@ -1,30 +1,4 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(xargs ls -la)",
-      "Bash(kill %1)",
-      "Bash(curl -s \"http://localhost:3000/api/books?sortBy=CreatedAt&sortDir=Desc&page=1&pageSize=20\")",
-      "Bash(psql -h localhost -p 5432 -U reading_room -d reading_room -c \"SELECT count\\(*\\) FROM books;\")",
-      "Bash(curl -s \"http://localhost:3000/api/health\")",
-      "Bash(PGPASSWORD=reading_room psql -h localhost -p 5432 -U reading_room -d reading_room -c \"\\\\d books;\")",
-      "Bash(node -e ' *)",
-      "Bash(PGPASSWORD=reading_room psql -h localhost -p 5432 -U postgres -c \"\\\\du reading_room;\")",
-      "Bash(sudo -u postgres psql -p 5432 -c \"\\\\du reading_room;\")",
-      "Bash(/Library/PostgreSQL/16/bin/psql -U shalevshushy -p 5432 -c \"SELECT current_user;\")",
-      "Bash(/Library/PostgreSQL/16/bin/psql -p 5432 -c \"SELECT current_user;\")",
-      "Bash(cat /Library/PostgreSQL/16/data/pg_hba.conf 2>&1 | head -30)",
-      "Read(//Library/PostgreSQL/16/data/**)",
-      "Bash(DB_PORT=5434 npx drizzle-kit migrate)",
-      "Bash(PGPASSWORD=reading_room /Library/PostgreSQL/16/bin/psql -h 127.0.0.1 -p 5434 -U reading_room -d reading_room -c \"SELECT 1;\")",
-      "Bash(echo \"=== total ===\")",
-      "Bash(wc -l -w -c /Users/shalevshushy/.claude/CLAUDE.md)",
-      "Bash(echo \"=== top-level \\(#\\) and section \\(##\\) headers with line numbers ===\")",
-      "Bash(grep -nE '^#{1,2} ' /Users/shalevshushy/.claude/CLAUDE.md)",
-      "Bash(PGPASSWORD=reading_room_test psql -h localhost -p 5433 -U reading_room_test -d reading_room_test -c 'DROP SCHEMA IF EXISTS public CASCADE; DROP SCHEMA IF EXISTS drizzle CASCADE; CREATE SCHEMA public;')",
-      "Skill(code-review)",
-      "Skill(code-review:*)"
-    ]
-  },
   "hooks": {
     "Stop": [
       {
