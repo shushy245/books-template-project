@@ -4,38 +4,38 @@ describe('Browse books', () => {
     const driver = new BookListDriver();
 
     beforeEach(() => {
-        driver.clearBooks();
-        driver.visit();
+        driver.given.clear();
+        driver.given.visit();
     });
 
     it('shows a card for each seeded book', () => {
-        driver.seedBooks(['Dune', 'Foundation', 'Neuromancer']);
+        driver.given.books(['Dune', 'Foundation', 'Neuromancer']);
 
-        driver.visit();
+        driver.given.visit();
 
-        driver.assertCardCount(3);
+        driver.assert.cardCount(3);
     });
 
     it('re-orders cards when sort changes — server round-trip', () => {
-        driver.seedBooks(['Zeta', 'Alpha', 'Mu']);
+        driver.given.books(['Zeta', 'Alpha', 'Mu']);
 
-        driver.visit();
-        driver.selectSortBy('Title');
-        driver.selectSortDir('Asc');
+        driver.given.visit();
+        driver.select.sortBy('Title');
+        driver.select.sortDir('Asc');
 
-        driver.assertCardTitleAt(0, 'Alpha');
-        driver.assertCardTitleAt(1, 'Mu');
-        driver.assertCardTitleAt(2, 'Zeta');
+        driver.assert.cardTitleAt(0, 'Alpha');
+        driver.assert.cardTitleAt(1, 'Mu');
+        driver.assert.cardTitleAt(2, 'Zeta');
     });
 
     it('navigates to page 2 and shows the next slice', () => {
-        driver.seedBooks(['A', 'B', 'C', 'D', 'E']);
+        driver.given.books(['A', 'B', 'C', 'D', 'E']);
 
-        driver.visit();
-        driver.selectSortBy('Title');
-        driver.selectSortDir('Asc');
+        driver.given.visit();
+        driver.select.sortBy('Title');
+        driver.select.sortDir('Asc');
         // Default pageSize is 20 — seed with >20 or reduce pageSize. Using a small
         // custom pageSize requires a toolbar control; for now verify pagination renders.
-        driver.assertCardCount(5);
+        driver.assert.cardCount(5);
     });
 });
