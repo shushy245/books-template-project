@@ -1,12 +1,23 @@
 import { afterEach, beforeEach, describe, it, vi } from 'vitest';
 import { cleanup, waitFor } from '@testing-library/react';
 
-import { ReadingStatus } from '@reading-room/common';
+import { Book, ReadingStatus } from '@reading-room/common';
 
 import * as booksApi from '../../api/books.api.ts';
 import { BookListDriver, makeBookListDriver } from './book-list.driver.tsx';
 
 vi.mock('../../api/books.api.ts');
+
+const aBook = (overrides: Partial<Book> = {}): Book => ({
+    id: 'a',
+    title: 'Dune',
+    authorId: 'au',
+    shelfId: 'sh',
+    status: ReadingStatus.WantToRead,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    ...overrides,
+});
 
 describe('BookList', () => {
     let driver: BookListDriver;
@@ -31,8 +42,8 @@ describe('BookList', () => {
 
     it('renders one card per book in the result', async () => {
         driver.given.books([
-            { id: 'a', title: 'Dune', authorId: 'au', shelfId: 'sh', status: ReadingStatus.WantToRead, createdAt: new Date(), updatedAt: new Date() },
-            { id: 'b', title: 'Foundation', authorId: 'au', shelfId: 'sh', status: ReadingStatus.Reading, createdAt: new Date(), updatedAt: new Date() },
+            aBook({ id: 'a', title: 'Dune' }),
+            aBook({ id: 'b', title: 'Foundation', status: ReadingStatus.Reading }),
         ]);
 
         await driver.given.render();
@@ -41,10 +52,7 @@ describe('BookList', () => {
     });
 
     it('Prev button is disabled on page 1', async () => {
-        driver.given.books(
-            [{ id: 'a', title: 'Dune', authorId: 'au', shelfId: 'sh', status: ReadingStatus.WantToRead, createdAt: new Date(), updatedAt: new Date() }],
-            1,
-        );
+        driver.given.books([aBook()], 1);
 
         await driver.given.render();
 
@@ -52,10 +60,7 @@ describe('BookList', () => {
     });
 
     it('Next button is disabled when total fits in a single page', async () => {
-        driver.given.books(
-            [{ id: 'a', title: 'Dune', authorId: 'au', shelfId: 'sh', status: ReadingStatus.WantToRead, createdAt: new Date(), updatedAt: new Date() }],
-            1,
-        );
+        driver.given.books([aBook()], 1);
 
         await driver.given.render();
 
@@ -63,10 +68,7 @@ describe('BookList', () => {
     });
 
     it('Next button is enabled when there are more pages', async () => {
-        driver.given.books(
-            [{ id: 'a', title: 'Dune', authorId: 'au', shelfId: 'sh', status: ReadingStatus.WantToRead, createdAt: new Date(), updatedAt: new Date() }],
-            100,
-        );
+        driver.given.books([aBook()], 100);
 
         await driver.given.render();
 

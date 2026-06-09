@@ -67,8 +67,9 @@ export const makeBookCardDriver = (): BookCardDriver => {
                 expect(screen.getByText(title)).toBeTruthy();
             },
             status: (id, status) => {
-                const select = screen.getByTestId(BookListTestIds.CardStatus(id)) as HTMLSelectElement;
-                expect(select.value).toBe(status);
+                const el = screen.getByTestId(BookListTestIds.CardStatus(id));
+                if (!(el instanceof HTMLSelectElement)) throw new Error(`book-card driver: expected select at ${id}`);
+                expect(el.value).toBe(status);
             },
             onDeleteCalledWith: (onDelete, id) => {
                 expect(onDelete).toHaveBeenCalledWith(id);

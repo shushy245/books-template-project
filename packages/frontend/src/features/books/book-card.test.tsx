@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, it, vi } from 'vitest';
 import { act, cleanup, waitFor } from '@testing-library/react';
 
 import { ReadingStatus } from '@reading-room/common';
@@ -35,8 +35,12 @@ describe('BookCard', () => {
     });
 
     it('status change updates the select immediately before patchBook resolves', async () => {
-        let resolvePatch!: (value: unknown) => void;
-        vi.spyOn(booksApi, 'patchBook').mockReturnValue(new Promise((res) => { resolvePatch = res; }));
+        let resolvePatch!: (value: Book | PromiseLike<Book>) => void;
+        vi.spyOn(booksApi, 'patchBook').mockReturnValue(
+            new Promise<Book>((res) => {
+                resolvePatch = res;
+            }),
+        );
 
         const { book } = driver.given.render({ status: ReadingStatus.WantToRead });
 
@@ -47,13 +51,21 @@ describe('BookCard', () => {
         driver.assert.status(book.id, ReadingStatus.Reading);
 
         await act(async () => {
-            resolvePatch({ ...book, status: ReadingStatus.Reading, updatedAt: new Date() });
+            resolvePatch({
+                ...book,
+                status: ReadingStatus.Reading,
+                updatedAt: new Date(),
+            });
         });
     });
 
     it('status change success: select reflects the value returned from patchBook', async () => {
         const { book } = driver.given.render({ status: ReadingStatus.WantToRead });
-        vi.spyOn(booksApi, 'patchBook').mockResolvedValue({ ...book, status: ReadingStatus.Reading, updatedAt: new Date() });
+        vi.spyOn(booksApi, 'patchBook').mockResolvedValue({
+            ...book,
+            status: ReadingStatus.Reading,
+            updatedAt: new Date(),
+        });
 
         await driver.select.status(book.id, ReadingStatus.Reading);
 

@@ -2,23 +2,12 @@ import { expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { Book, PaginatedResult, ReadingStatus } from '@reading-room/common';
+import { Book, PaginatedResult } from '@reading-room/common';
 
 import * as booksApi from '../../api/books.api.ts';
 import { BookListProvider, useBookListContext } from './book-list-context.tsx';
 import { BookList } from './book-list.tsx';
 import { BookListTestIds } from './book-list.test-ids.ts';
-
-const aBook = (overrides: Partial<Book> = {}): Book => ({
-    id: `book-${Math.random()}`,
-    title: 'Dune',
-    authorId: 'author-1',
-    shelfId: 'shelf-1',
-    status: ReadingStatus.WantToRead,
-    createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01'),
-    ...overrides,
-});
 
 const makePaginatedResult = (books: Book[], total?: number): PaginatedResult<Book> => ({
     items: books,
@@ -26,6 +15,13 @@ const makePaginatedResult = (books: Book[], total?: number): PaginatedResult<Boo
     page: 1,
     pageSize: 20,
 });
+
+const requireButton = (testId: string): HTMLButtonElement => {
+    const el = screen.getByTestId(testId);
+    if (!(el instanceof HTMLButtonElement)) throw new Error(`book-list driver: expected button at ${testId}`);
+
+    return el;
+};
 
 const TriggerRefreshButton = (): JSX.Element => {
     const { triggerRefresh } = useBookListContext();
@@ -100,13 +96,13 @@ export const makeBookListDriver = (): BookListDriver => {
                 expect(screen.getByTestId(BookListTestIds.EmptyState)).toBeTruthy();
             },
             prevDisabled: () => {
-                expect((screen.getByTestId(BookListTestIds.PrevPage) as HTMLButtonElement).disabled).toBe(true);
+                expect(requireButton(BookListTestIds.PrevPage).disabled).toBe(true);
             },
             nextDisabled: () => {
-                expect((screen.getByTestId(BookListTestIds.NextPage) as HTMLButtonElement).disabled).toBe(true);
+                expect(requireButton(BookListTestIds.NextPage).disabled).toBe(true);
             },
             nextEnabled: () => {
-                expect((screen.getByTestId(BookListTestIds.NextPage) as HTMLButtonElement).disabled).toBe(false);
+                expect(requireButton(BookListTestIds.NextPage).disabled).toBe(false);
             },
             fetchCallCount: (count) => {
                 expect(booksApi.fetchBooks).toHaveBeenCalledTimes(count);
