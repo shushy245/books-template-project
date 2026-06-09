@@ -53,7 +53,9 @@ export const makeBookCardDriver = (): BookCardDriver => {
             },
             patchBookPending: () => {
                 vi.spyOn(booksApi, 'patchBook').mockReturnValue(
-                    new Promise<Book>((resolve) => { _resolvePatch = resolve; }),
+                    new Promise<Book>((resolve) => {
+                        _resolvePatch = resolve;
+                    }),
                 );
             },
             patchBookRejectsWith: (error = new Error('network error')) => {
@@ -89,13 +91,15 @@ export const makeBookCardDriver = (): BookCardDriver => {
             },
             status: (status) => {
                 const el = screen.getByTestId(BookListTestIds.CardStatus(_book.id));
-                if (!(el instanceof HTMLSelectElement)) throw new Error(`book-card driver: expected select at ${_book.id}`);
+                if (!(el instanceof HTMLSelectElement))
+                    throw new Error(`book-card driver: expected select at ${_book.id}`);
                 expect(el.value).toBe(status);
             },
             statusEventually: async (status) => {
                 await waitFor(() => {
                     const el = screen.getByTestId(BookListTestIds.CardStatus(_book.id));
-                    if (!(el instanceof HTMLSelectElement)) throw new Error(`book-card driver: expected select at ${_book.id}`);
+                    if (!(el instanceof HTMLSelectElement))
+                        throw new Error(`book-card driver: expected select at ${_book.id}`);
                     expect(el.value).toBe(status);
                 });
             },

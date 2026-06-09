@@ -2,7 +2,6 @@ import { beforeEach, describe, it, vi } from 'vitest';
 
 import { ReadingStatus } from '@reading-room/common';
 
-import * as booksApi from '../../api/books.api.ts';
 import { aBook } from '../../testing/builders/index.ts';
 import { BookListDriver, makeBookListDriver } from './book-list.driver.tsx';
 

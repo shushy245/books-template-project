@@ -17,13 +17,30 @@ class BookBuilder {
         }
     }
 
-    withId(id: string): this { this.state = { ...this.state, id }; return this; }
-    withTitle(title: string): this { this.state = { ...this.state, title }; return this; }
-    withAuthorId(authorId: string): this { this.state = { ...this.state, authorId }; return this; }
-    withStatus(status: ReadingStatus): this { this.state = { ...this.state, status }; return this; }
-    withRating(rating: number): this { this.state = { ...this.state, rating }; return this; }
+    withId(id: string): this {
+        this.state = { ...this.state, id };
+        return this;
+    }
+    withTitle(title: string): this {
+        this.state = { ...this.state, title };
+        return this;
+    }
+    withAuthorId(authorId: string): this {
+        this.state = { ...this.state, authorId };
+        return this;
+    }
+    withStatus(status: ReadingStatus): this {
+        this.state = { ...this.state, status };
+        return this;
+    }
+    withRating(rating: number): this {
+        this.state = { ...this.state, rating };
+        return this;
+    }
 
-    build(): Book { return { ...this.state }; }
+    build(): Book {
+        return { ...this.state };
+    }
 }
 
-export const aBook = (...args: ConstructorParameters<typeof BookBuilder>) => new BookBuilder(...args);
+export const aBook = (...args: ConstructorParameters<typeof BookBuilder>): BookBuilder => new BookBuilder(...args);
