@@ -1,9 +1,9 @@
 import { expect } from 'vitest';
 import { Book, PaginatedResult, ReadingStatus } from '@reading-room/common';
 
-import { aBook } from '../../testing/builders/book.js';
-import { FakeBookRepository } from '../../testing/fake-book-repository.js';
-import { listBooks } from './list-books.js';
+import { aBook } from '../../testing/builders/book.ts';
+import { FakeBookRepository } from '../../testing/fake-book-repository.ts';
+import { listBooks } from './list-books.ts';
 
 export type ListBooksDriver = {
     given: {

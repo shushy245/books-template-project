@@ -2,7 +2,7 @@ import { describe, it } from 'vitest';
 
 import { ReadingStatus } from '@reading-room/common';
 
-import { ParseUpdateBookDriver, makeParseUpdateBookDriver } from './update-book.handler.utils.driver.js';
+import { ParseUpdateBookDriver, makeParseUpdateBookDriver } from './update-book.handler.utils.driver.ts';
 
 describe('parseUpdateBookBody', () => {
     const driver: ParseUpdateBookDriver = makeParseUpdateBookDriver();

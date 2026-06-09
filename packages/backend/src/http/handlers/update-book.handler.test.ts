@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from 'vitest';
 
 import { ReadingStatus } from '@reading-room/common';
 
-import { UpdateBookDriver, makeUpdateBookDriver } from './update-book.handler.driver.js';
+import { UpdateBookDriver, makeUpdateBookDriver } from './update-book.handler.driver.ts';
 
 describe('PATCH /api/books/:id', () => {
     let driver: UpdateBookDriver;

@@ -1,10 +1,10 @@
 import { RequestHandler, Response } from 'express';
 
-import { StorePort } from '../../domain/ports/store.port.js';
-import { listShelves } from '../../domain/queries/list-shelves.js';
-import { LoggerPort } from '../../telemetry/logger.port.js';
-import { errorToHttpStatus } from '../http-error.utils.js';
-import { ValidatedRequest } from '../middleware/validate.middleware.js';
+import { StorePort } from '../../domain/ports/store.port.ts';
+import { listShelves } from '../../domain/queries/list-shelves.ts';
+import { LoggerPort } from '../../telemetry/logger.port.ts';
+import { errorToHttpStatus } from '../http-error.utils.ts';
+import { ValidatedRequest } from '../middleware/validate.middleware.ts';
 
 type ListShelvesDeps = {
     store: StorePort;

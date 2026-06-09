@@ -2,11 +2,11 @@ import { RequestHandler, Response } from 'express';
 
 import { BookQueryDto } from '@reading-room/common';
 
-import { StorePort } from '../../domain/ports/store.port.js';
-import { listBooks } from '../../domain/queries/list-books.js';
-import { LoggerPort } from '../../telemetry/logger.port.js';
-import { errorToHttpStatus } from '../http-error.utils.js';
-import { ValidatedRequest } from '../middleware/validate.middleware.js';
+import { StorePort } from '../../domain/ports/store.port.ts';
+import { listBooks } from '../../domain/queries/list-books.ts';
+import { LoggerPort } from '../../telemetry/logger.port.ts';
+import { errorToHttpStatus } from '../http-error.utils.ts';
+import { ValidatedRequest } from '../middleware/validate.middleware.ts';
 
 type ListBooksDeps = {
     store: StorePort;

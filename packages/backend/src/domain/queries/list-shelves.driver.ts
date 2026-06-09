@@ -1,9 +1,9 @@
 import { expect } from 'vitest';
 import { Shelf } from '@reading-room/common';
 
-import { aShelfWithRandomId } from '../../testing/builders/shelf.js';
-import { FakeShelfRepository } from '../../testing/fake-shelf.repository.js';
-import { listShelves } from './list-shelves.js';
+import { aShelfWithRandomId } from '../../testing/builders/shelf.ts';
+import { FakeShelfRepository } from '../../testing/fake-shelf.repository.ts';
+import { listShelves } from './list-shelves.ts';
 
 export type ListShelvesDriver = {
     given: {

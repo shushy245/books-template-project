@@ -1,6 +1,6 @@
 import { describe, it } from 'vitest';
 
-import { ValidateDriver, makeValidateDriver } from './validate.driver.js';
+import { ValidateDriver, makeValidateDriver } from './validate.driver.ts';
 
 // Learning tests — verify Zod and the middleware behave as expected at our integration points.
 // These exist to catch silent breakage on library upgrades.

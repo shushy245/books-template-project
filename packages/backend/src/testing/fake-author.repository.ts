@@ -1,6 +1,6 @@
 import { Author } from '@reading-room/common';
 
-import { AuthorRepositoryPort } from '../domain/ports/author-repository.port.js';
+import { AuthorRepositoryPort } from '../domain/ports/author-repository.port.ts';
 
 export class FakeAuthorRepository implements AuthorRepositoryPort {
     private readonly store: Map<string, Author> = new Map();

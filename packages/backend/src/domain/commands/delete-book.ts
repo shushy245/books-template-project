@@ -1,8 +1,8 @@
 import { EntityKind, OutboxEventType } from '@reading-room/common';
 
-import { LoggerPort } from '../../telemetry/logger.port.js';
-import { NotFoundError, notFoundMessage } from '../errors/index.js';
-import { StorePort } from '../ports/store.port.js';
+import { LoggerPort } from '../../telemetry/logger.port.ts';
+import { NotFoundError, notFoundMessage } from '../errors/index.ts';
+import { StorePort } from '../ports/store.port.ts';
 
 type DeleteBookDeps = {
     store: StorePort;

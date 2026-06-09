@@ -11,8 +11,8 @@ import {
     UpdateBookDto,
 } from '@reading-room/common';
 
-import { ConflictError, NotFoundError, conflictMessage, notFoundMessage } from '../domain/errors/index.js';
-import { BookRepositoryPort } from '../domain/ports/book-repository.port.js';
+import { ConflictError, NotFoundError, conflictMessage, notFoundMessage } from '../domain/errors/index.ts';
+import { BookRepositoryPort } from '../domain/ports/book-repository.port.ts';
 
 const DEFAULT_PAGE_SIZE = 20;
 

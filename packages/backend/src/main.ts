@@ -1,11 +1,11 @@
 // main.ts — composition root.
 // This is the only place real adapters are wired.
 // buildApp() takes deps and remains testable without this file.
-import { buildApp } from './app.js';
-import { Store } from './adapters/store.js';
-import { createDb } from './db/client.js';
-import { startOutboxRelay } from './outbox-relay/outbox-relay.js';
-import { LoggingEventDispatcher } from './adapters/outbox/logging-event-dispatcher.js';
+import { buildApp } from './app.ts';
+import { Store } from './adapters/store.ts';
+import { createDb } from './db/client.ts';
+import { startOutboxRelay } from './outbox-relay/outbox-relay.ts';
+import { LoggingEventDispatcher } from './adapters/outbox/logging-event-dispatcher.ts';
 
 // TODO (S8 T8.1): replace with the real OTel-backed structured logger.
 const logger = {

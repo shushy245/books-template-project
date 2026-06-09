@@ -1,7 +1,7 @@
 import { ReadingStatus } from '@reading-room/common';
 import { describe, expect, it } from 'vitest';
 
-import { canRate, canTransition } from './book-rules.js';
+import { canRate, canTransition } from './book-rules.ts';
 
 describe('canTransition', () => {
     it('a want-to-read book can move to reading', () => {

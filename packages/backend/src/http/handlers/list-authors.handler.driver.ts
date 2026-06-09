@@ -4,10 +4,10 @@ import request from 'supertest';
 
 import { Author } from '@reading-room/common';
 
-import { buildApp } from '../../app.js';
-import { anAuthorWithRandomId } from '../../testing/builders/author.js';
-import { FakeStore } from '../../testing/fake-store.js';
-import { makeFakeLogger } from '../../testing/fake-logger.js';
+import { buildApp } from '../../app.ts';
+import { anAuthorWithRandomId } from '../../testing/builders/author.ts';
+import { FakeStore } from '../../testing/fake-store.ts';
+import { makeFakeLogger } from '../../testing/fake-logger.ts';
 
 export type ListAuthorsDriver = {
     given: {

@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from 'vitest';
 
 import { BookSortField, SortDirection } from '@reading-room/common';
 
-import { ListBooksDriver, makeListBooksDriver } from './list-books.driver.js';
+import { ListBooksDriver, makeListBooksDriver } from './list-books.driver.ts';
 
 describe('listBooks', () => {
     let driver: ListBooksDriver;

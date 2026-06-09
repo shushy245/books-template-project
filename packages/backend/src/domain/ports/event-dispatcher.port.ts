@@ -1,4 +1,4 @@
-import { OutboxRecord } from './outbox-repository.port.js';
+import { OutboxRecord } from './outbox-repository.port.ts';
 
 // The relay's downstream target. Today a logging adapter; swap for a Kafka/Rabbit
 // adapter later without touching the relay — the port is the seam.

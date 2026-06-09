@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Shelf } from '@reading-room/common';
 
-import { aShelfWithRandomId } from '../../testing/builders/shelf.js';
-import { ShelfRepositoryPort } from './shelf-repository.port.js';
+import { aShelfWithRandomId } from '../../testing/builders/shelf.ts';
+import { ShelfRepositoryPort } from './shelf-repository.port.ts';
 
 type TestContext = {
     repo: ShelfRepositoryPort;

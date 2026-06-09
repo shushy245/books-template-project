@@ -1,6 +1,6 @@
-import { EventDispatcherPort } from '../../domain/ports/event-dispatcher.port.js';
-import { OutboxRecord } from '../../domain/ports/outbox-repository.port.js';
-import { LoggerPort } from '../../telemetry/logger.port.js';
+import { EventDispatcherPort } from '../../domain/ports/event-dispatcher.port.ts';
+import { OutboxRecord } from '../../domain/ports/outbox-repository.port.ts';
+import { LoggerPort } from '../../telemetry/logger.port.ts';
 
 // Placeholder downstream: logs the event instead of publishing to a broker.
 // Swap this adapter for a Kafka/Rabbit one — the relay never changes.

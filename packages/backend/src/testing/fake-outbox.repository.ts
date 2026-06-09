@@ -1,4 +1,4 @@
-import { OutboxEvent, OutboxRecord, OutboxRepositoryPort } from '../domain/ports/outbox-repository.port.js';
+import { OutboxEvent, OutboxRecord, OutboxRepositoryPort } from '../domain/ports/outbox-repository.port.ts';
 
 export class FakeOutboxRepository implements OutboxRepositoryPort {
     private readonly records: OutboxRecord[] = [];

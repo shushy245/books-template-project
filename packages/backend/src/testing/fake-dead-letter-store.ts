@@ -1,4 +1,4 @@
-import { DeadLetterEntry, DeadLetterStorePort } from '../domain/ports/dead-letter-store.port.js';
+import { DeadLetterEntry, DeadLetterStorePort } from '../domain/ports/dead-letter-store.port.ts';
 
 export class FakeDeadLetterStore implements DeadLetterStorePort {
     private readonly records: DeadLetterEntry[] = [];

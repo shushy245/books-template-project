@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/main.ts",
-    "build": "tsc",
+    "build": "tsup src/main.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest-integration.config.ts",
@@ -28,6 +28,7 @@
     "@types/supertest": "^6.0.2",
     "drizzle-kit": "^0.31.10",
     "supertest": "^7.0.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.19.1",
     "typescript": "^5.5.4",
     "vitest": "^4.1.8"

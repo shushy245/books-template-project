@@ -2,9 +2,9 @@ import { asc, eq } from 'drizzle-orm';
 
 import { Shelf } from '@reading-room/common';
 
-import { Db } from '../../db/client.js';
-import { shelves } from '../../db/schema.js';
-import { ShelfRepositoryPort } from '../../domain/ports/shelf-repository.port.js';
+import { Db } from '../../db/client.ts';
+import { shelves } from '../../db/schema.ts';
+import { ShelfRepositoryPort } from '../../domain/ports/shelf-repository.port.ts';
 
 export class ShelfRepository implements ShelfRepositoryPort {
     constructor(private readonly db: Db) {}

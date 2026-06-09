@@ -3,9 +3,9 @@ import { z } from 'zod';
 
 import { OutboxEventType } from '@reading-room/common';
 
-import { Db } from '../../db/client.js';
-import { outbox } from '../../db/schema.js';
-import { OutboxEvent, OutboxRecord, OutboxRepositoryPort } from '../../domain/ports/outbox-repository.port.js';
+import { Db } from '../../db/client.ts';
+import { outbox } from '../../db/schema.ts';
+import { OutboxEvent, OutboxRecord, OutboxRepositoryPort } from '../../domain/ports/outbox-repository.port.ts';
 
 const OutboxEventTypeSchema = z.nativeEnum(OutboxEventType);
 const OutboxPayloadSchema = z.record(z.string(), z.unknown());

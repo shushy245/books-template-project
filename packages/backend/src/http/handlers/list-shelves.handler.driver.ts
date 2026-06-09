@@ -4,10 +4,10 @@ import request from 'supertest';
 
 import { Shelf } from '@reading-room/common';
 
-import { buildApp } from '../../app.js';
-import { aShelfWithRandomId } from '../../testing/builders/shelf.js';
-import { FakeStore } from '../../testing/fake-store.js';
-import { makeFakeLogger } from '../../testing/fake-logger.js';
+import { buildApp } from '../../app.ts';
+import { aShelfWithRandomId } from '../../testing/builders/shelf.ts';
+import { FakeStore } from '../../testing/fake-store.ts';
+import { makeFakeLogger } from '../../testing/fake-logger.ts';
 
 export type ListShelvesDriver = {
     given: {

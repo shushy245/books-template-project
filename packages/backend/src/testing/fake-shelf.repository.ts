@@ -1,6 +1,6 @@
 import { Shelf } from '@reading-room/common';
 
-import { ShelfRepositoryPort } from '../domain/ports/shelf-repository.port.js';
+import { ShelfRepositoryPort } from '../domain/ports/shelf-repository.port.ts';
 
 export class FakeShelfRepository implements ShelfRepositoryPort {
     private readonly store: Map<string, Shelf> = new Map();

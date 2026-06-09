@@ -5,16 +5,16 @@ import { Pool } from 'pg';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import { Db, createDb } from '../../db/client.js';
-import { authors, books, outbox, shelves } from '../../db/schema.js';
-import { BookRepository } from '../../adapters/repositories/book.repository.js';
-import { AuthorRepository } from '../../adapters/repositories/author.repository.js';
-import { Store } from '../../adapters/store.js';
-import { StorePort } from '../ports/store.port.js';
-import { aBook } from '../../testing/builders/book.js';
-import { makeFakeLogger } from '../../testing/fake-logger.js';
-import { FakeOutboxRepository } from '../../testing/fake-outbox.repository.js';
-import { createBook } from './create-book.js';
+import { Db, createDb } from '../../db/client.ts';
+import { authors, books, outbox, shelves } from '../../db/schema.ts';
+import { BookRepository } from '../../adapters/repositories/book.repository.ts';
+import { AuthorRepository } from '../../adapters/repositories/author.repository.ts';
+import { Store } from '../../adapters/store.ts';
+import { StorePort } from '../ports/store.port.ts';
+import { aBook } from '../../testing/builders/book.ts';
+import { makeFakeLogger } from '../../testing/fake-logger.ts';
+import { FakeOutboxRepository } from '../../testing/fake-outbox.repository.ts';
+import { createBook } from './create-book.ts';
 
 const makeTestDb = (): { pool: Pool; db: Db } =>
     createDb({

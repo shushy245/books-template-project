@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'vitest';
 
-import { DeleteBookDriver, makeDeleteBookDriver } from './delete-book.handler.driver.js';
+import { DeleteBookDriver, makeDeleteBookDriver } from './delete-book.handler.driver.ts';
 
 describe('DELETE /api/books/:id', () => {
     let driver: DeleteBookDriver;

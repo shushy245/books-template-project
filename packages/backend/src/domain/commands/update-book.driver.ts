@@ -1,11 +1,11 @@
 import { expect } from 'vitest';
 import { Book, OutboxEventType, ReadingStatus, UpdateBookDto } from '@reading-room/common';
 
-import { aBook } from '../../testing/builders/book.js';
-import { FakeStore } from '../../testing/fake-store.js';
-import { makeFakeLogger } from '../../testing/fake-logger.js';
-import { ConflictError, NotFoundError, RuleError } from '../errors/index.js';
-import { updateBook } from './update-book.js';
+import { aBook } from '../../testing/builders/book.ts';
+import { FakeStore } from '../../testing/fake-store.ts';
+import { makeFakeLogger } from '../../testing/fake-logger.ts';
+import { ConflictError, NotFoundError, RuleError } from '../errors/index.ts';
+import { updateBook } from './update-book.ts';
 
 export type UpdateBookDriver = {
     given: {

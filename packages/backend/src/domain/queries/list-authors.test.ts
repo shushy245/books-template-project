@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'vitest';
 
-import { ListAuthorsDriver, makeListAuthorsDriver } from './list-authors.driver.js';
+import { ListAuthorsDriver, makeListAuthorsDriver } from './list-authors.driver.ts';
 
 describe('listAuthors', () => {
     let driver: ListAuthorsDriver;

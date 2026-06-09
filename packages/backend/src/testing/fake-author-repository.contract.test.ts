@@ -1,5 +1,5 @@
-import { FakeAuthorRepository } from './fake-author.repository.js';
-import { runAuthorRepositoryContractTests } from '../domain/ports/author-repository.contract.js';
+import { FakeAuthorRepository } from './fake-author.repository.ts';
+import { runAuthorRepositoryContractTests } from '../domain/ports/author-repository.contract.ts';
 
 runAuthorRepositoryContractTests(async () => {
     const repo = new FakeAuthorRepository();

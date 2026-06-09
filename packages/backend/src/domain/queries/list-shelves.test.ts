@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'vitest';
 
-import { ListShelvesDriver, makeListShelvesDriver } from './list-shelves.driver.js';
+import { ListShelvesDriver, makeListShelvesDriver } from './list-shelves.driver.ts';
 
 describe('listShelves', () => {
     let driver: ListShelvesDriver;

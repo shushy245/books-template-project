@@ -2,10 +2,10 @@ import { expect } from 'vitest';
 import type { Response } from 'supertest';
 import request from 'supertest';
 
-import { buildApp } from '../../app.js';
-import { aBook } from '../../testing/builders/book.js';
-import { FakeStore } from '../../testing/fake-store.js';
-import { makeFakeLogger } from '../../testing/fake-logger.js';
+import { buildApp } from '../../app.ts';
+import { aBook } from '../../testing/builders/book.ts';
+import { FakeStore } from '../../testing/fake-store.ts';
+import { makeFakeLogger } from '../../testing/fake-logger.ts';
 
 export type ListBooksDriver = {
     given: {

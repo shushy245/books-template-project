@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'vitest';
 
-import { DeleteBookDriver, makeDeleteBookDriver } from './delete-book.driver.js';
+import { DeleteBookDriver, makeDeleteBookDriver } from './delete-book.driver.ts';
 
 describe('deleteBook', () => {
     let driver: DeleteBookDriver;

@@ -1,10 +1,10 @@
 import { RequestHandler, Response } from 'express';
 
-import { StorePort } from '../../domain/ports/store.port.js';
-import { listAuthors } from '../../domain/queries/list-authors.js';
-import { LoggerPort } from '../../telemetry/logger.port.js';
-import { errorToHttpStatus } from '../http-error.utils.js';
-import { ValidatedRequest } from '../middleware/validate.middleware.js';
+import { StorePort } from '../../domain/ports/store.port.ts';
+import { listAuthors } from '../../domain/queries/list-authors.ts';
+import { LoggerPort } from '../../telemetry/logger.port.ts';
+import { errorToHttpStatus } from '../http-error.utils.ts';
+import { ValidatedRequest } from '../middleware/validate.middleware.ts';
 
 type ListAuthorsDeps = {
     store: StorePort;

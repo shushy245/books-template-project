@@ -1,8 +1,8 @@
-import { BookRepositoryPort } from './book-repository.port.js';
-import { AuthorRepositoryPort } from './author-repository.port.js';
-import { OutboxRepositoryPort } from './outbox-repository.port.js';
-import { ShelfRepositoryPort } from './shelf-repository.port.js';
-import { DeadLetterStorePort } from './dead-letter-store.port.js';
+import { BookRepositoryPort } from './book-repository.port.ts';
+import { AuthorRepositoryPort } from './author-repository.port.ts';
+import { OutboxRepositoryPort } from './outbox-repository.port.ts';
+import { ShelfRepositoryPort } from './shelf-repository.port.ts';
+import { DeadLetterStorePort } from './dead-letter-store.port.ts';
 
 export type TransactionRepos = {
     books: BookRepositoryPort;

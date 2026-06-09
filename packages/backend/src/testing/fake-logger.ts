@@ -1,4 +1,4 @@
-import { LogEntry, LogFields, LoggerPort } from '../telemetry/logger.port.js';
+import { LogEntry, LogFields, LoggerPort } from '../telemetry/logger.port.ts';
 
 // `exactOptionalPropertyTypes` forbids setting an optional property to `undefined` explicitly.
 // We use a conditional spread so `fields` is only included in the entry when actually provided.

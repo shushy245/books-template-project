@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'vitest';
 
-import { ListBooksDriver, makeListBooksDriver } from './list-books.handler.driver.js';
+import { ListBooksDriver, makeListBooksDriver } from './list-books.handler.driver.ts';
 
 describe('GET /api/books', () => {
     let driver: ListBooksDriver;

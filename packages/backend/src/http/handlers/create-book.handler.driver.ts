@@ -6,12 +6,12 @@ import request from 'supertest';
 
 import { CreateBookDto } from '@reading-room/common';
 
-import { buildApp } from '../../app.js';
-import { aBook } from '../../testing/builders/book.js';
-import { aShelf } from '../../testing/builders/shelf.js';
-import { anAuthor } from '../../testing/builders/author.js';
-import { FakeStore } from '../../testing/fake-store.js';
-import { makeFakeLogger } from '../../testing/fake-logger.js';
+import { buildApp } from '../../app.ts';
+import { aBook } from '../../testing/builders/book.ts';
+import { aShelf } from '../../testing/builders/shelf.ts';
+import { anAuthor } from '../../testing/builders/author.ts';
+import { FakeStore } from '../../testing/fake-store.ts';
+import { makeFakeLogger } from '../../testing/fake-logger.ts';
 
 export type CreateBookDriver = {
     given: {

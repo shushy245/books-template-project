@@ -1,10 +1,10 @@
 import { RequestHandler, Response } from 'express';
 
-import { deleteBook } from '../../domain/commands/delete-book.js';
-import { StorePort } from '../../domain/ports/store.port.js';
-import { LoggerPort } from '../../telemetry/logger.port.js';
-import { errorToHttpStatus } from '../http-error.utils.js';
-import { ValidatedRequest } from '../middleware/validate.middleware.js';
+import { deleteBook } from '../../domain/commands/delete-book.ts';
+import { StorePort } from '../../domain/ports/store.port.ts';
+import { LoggerPort } from '../../telemetry/logger.port.ts';
+import { errorToHttpStatus } from '../http-error.utils.ts';
+import { ValidatedRequest } from '../middleware/validate.middleware.ts';
 
 type DeleteBookDeps = {
     store: StorePort;

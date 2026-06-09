@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'vitest';
 
-import { HealthDriver, makeHealthDriver } from './app.driver.js';
+import { HealthDriver, makeHealthDriver } from './app.driver.ts';
 
 describe('GET /api/health', () => {
     let driver: HealthDriver;

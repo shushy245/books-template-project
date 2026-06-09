@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from 'vitest';
 
 import { OutboxEventType } from '@reading-room/common';
 
-import { CreateBookDriver, makeCreateBookDriver } from './create-book.driver.js';
+import { CreateBookDriver, makeCreateBookDriver } from './create-book.driver.ts';
 
 describe('createBook', () => {
     let driver: CreateBookDriver;

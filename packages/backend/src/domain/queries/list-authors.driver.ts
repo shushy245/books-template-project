@@ -1,9 +1,9 @@
 import { expect } from 'vitest';
 import { Author } from '@reading-room/common';
 
-import { anAuthorWithRandomId } from '../../testing/builders/author.js';
-import { FakeAuthorRepository } from '../../testing/fake-author.repository.js';
-import { listAuthors } from './list-authors.js';
+import { anAuthorWithRandomId } from '../../testing/builders/author.ts';
+import { FakeAuthorRepository } from '../../testing/fake-author.repository.ts';
+import { listAuthors } from './list-authors.ts';
 
 export type ListAuthorsDriver = {
     given: {

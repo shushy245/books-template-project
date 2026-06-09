@@ -4,7 +4,7 @@ import { z } from 'zod';
 import express, { json } from 'express';
 import supertest from 'supertest';
 
-import { validateBody } from './validate.js';
+import { validateBody } from './validate.ts';
 
 const Schema = z.object({
     name: z.string().min(1),

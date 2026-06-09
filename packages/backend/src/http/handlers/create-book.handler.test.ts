@@ -1,6 +1,6 @@
 import { beforeEach, describe, it } from 'vitest';
 
-import { CreateBookDriver, makeCreateBookDriver } from './create-book.handler.driver.js';
+import { CreateBookDriver, makeCreateBookDriver } from './create-book.handler.driver.ts';
 
 describe('POST /api/books', () => {
     let driver: CreateBookDriver;

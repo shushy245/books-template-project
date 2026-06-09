@@ -2,7 +2,7 @@ import { beforeEach, describe, it } from 'vitest';
 
 import { OutboxEventType } from '@reading-room/common';
 
-import { OutboxRelayDriver, makeOutboxRelayDriver } from './outbox-relay.driver.js';
+import { OutboxRelayDriver, makeOutboxRelayDriver } from './outbox-relay.driver.ts';
 
 describe('pollOutbox', () => {
     let driver: OutboxRelayDriver;

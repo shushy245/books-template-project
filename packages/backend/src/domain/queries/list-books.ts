@@ -1,6 +1,6 @@
 import { Book, BookQueryDto, PaginatedResult } from '@reading-room/common';
 
-import { BookRepositoryPort } from '../ports/book-repository.port.js';
+import { BookRepositoryPort } from '../ports/book-repository.port.ts';
 
 type ListBooksDeps = {
     bookRepo: BookRepositoryPort;

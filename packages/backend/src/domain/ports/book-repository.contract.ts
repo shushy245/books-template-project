@@ -2,10 +2,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { BookSortField, ReadingStatus, SortDirection } from '@reading-room/common';
 
-import { aBook } from '../../testing/builders/book.js';
-import { ConflictError } from '../errors/conflict.error.js';
-import { NotFoundError } from '../errors/not-found.error.js';
-import { BookRepositoryPort } from './book-repository.port.js';
+import { aBook } from '../../testing/builders/book.ts';
+import { ConflictError } from '../errors/conflict.error.ts';
+import { NotFoundError } from '../errors/not-found.error.ts';
+import { BookRepositoryPort } from './book-repository.port.ts';
 
 type TestContext = {
     repo: BookRepositoryPort;

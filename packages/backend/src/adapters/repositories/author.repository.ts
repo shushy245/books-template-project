@@ -2,9 +2,9 @@ import { asc, eq } from 'drizzle-orm';
 
 import { Author } from '@reading-room/common';
 
-import { Db } from '../../db/client.js';
-import { authors } from '../../db/schema.js';
-import { AuthorRepositoryPort } from '../../domain/ports/author-repository.port.js';
+import { Db } from '../../db/client.ts';
+import { authors } from '../../db/schema.ts';
+import { AuthorRepositoryPort } from '../../domain/ports/author-repository.port.ts';
 
 export class AuthorRepository implements AuthorRepositoryPort {
     constructor(private readonly db: Db) {}

@@ -4,7 +4,7 @@
 
 import { Book, ReadingStatus } from '@reading-room/common';
 
-import * as schema from '../../db/schema.js';
+import * as schema from '../../db/schema.ts';
 
 type BookRow = typeof schema.books.$inferSelect;
 

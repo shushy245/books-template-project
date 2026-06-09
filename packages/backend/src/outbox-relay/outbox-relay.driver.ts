@@ -2,10 +2,10 @@ import { expect } from 'vitest';
 
 import { OutboxEventType } from '@reading-room/common';
 
-import { FakeStore } from '../testing/fake-store.js';
-import { FakeEventDispatcher } from '../testing/fake-event-dispatcher.js';
-import { makeFakeLogger } from '../testing/fake-logger.js';
-import { pollOutbox } from './outbox-relay.js';
+import { FakeStore } from '../testing/fake-store.ts';
+import { FakeEventDispatcher } from '../testing/fake-event-dispatcher.ts';
+import { makeFakeLogger } from '../testing/fake-logger.ts';
+import { pollOutbox } from './outbox-relay.ts';
 
 export type OutboxRelayDriver = {
     given: {

@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Author } from '@reading-room/common';
 
-import { anAuthorWithRandomId } from '../../testing/builders/author.js';
-import { AuthorRepositoryPort } from './author-repository.port.js';
+import { anAuthorWithRandomId } from '../../testing/builders/author.ts';
+import { AuthorRepositoryPort } from './author-repository.port.ts';
 
 type TestContext = {
     repo: AuthorRepositoryPort;

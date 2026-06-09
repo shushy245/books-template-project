@@ -5,10 +5,10 @@ import type { Pool } from 'pg';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { afterAll, beforeAll } from 'vitest';
 
-import { Db, createDb } from '../../db/client.js';
-import { shelves } from '../../db/schema.js';
-import { ShelfRepository } from './shelf.repository.js';
-import { runShelfRepositoryContractTests } from '../../domain/ports/shelf-repository.contract.js';
+import { Db, createDb } from '../../db/client.ts';
+import { shelves } from '../../db/schema.ts';
+import { ShelfRepository } from './shelf.repository.ts';
+import { runShelfRepositoryContractTests } from '../../domain/ports/shelf-repository.contract.ts';
 
 const makeTestDb = (): { pool: Pool; db: Db } =>
     createDb({

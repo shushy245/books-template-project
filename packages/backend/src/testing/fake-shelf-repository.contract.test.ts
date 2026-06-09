@@ -1,5 +1,5 @@
-import { FakeShelfRepository } from './fake-shelf.repository.js';
-import { runShelfRepositoryContractTests } from '../domain/ports/shelf-repository.contract.js';
+import { FakeShelfRepository } from './fake-shelf.repository.ts';
+import { runShelfRepositoryContractTests } from '../domain/ports/shelf-repository.contract.ts';
 
 runShelfRepositoryContractTests(async () => {
     const repo = new FakeShelfRepository();

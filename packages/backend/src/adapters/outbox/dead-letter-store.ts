@@ -1,6 +1,6 @@
-import { Db } from '../../db/client.js';
-import { dlqEvents } from '../../db/schema.js';
-import { DeadLetterEntry, DeadLetterStorePort } from '../../domain/ports/dead-letter-store.port.js';
+import { Db } from '../../db/client.ts';
+import { dlqEvents } from '../../db/schema.ts';
+import { DeadLetterEntry, DeadLetterStorePort } from '../../domain/ports/dead-letter-store.port.ts';
 
 export class DeadLetterStore implements DeadLetterStorePort {
     constructor(private readonly db: Db) {}
