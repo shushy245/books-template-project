@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import { Book, ReadingStatus } from '@reading-room/common';
 
-import { patchBook } from '../../api/books.api.js';
-import { Column, Row } from '../../ui/box.js';
-import { BookListTestIds } from './book-list.test-ids.js';
-import { isReadingStatus, readingStatusLabelMap } from './book-list.utils.js';
+import { patchBook } from '../../api/books.api.ts';
+import { Column, Row } from '../../ui/box.ts';
+import { BookListTestIds } from './book-list.test-ids.ts';
+import { isReadingStatus, readingStatusLabelMap } from './book-list.utils.ts';
 import styles from './book-card.module.scss';
 
 type BookCardProps = { book: Book; onDelete: (id: string) => void };

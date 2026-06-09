@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 
 import { PaginatedResult, Book } from '@reading-room/common';
 
-import { deleteBook } from '../../api/books.api.js';
-import { Column, Row } from '../../ui/box.js';
-import { RestfulWrapper } from '../../data/restful-wrapper.js';
-import { useBooks } from '../../data/use-books.js';
-import { useBookListContext } from './book-list-context.js';
-import { BookCard } from './book-card.js';
-import { BookListTestIds } from './book-list.test-ids.js';
+import { deleteBook } from '../../api/books.api.ts';
+import { Column, Row } from '../../ui/box.ts';
+import { RestfulWrapper } from '../../data/restful-wrapper.ts';
+import { useBooks } from '../../data/use-books.ts';
+import { useBookListContext } from './book-list-context.ts';
+import { BookCard } from './book-card.ts';
+import { BookListTestIds } from './book-list.test-ids.ts';
 import styles from './book-list.module.scss';
 
 export const BookList = (): JSX.Element => {
