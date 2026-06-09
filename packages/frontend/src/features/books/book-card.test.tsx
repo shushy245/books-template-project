@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, it, vi } from 'vitest';
 import { act, cleanup, waitFor } from '@testing-library/react';
 
-import { ReadingStatus } from '@reading-room/common';
+import { Book, ReadingStatus } from '@reading-room/common';
 
 import * as booksApi from '../../api/books.api.ts';
 import { BookCardDriver, makeBookCardDriver } from './book-card.driver.tsx';
