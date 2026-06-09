@@ -1,4 +1,4 @@
-import { ReadingStatus } from '../enums/reading-status.js';
+import { ReadingStatus } from '../enums/reading-status.ts';
 
 export type UpdateBookDto = {
     id: string;

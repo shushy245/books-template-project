@@ -1,7 +1,7 @@
 import { Book, BookQueryDto, CreateBookDto, PaginatedResult, ReadingStatus } from '@reading-room/common';
 
-import { buildBooksQueryString } from '../features/books/book-list.utils.js';
-import { httpClient } from './http-client.js';
+import { buildBooksQueryString } from '../features/books/book-list.utils.ts';
+import { httpClient } from './http-client.ts';
 
 export const fetchBooks = async (query: BookQueryDto): Promise<PaginatedResult<Book>> => {
     const qs = buildBooksQueryString(query);

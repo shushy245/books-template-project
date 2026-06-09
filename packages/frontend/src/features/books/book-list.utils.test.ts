@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { BookSortField, SortDirection } from '@reading-room/common';
 
-import { buildBooksQueryString } from './book-list.utils.js';
+import { buildBooksQueryString } from './book-list.utils.ts';
 
 type QueryStringDriver = {
     assertQueryString: (input: Parameters<typeof buildBooksQueryString>[0], expected: string) => void;

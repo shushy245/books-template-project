@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { ReadingStatus } from '@reading-room/common';
 
-import { AddBookFormState, emptyAddBookForm, isAddBookFormValid, makeCreateBookDto } from './add-book-form.utils.js';
+import { AddBookFormState, emptyAddBookForm, isAddBookFormValid, makeCreateBookDto } from './add-book-form.utils.ts';
 
 const aFormState = (overrides: Partial<AddBookFormState> = {}): AddBookFormState => ({
     title: 'Dune',

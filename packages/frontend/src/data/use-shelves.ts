@@ -1,7 +1,7 @@
 import { Shelf } from '@reading-room/common';
 
-import { fetchShelves } from '../api/shelves.api.js';
-import { useFetchOnMount } from './use-fetch-on-mount.js';
+import { fetchShelves } from '../api/shelves.api.ts';
+import { useFetchOnMount } from './use-fetch-on-mount.ts';
 
 type UseShelvesResult = {
     data: Shelf[] | undefined;

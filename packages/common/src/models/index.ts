@@ -1,3 +1,3 @@
-export type { Author } from './author.model.js';
-export type { Book } from './book.model.js';
-export type { Shelf } from './shelf.model.js';
+export type { Author } from './author.model.ts';
+export type { Book } from './book.model.ts';
+export type { Shelf } from './shelf.model.ts';

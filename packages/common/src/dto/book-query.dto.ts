@@ -1,6 +1,6 @@
-import { BookSortField } from '../enums/book-sort-field.js';
-import { ReadingStatus } from '../enums/reading-status.js';
-import { SortDirection } from '../enums/sort-direction.js';
+import { BookSortField } from '../enums/book-sort-field.ts';
+import { ReadingStatus } from '../enums/reading-status.ts';
+import { SortDirection } from '../enums/sort-direction.ts';
 
 export type BookQueryDto = {
     shelfId?: string;

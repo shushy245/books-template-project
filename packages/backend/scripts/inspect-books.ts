@@ -1,4 +1,4 @@
-import { createDb } from '../src/db/client.js';
+import { createDb } from '../src/db/client.ts';
 
 const { pool, db } = createDb({
     host: process.env['DB_HOST'] ?? 'localhost',
