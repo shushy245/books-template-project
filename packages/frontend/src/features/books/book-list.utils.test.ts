@@ -1,8 +1,16 @@
 import { describe, expect, it } from 'vitest';
 
-import { BookSortField, SortDirection } from '@reading-room/common';
+import { BookSortField, ReadingStatus, SortDirection } from '@reading-room/common';
 
-import { buildBooksQueryString } from './book-list.utils.ts';
+import {
+    buildBooksQueryString,
+    isBookSortField,
+    isReadingStatus,
+    isSortDirection,
+    readingStatusLabelMap,
+    sortDirectionLabelMap,
+    sortFieldLabelMap,
+} from './book-list.utils.ts';
 
 type QueryStringDriver = {
     assertQueryString: (input: Parameters<typeof buildBooksQueryString>[0], expected: string) => void;
@@ -12,6 +20,54 @@ const makeQueryStringDriver = (): QueryStringDriver => ({
     assertQueryString: (input, expected) => {
         expect(buildBooksQueryString(input)).toBe(expected);
     },
+});
+
+describe('isReadingStatus', () => {
+    it.each(Object.values(ReadingStatus))('returns true for valid status %s', (status) => {
+        expect(isReadingStatus(status)).toBe(true);
+    });
+
+    it('returns false for an arbitrary string', () => {
+        expect(isReadingStatus('not-a-status')).toBe(false);
+    });
+});
+
+describe('isBookSortField', () => {
+    it.each(Object.values(BookSortField))('returns true for valid field %s', (field) => {
+        expect(isBookSortField(field)).toBe(true);
+    });
+
+    it('returns false for an arbitrary string', () => {
+        expect(isBookSortField('not-a-field')).toBe(false);
+    });
+});
+
+describe('isSortDirection', () => {
+    it.each(Object.values(SortDirection))('returns true for valid direction %s', (dir) => {
+        expect(isSortDirection(dir)).toBe(true);
+    });
+
+    it('returns false for an arbitrary string', () => {
+        expect(isSortDirection('not-a-direction')).toBe(false);
+    });
+});
+
+describe('readingStatusLabelMap', () => {
+    it.each(Object.values(ReadingStatus))('has a non-empty label for %s', (status) => {
+        expect(readingStatusLabelMap[status]).toBeTruthy();
+    });
+});
+
+describe('sortFieldLabelMap', () => {
+    it.each(Object.values(BookSortField))('has a non-empty label for %s', (field) => {
+        expect(sortFieldLabelMap[field]).toBeTruthy();
+    });
+});
+
+describe('sortDirectionLabelMap', () => {
+    it.each(Object.values(SortDirection))('has a non-empty label for %s', (dir) => {
+        expect(sortDirectionLabelMap[dir]).toBeTruthy();
+    });
 });
 
 describe('buildBooksQueryString', () => {
