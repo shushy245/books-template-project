@@ -19,7 +19,10 @@
       "Bash(echo \"=== total ===\")",
       "Bash(wc -l -w -c /Users/shalevshushy/.claude/CLAUDE.md)",
       "Bash(echo \"=== top-level \\(#\\) and section \\(##\\) headers with line numbers ===\")",
-      "Bash(grep -nE '^#{1,2} ' /Users/shalevshushy/.claude/CLAUDE.md)"
+      "Bash(grep -nE '^#{1,2} ' /Users/shalevshushy/.claude/CLAUDE.md)",
+      "Bash(PGPASSWORD=reading_room_test psql -h localhost -p 5433 -U reading_room_test -d reading_room_test -c 'DROP SCHEMA IF EXISTS public CASCADE; DROP SCHEMA IF EXISTS drizzle CASCADE; CREATE SCHEMA public;')",
+      "Skill(code-review)",
+      "Skill(code-review:*)"
     ]
   },
   "hooks": {
