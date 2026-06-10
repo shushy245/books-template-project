@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { BookSortField, ReadingStatus, SortDirection } from '@reading-room/common';
 
-import { aBook } from '../../testing/builders/book.ts';
+import { aBook } from '../../testing/builders/index.ts';
 import { ConflictError } from '../errors/conflict.error.ts';
 import { NotFoundError } from '../errors/not-found.error.ts';
 import { BookRepositoryPort } from './book-repository.port.ts';

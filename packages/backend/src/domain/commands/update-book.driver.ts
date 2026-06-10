@@ -1,7 +1,7 @@
 import { expect } from 'vitest';
 import { Book, OutboxEventType, ReadingStatus, UpdateBookDto } from '@reading-room/common';
 
-import { aBook } from '../../testing/builders/book.ts';
+import { aBook } from '../../testing/builders/index.ts';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';
 import { ConflictError, NotFoundError, RuleError } from '../errors/index.ts';

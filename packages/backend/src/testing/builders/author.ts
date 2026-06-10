@@ -1,5 +1,3 @@
-import { randomUUID } from 'crypto';
-
 import { Author } from '@reading-room/common';
 
 type AuthorState = {
@@ -35,5 +33,3 @@ class AuthorBuilder {
 
 export const anAuthor = (...args: ConstructorParameters<typeof AuthorBuilder>): AuthorBuilder =>
     new AuthorBuilder(...args);
-
-export const anAuthorWithRandomId = (): AuthorBuilder => new AuthorBuilder({ id: randomUUID() });

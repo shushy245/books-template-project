@@ -1,7 +1,7 @@
 import { expect } from 'vitest';
 import { Book, PaginatedResult, ReadingStatus } from '@reading-room/common';
 
-import { aBook } from '../../testing/builders/book.ts';
+import { aBook } from '../../testing/builders/index.ts';
 import { FakeBookRepository } from '../../testing/fake-book-repository.ts';
 import { listBooks } from './list-books.ts';
 

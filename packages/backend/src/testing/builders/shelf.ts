@@ -1,5 +1,3 @@
-import { randomUUID } from 'crypto';
-
 import { Shelf } from '@reading-room/common';
 
 type ShelfState = {
@@ -34,5 +32,3 @@ class ShelfBuilder {
 }
 
 export const aShelf = (...args: ConstructorParameters<typeof ShelfBuilder>): ShelfBuilder => new ShelfBuilder(...args);
-
-export const aShelfWithRandomId = (): ShelfBuilder => new ShelfBuilder({ id: randomUUID() });

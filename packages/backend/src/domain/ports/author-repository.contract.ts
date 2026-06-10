@@ -1,8 +1,10 @@
+import { randomUUID } from 'crypto';
+
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Author } from '@reading-room/common';
 
-import { anAuthorWithRandomId } from '../../testing/builders/author.ts';
+import { anAuthor } from '../../testing/builders/index.ts';
 import { AuthorRepositoryPort } from './author-repository.port.ts';
 
 type TestContext = {
@@ -19,7 +21,7 @@ export const runAuthorRepositoryContractTests = (setup: () => Promise<TestContex
         });
 
         const seedAuthor = async (name = 'Test Author'): Promise<Author> => {
-            const author = anAuthorWithRandomId().withName(name).build();
+            const author = anAuthor({ id: randomUUID() }).withName(name).build();
             await ctx.seed(author);
 
             return author;

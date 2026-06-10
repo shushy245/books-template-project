@@ -1,11 +1,13 @@
+import { randomUUID } from 'crypto';
+
 import { expect } from 'vitest';
 import type { Response } from 'supertest';
 import request from 'supertest';
 
 import { Shelf } from '@reading-room/common';
 
+import { aShelf } from '../../testing/builders/index.ts';
 import { buildApp } from '../../app.ts';
-import { aShelfWithRandomId } from '../../testing/builders/shelf.ts';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';
 
@@ -28,7 +30,7 @@ export const makeListShelvesDriver = (): ListShelvesDriver => {
     return {
         given: {
             shelf: async (name) => {
-                store.shelves.seed(aShelfWithRandomId().withName(name).build());
+                store.shelves.seed(aShelf({ id: randomUUID() }).withName(name).build());
             },
         },
 

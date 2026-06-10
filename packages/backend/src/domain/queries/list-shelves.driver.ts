@@ -1,7 +1,9 @@
+import { randomUUID } from 'crypto';
+
 import { expect } from 'vitest';
 import { Shelf } from '@reading-room/common';
 
-import { aShelfWithRandomId } from '../../testing/builders/shelf.ts';
+import { aShelf } from '../../testing/builders/index.ts';
 import { FakeShelfRepository } from '../../testing/fake-shelf.repository.ts';
 import { listShelves } from './list-shelves.ts';
 
@@ -23,7 +25,7 @@ export const makeListShelvesDriver = (): ListShelvesDriver => {
     return {
         given: {
             shelf: async (name) => {
-                repo.seed(aShelfWithRandomId().withName(name).build());
+                repo.seed(aShelf({ id: randomUUID() }).withName(name).build());
             },
         },
 

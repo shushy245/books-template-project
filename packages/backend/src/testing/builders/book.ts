@@ -1,8 +1,7 @@
-import { randomUUID } from 'crypto';
-
 import { Book, CreateBookDto, ReadingStatus } from '@reading-room/common';
 
 type BookState = {
+    id: string;
     title: string;
     authorId: string;
     shelfId: string;
@@ -12,6 +11,7 @@ type BookState = {
 
 class BookBuilder {
     private state: BookState = {
+        id: 'book-id',
         title: 'Test Book',
         authorId: 'author-id',
         shelfId: 'shelf-id',
@@ -20,6 +20,11 @@ class BookBuilder {
 
     constructor(overrides?: Partial<BookState>) {
         this.state = { ...this.state, ...overrides };
+    }
+
+    withId(id: string): this {
+        this.state = { ...this.state, id };
+        return this;
     }
 
     withTitle(title: string): this {
@@ -49,8 +54,9 @@ class BookBuilder {
 
     build(): Book {
         const now = new Date();
+
         return {
-            id: randomUUID(),
+            id: this.state.id,
             title: this.state.title,
             authorId: this.state.authorId,
             shelfId: this.state.shelfId,

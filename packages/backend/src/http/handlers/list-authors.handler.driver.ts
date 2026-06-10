@@ -1,11 +1,13 @@
+import { randomUUID } from 'crypto';
+
 import { expect } from 'vitest';
 import type { Response } from 'supertest';
 import request from 'supertest';
 
 import { Author } from '@reading-room/common';
 
+import { anAuthor } from '../../testing/builders/index.ts';
 import { buildApp } from '../../app.ts';
-import { anAuthorWithRandomId } from '../../testing/builders/author.ts';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';
 
@@ -28,7 +30,7 @@ export const makeListAuthorsDriver = (): ListAuthorsDriver => {
     return {
         given: {
             author: async (name) => {
-                store.authors.seed(anAuthorWithRandomId().withName(name).build());
+                store.authors.seed(anAuthor({ id: randomUUID() }).withName(name).build());
             },
         },
 

@@ -1,7 +1,9 @@
+import { randomUUID } from 'crypto';
+
 import { expect } from 'vitest';
 import { Author } from '@reading-room/common';
 
-import { anAuthorWithRandomId } from '../../testing/builders/author.ts';
+import { anAuthor } from '../../testing/builders/index.ts';
 import { FakeAuthorRepository } from '../../testing/fake-author.repository.ts';
 import { listAuthors } from './list-authors.ts';
 
@@ -23,7 +25,7 @@ export const makeListAuthorsDriver = (): ListAuthorsDriver => {
     return {
         given: {
             author: async (name) => {
-                repo.seed(anAuthorWithRandomId().withName(name).build());
+                repo.seed(anAuthor({ id: randomUUID() }).withName(name).build());
             },
         },
 

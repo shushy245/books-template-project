@@ -1,8 +1,10 @@
+import { randomUUID } from 'crypto';
+
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Shelf } from '@reading-room/common';
 
-import { aShelfWithRandomId } from '../../testing/builders/shelf.ts';
+import { aShelf } from '../../testing/builders/index.ts';
 import { ShelfRepositoryPort } from './shelf-repository.port.ts';
 
 type TestContext = {
@@ -19,7 +21,7 @@ export const runShelfRepositoryContractTests = (setup: () => Promise<TestContext
         });
 
         const seedShelf = async (name = 'Test Shelf'): Promise<Shelf> => {
-            const shelf = aShelfWithRandomId().withName(name).build();
+            const shelf = aShelf({ id: randomUUID() }).withName(name).build();
             await ctx.seed(shelf);
 
             return shelf;

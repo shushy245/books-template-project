@@ -12,9 +12,7 @@ class BookBuilder {
     };
 
     constructor(overrides?: Partial<Book>) {
-        if (overrides !== undefined) {
-            this.state = { ...this.state, ...overrides };
-        }
+        this.state = { ...this.state, ...overrides };
     }
 
     withId(id: string): this {

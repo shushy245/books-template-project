@@ -1,9 +1,7 @@
 import { expect } from 'vitest';
 import { OutboxEventType } from '@reading-room/common';
 
-import { aBook } from '../../testing/builders/book.ts';
-import { aShelf } from '../../testing/builders/shelf.ts';
-import { anAuthor } from '../../testing/builders/author.ts';
+import { aBook, aShelf, anAuthor } from '../../testing/builders/index.ts';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';
 import { NotFoundError } from '../errors/index.ts';
