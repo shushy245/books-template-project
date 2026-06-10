@@ -27,6 +27,7 @@ export type BookCardDriver = {
     };
     assert: {
         title: (title: string) => void;
+        rating: (rating: number) => void;
         status: (status: ReadingStatus) => void;
         statusEventually: (status: ReadingStatus) => Promise<void>;
         onDeleteCalledWith: (id: string) => void;
@@ -73,6 +74,9 @@ export const makeBookCardDriver = (): BookCardDriver => {
         assert: {
             title: (title) => {
                 expect(screen.getByText(title)).toBeInTheDocument();
+            },
+            rating: (rating) => {
+                expect(screen.getByText(`${rating} ★`)).toBeInTheDocument();
             },
             status: (status) => {
                 const el = screen.getByTestId(BookListTestIds.CardStatus(_book.id));

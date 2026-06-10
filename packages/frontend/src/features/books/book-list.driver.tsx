@@ -38,6 +38,8 @@ export type BookListDriver = {
         books: (books: Book[], total?: number) => void;
         noBooks: () => void;
         deleteBookResolves: () => void;
+        deleteBookRejectsWith: (error?: Error) => void;
+        fetchBooksRejectsWith: (error?: Error) => void;
     };
     when: {
         created: () => Promise<void>;
@@ -46,6 +48,7 @@ export type BookListDriver = {
         nextPage: () => Promise<void>;
         prevPage: () => Promise<void>;
         triggerRefresh: () => Promise<void>;
+        deleteCard: (id: string) => Promise<void>;
     };
     assert: {
         cardCount: (count: number) => void;
@@ -55,6 +58,10 @@ export type BookListDriver = {
         nextEnabled: () => void;
         fetchCallCount: (count: number) => void;
         fetchCallCountEventually: (count: number) => Promise<void>;
+        cardAbsent: (id: string) => void;
+        cardPresentEventually: (id: string) => Promise<void>;
+        fetchCalledWithPage: (page: number) => void;
+        errorState: () => void;
     };
 };
 
@@ -71,6 +78,12 @@ export const makeBookListDriver = (): BookListDriver => {
             },
             deleteBookResolves: () => {
                 vi.mocked(booksApi.deleteBook).mockResolvedValue(undefined);
+            },
+            deleteBookRejectsWith: (error = new Error('network error')) => {
+                vi.mocked(booksApi.deleteBook).mockRejectedValue(error);
+            },
+            fetchBooksRejectsWith: (error = new Error('fetch failed')) => {
+                vi.mocked(booksApi.fetchBooks).mockRejectedValue(error);
             },
         },
         when: {
@@ -96,6 +109,9 @@ export const makeBookListDriver = (): BookListDriver => {
             triggerRefresh: async () => {
                 await user.click(screen.getByTestId('test:triggerRefresh'));
             },
+            deleteCard: async (id) => {
+                await user.click(screen.getByTestId(BookListTestIds.CardDeleteButton(id)));
+            },
         },
         assert: {
             cardCount: (count) => {
@@ -120,6 +136,20 @@ export const makeBookListDriver = (): BookListDriver => {
                 await waitFor(() => {
                     expect(booksApi.fetchBooks).toHaveBeenCalledTimes(count);
                 });
+            },
+            cardAbsent: (id) => {
+                expect(screen.queryByTestId(BookListTestIds.Card(id))).not.toBeInTheDocument();
+            },
+            cardPresentEventually: async (id) => {
+                await waitFor(() => {
+                    expect(screen.getByTestId(BookListTestIds.Card(id))).toBeInTheDocument();
+                });
+            },
+            fetchCalledWithPage: (page) => {
+                expect(booksApi.fetchBooks).toHaveBeenCalledWith(expect.objectContaining({ page }));
+            },
+            errorState: () => {
+                expect(screen.getByText(/^Error:/)).toBeInTheDocument();
             },
         },
     };

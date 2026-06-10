@@ -13,6 +13,22 @@ describe('BookCard', () => {
         driver = makeBookCardDriver();
     });
 
+    it('shows the initial status in the select', async () => {
+        driver.given.book({ status: ReadingStatus.Reading });
+
+        await driver.when.created();
+
+        driver.assert.status(ReadingStatus.Reading);
+    });
+
+    it('displays the rating when a rating is set', async () => {
+        driver.given.book({ rating: 4 });
+
+        await driver.when.created();
+
+        driver.assert.rating(4);
+    });
+
     it('renders the book title', async () => {
         driver.given.book({ title: 'Dune' });
 

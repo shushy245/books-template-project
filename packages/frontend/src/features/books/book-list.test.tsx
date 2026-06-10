@@ -58,6 +58,46 @@ describe('BookList', () => {
         driver.assert.nextEnabled();
     });
 
+    it('optimistic delete: card is removed immediately when delete is clicked', async () => {
+        driver.given.books([aBook({ id: 'x' }).build()]);
+
+        await driver.when.created();
+
+        await driver.click.deleteCard('x');
+
+        driver.assert.cardAbsent('x');
+    });
+
+    it('delete rollback: card reappears when deleteBook fails', async () => {
+        driver.given.books([aBook({ id: 'x' }).build()]);
+        driver.given.deleteBookRejectsWith();
+
+        await driver.when.created();
+
+        await driver.click.deleteCard('x');
+
+        await driver.assert.cardPresentEventually('x');
+    });
+
+    it('shows error message when fetchBooks fails', async () => {
+        driver.given.fetchBooksRejectsWith();
+
+        await driver.when.created();
+
+        driver.assert.errorState();
+    });
+
+    it('clicking next page fetches page 2', async () => {
+        driver.given.books([aBook().build()], 100);
+
+        await driver.when.created();
+
+        await driver.click.nextPage();
+
+        await driver.assert.fetchCallCountEventually(2);
+        driver.assert.fetchCalledWithPage(2);
+    });
+
     it('triggerRefresh causes fetchBooks to be called a second time', async () => {
         driver.given.noBooks();
 
