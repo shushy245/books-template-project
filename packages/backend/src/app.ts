@@ -1,8 +1,8 @@
 import express, { Application, json } from 'express';
 
-import { StorePort } from './domain/ports/store.port.ts';
 import { buildRouter } from './http/router.ts';
 import { LoggerPort } from './telemetry/logger.port.ts';
+import { StorePort } from './domain/ports/store.port.ts';
 
 export type AppDeps = {
     store: StorePort;

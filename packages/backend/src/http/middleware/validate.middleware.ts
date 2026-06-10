@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
 import { ZodError, ZodSchema } from 'zod';
+import { Request, Response, NextFunction } from 'express';
 
 export type ValidatedRequest<T = Record<string, unknown>> = Request & {
     validated?: T;

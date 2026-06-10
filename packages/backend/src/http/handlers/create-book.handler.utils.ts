@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import { CreateBookDto, ReadingStatus } from '@reading-room/common';
 
 // Every CreateBookDto field is required, so the parsed object already matches the DTO shape —

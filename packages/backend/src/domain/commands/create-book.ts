@@ -1,7 +1,7 @@
 import { Book, CreateBookDto, EntityKind, OutboxEventType } from '@reading-room/common';
 
-import { NotFoundError, notFoundMessage } from '../errors';
 import { StorePort } from '../ports/store.port.ts';
+import { NotFoundError, notFoundMessage } from '../errors';
 import { LoggerPort } from '../../telemetry/logger.port.ts';
 
 type CreateBookDeps = {

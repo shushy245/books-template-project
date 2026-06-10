@@ -1,7 +1,7 @@
 import { LoggerPort } from '../telemetry/logger.port.ts';
 import { StorePort } from '../domain/ports/store.port.ts';
-import { EventDispatcherPort } from '../domain/ports/event-dispatcher.port.ts';
 import { OutboxRecord } from '../domain/ports/outbox-repository.port.ts';
+import { EventDispatcherPort } from '../domain/ports/event-dispatcher.port.ts';
 
 type OutboxRelayDeps = {
     store: StorePort;

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import { ReadingStatus, UpdateBookDto } from '@reading-room/common';
 
 export const UpdateBookParamsSchema = z.object({

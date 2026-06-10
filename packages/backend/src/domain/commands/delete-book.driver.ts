@@ -1,12 +1,11 @@
 import { expect } from 'vitest';
-
 import { OutboxEventType } from '@reading-room/common';
 
+import { NotFoundError } from '../errors';
+import { deleteBook } from './delete-book.ts';
 import { aBook } from '../../testing/builders';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';
-import { NotFoundError } from '../errors';
-import { deleteBook } from './delete-book.ts';
 
 export type DeleteBookDriver = {
     given: {

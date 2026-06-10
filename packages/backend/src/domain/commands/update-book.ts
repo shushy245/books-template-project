@@ -1,9 +1,9 @@
 import { Book, EntityKind, OutboxEventType, ReadingStatus, UpdateBookDto } from '@reading-room/common';
 
+import { StorePort } from '../ports/store.port.ts';
 import { LoggerPort } from '../../telemetry/logger.port.ts';
 import { canRate, canTransition } from '../book-rules/book-rules.ts';
 import { NotFoundError, RuleError, notFoundMessage, ruleMessage } from '../errors';
-import { StorePort } from '../ports/store.port.ts';
 
 type UpdateBookDeps = {
     store: StorePort;

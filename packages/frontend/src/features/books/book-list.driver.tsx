@@ -1,13 +1,12 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { expect, vi } from 'vitest';
-
+import userEvent from '@testing-library/user-event';
 import { Book, PaginatedResult } from '@reading-room/common';
+import { render, screen, waitFor } from '@testing-library/react';
 
-import * as booksApi from '../../api/books.api.ts';
-import { BookListProvider, useBookListContext } from './book-list-context.tsx';
 import { BookList } from './book-list.tsx';
+import * as booksApi from '../../api/books.api.ts';
 import { BookListTestIds } from './book-list.test-ids.ts';
+import { BookListProvider, useBookListContext } from './book-list-context.tsx';
 
 const makePaginatedResult = (books: Book[], total?: number): PaginatedResult<Book> => ({
     items: books,

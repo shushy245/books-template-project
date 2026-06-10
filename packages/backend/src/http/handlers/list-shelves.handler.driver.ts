@@ -1,13 +1,11 @@
-import { randomUUID } from 'crypto';
-
 import { expect } from 'vitest';
-import type { Response } from 'supertest';
 import request from 'supertest';
-
+import { randomUUID } from 'crypto';
+import type { Response } from 'supertest';
 import { Shelf } from '@reading-room/common';
 
-import { aShelf } from '../../testing/builders';
 import { buildApp } from '../../app.ts';
+import { aShelf } from '../../testing/builders';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';
 

@@ -1,6 +1,5 @@
-import { beforeEach, describe, it, vi } from 'vitest';
-
 import { ReadingStatus } from '@reading-room/common';
+import { beforeEach, describe, it, vi } from 'vitest';
 
 import { BookCardDriver, makeBookCardDriver } from './book-card.driver.tsx';
 

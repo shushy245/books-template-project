@@ -1,5 +1,4 @@
 import { asc, eq } from 'drizzle-orm';
-
 import { Shelf } from '@reading-room/common';
 
 import { Db } from '../../db/client.ts';

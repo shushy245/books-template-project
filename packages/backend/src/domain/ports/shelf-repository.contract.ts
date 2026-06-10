@@ -1,8 +1,6 @@
 import { randomUUID } from 'crypto';
-
-import { beforeEach, describe, expect, it } from 'vitest';
-
 import { Shelf } from '@reading-room/common';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { aShelf } from '../../testing/builders';
 import { ShelfRepositoryPort } from './shelf-repository.port.ts';

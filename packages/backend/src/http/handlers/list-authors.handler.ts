@@ -1,9 +1,9 @@
 import { RequestHandler, Response } from 'express';
 
+import { errorToHttpStatus } from '../http-error.utils.ts';
+import { LoggerPort } from '../../telemetry/logger.port.ts';
 import { StorePort } from '../../domain/ports/store.port.ts';
 import { listAuthors } from '../../domain/queries/list-authors.ts';
-import { LoggerPort } from '../../telemetry/logger.port.ts';
-import { errorToHttpStatus } from '../http-error.utils.ts';
 import { ValidatedRequest } from '../middleware/validate.middleware.ts';
 
 type ListAuthorsDeps = {

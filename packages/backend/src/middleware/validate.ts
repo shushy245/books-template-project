@@ -1,5 +1,5 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { ZodSchema } from 'zod';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 
 export type ValidatedRequest<T> = Request & { body: T };
 

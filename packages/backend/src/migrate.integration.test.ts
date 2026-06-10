@@ -1,10 +1,10 @@
+import { Pool } from 'pg';
+import { sql } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
 // Requires: docker compose up -d postgres_test (port 5433)
 // These tests run in CI with the postgres_test service.
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { sql } from 'drizzle-orm';
-import { Pool } from 'pg';
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { migrate } from 'drizzle-orm/node-postgres/migrator';
 
 const makeTestPool = (): Pool =>
     new Pool({

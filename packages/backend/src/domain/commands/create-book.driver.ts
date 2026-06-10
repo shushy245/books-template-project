@@ -1,11 +1,11 @@
 import { expect } from 'vitest';
 import { OutboxEventType } from '@reading-room/common';
 
-import { aBook, aShelf, anAuthor } from '../../testing/builders';
-import { FakeStore } from '../../testing/fake-store.ts';
-import { makeFakeLogger } from '../../testing/fake-logger.ts';
 import { NotFoundError } from '../errors';
 import { createBook } from './create-book.ts';
+import { FakeStore } from '../../testing/fake-store.ts';
+import { makeFakeLogger } from '../../testing/fake-logger.ts';
+import { aBook, aShelf, anAuthor } from '../../testing/builders';
 
 export type CreateBookDriver = {
     given: {

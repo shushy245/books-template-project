@@ -1,11 +1,10 @@
-import { randomUUID } from 'crypto';
-
 import { expect } from 'vitest';
+import { randomUUID } from 'crypto';
 import { Shelf } from '@reading-room/common';
 
 import { aShelf } from '../../testing/builders';
-import { FakeShelfRepository } from '../../testing/fake-shelf.repository.ts';
 import { listShelves } from './list-shelves.ts';
+import { FakeShelfRepository } from '../../testing/fake-shelf.repository.ts';
 
 export type ListShelvesDriver = {
     given: {

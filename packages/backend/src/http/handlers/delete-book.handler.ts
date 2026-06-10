@@ -1,9 +1,9 @@
 import { RequestHandler, Response } from 'express';
 
-import { deleteBook } from '../../domain/commands/delete-book.ts';
-import { StorePort } from '../../domain/ports/store.port.ts';
-import { LoggerPort } from '../../telemetry/logger.port.ts';
 import { errorToHttpStatus } from '../http-error.utils.ts';
+import { LoggerPort } from '../../telemetry/logger.port.ts';
+import { StorePort } from '../../domain/ports/store.port.ts';
+import { deleteBook } from '../../domain/commands/delete-book.ts';
 import { ValidatedRequest } from '../middleware/validate.middleware.ts';
 
 type DeleteBookDeps = {

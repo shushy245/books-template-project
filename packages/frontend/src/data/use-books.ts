@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-
 import { Book, BookQueryDto, PaginatedResult } from '@reading-room/common';
 
 import { fetchBooks } from '../api/books.api.ts';

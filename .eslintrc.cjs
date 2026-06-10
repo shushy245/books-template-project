@@ -10,7 +10,7 @@ module.exports = {
     // project is omitted here — type-aware rules are expensive and break on non-TS files.
     // We use syntactic rules only at the root; packages add type-aware rules in their own configs.
   },
-  plugins: ['@typescript-eslint', 'import', 'prettier'],
+  plugins: ['@typescript-eslint', 'import', 'prettier', 'perfectionist'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -96,6 +96,41 @@ module.exports = {
         useTabs: false,
         endOfLine: 'lf',
         bracketSpacing: true,
+      },
+    ],
+
+    // ── Import ordering ──────────────────────────────────────────────────────
+    // Disable import/order from plugin:import/recommended — perfectionist replaces it.
+    'import/order': 'off',
+    // Three groups per CLAUDE.md: external → internal (~) → relative; style last.
+    // type: 'line-length' is the closest autofixable proxy for binding-name-length.
+    'perfectionist/sort-imports': [
+      'error',
+      {
+        type: 'line-length',
+        order: 'asc',
+        internalPattern: ['^~/.+'],
+        newlinesBetween: 1,
+        groups: [
+          ['value-builtin', 'value-external', 'type-builtin', 'type-external'],
+          ['value-internal', 'type-internal'],
+          [
+            'value-parent',
+            'value-sibling',
+            'value-index',
+            'type-parent',
+            'type-sibling',
+            'type-index',
+          ],
+          'style',
+          'unknown',
+        ],
+        customGroups: [
+          {
+            groupName: 'style',
+            elementNamePattern: '\\.(module\\.)?(css|scss)$',
+          },
+        ],
       },
     ],
 

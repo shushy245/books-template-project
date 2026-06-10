@@ -1,5 +1,5 @@
-import { ReadingStatus } from '@reading-room/common';
 import { describe, expect, it } from 'vitest';
+import { ReadingStatus } from '@reading-room/common';
 
 import { canRate, canTransition } from './book-rules.ts';
 

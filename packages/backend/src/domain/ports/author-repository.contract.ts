@@ -1,8 +1,6 @@
 import { randomUUID } from 'crypto';
-
-import { beforeEach, describe, expect, it } from 'vitest';
-
 import { Author } from '@reading-room/common';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { anAuthor } from '../../testing/builders';
 import { AuthorRepositoryPort } from './author-repository.port.ts';

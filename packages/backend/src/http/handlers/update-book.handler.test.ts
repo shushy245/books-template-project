@@ -1,5 +1,4 @@
 import { beforeEach, describe, it } from 'vitest';
-
 import { ReadingStatus } from '@reading-room/common';
 
 import { UpdateBookDriver, makeUpdateBookDriver } from './update-book.handler.driver.ts';

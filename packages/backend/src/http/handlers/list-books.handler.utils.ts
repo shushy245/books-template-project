@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import { BookQueryDto, BookSortField, ReadingStatus, SortDirection } from '@reading-room/common';
 
 // .transform() builds BookQueryDto explicitly — setting only defined fields — to satisfy

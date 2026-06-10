@@ -1,5 +1,4 @@
 import { describe, it } from 'vitest';
-
 import { ReadingStatus } from '@reading-room/common';
 
 import { ParseUpdateBookDriver, makeParseUpdateBookDriver } from './update-book.handler.utils.driver.ts';

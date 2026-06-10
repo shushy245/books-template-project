@@ -1,6 +1,5 @@
-import { eq, isNull, sql } from 'drizzle-orm';
 import { z } from 'zod';
-
+import { eq, isNull, sql } from 'drizzle-orm';
 import { OutboxEventType } from '@reading-room/common';
 
 import { Db } from '../../db/client.ts';

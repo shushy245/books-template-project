@@ -1,20 +1,20 @@
+import { Pool } from 'pg';
 // Requires: docker compose up -d postgres_test (port 5433)
 // Run with: pnpm test:integration
 import { sql } from 'drizzle-orm';
-import { Pool } from 'pg';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
+import { createBook } from './create-book.ts';
+import { aBook } from '../../testing/builders';
+import { Store } from '../../adapters/store.ts';
 import { Db, createDb } from '../../db/client.ts';
+import { StorePort } from '../ports/store.port.ts';
+import { makeFakeLogger } from '../../testing/fake-logger.ts';
 import { authors, books, outbox, shelves } from '../../db/schema.ts';
+import { FakeOutboxRepository } from '../../testing/fake-outbox.repository.ts';
 import { BookRepository } from '../../adapters/repositories/book.repository.ts';
 import { AuthorRepository } from '../../adapters/repositories/author.repository.ts';
-import { Store } from '../../adapters/store.ts';
-import { StorePort } from '../ports/store.port.ts';
-import { aBook } from '../../testing/builders';
-import { makeFakeLogger } from '../../testing/fake-logger.ts';
-import { FakeOutboxRepository } from '../../testing/fake-outbox.repository.ts';
-import { createBook } from './create-book.ts';
 
 const makeTestDb = (): { pool: Pool; db: Db } =>
     createDb({

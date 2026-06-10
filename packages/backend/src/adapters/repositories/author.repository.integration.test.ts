@@ -1,12 +1,12 @@
+import type { Pool } from 'pg';
 // Requires: docker compose up -d postgres_test (port 5433)
 // Run with: pnpm test:integration
 import { sql } from 'drizzle-orm';
-import type { Pool } from 'pg';
-import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { afterAll, beforeAll } from 'vitest';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
 
-import { Db, createDb } from '../../db/client.ts';
 import { authors } from '../../db/schema.ts';
+import { Db, createDb } from '../../db/client.ts';
 import { AuthorRepository } from './author.repository.ts';
 import { runAuthorRepositoryContractTests } from '../../domain/ports/author-repository.contract.ts';
 

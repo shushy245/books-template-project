@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
-import type { Response } from 'supertest';
 import request from 'supertest';
+import type { Response } from 'supertest';
 
 import { buildApp } from './app.ts';
 import { FakeStore } from './testing/fake-store.ts';

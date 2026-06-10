@@ -1,5 +1,4 @@
 import { ReactNode, createContext, useContext, useState } from 'react';
-
 import { BookQueryDto, BookSortField, SortDirection } from '@reading-room/common';
 
 type BookListContextValue = {

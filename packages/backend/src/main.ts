@@ -2,8 +2,8 @@
 // This is the only place real adapters are wired.
 // buildApp() takes deps and remains testable without this file.
 import { buildApp } from './app.ts';
-import { Store } from './adapters/store.ts';
 import { createDb } from './db/client.ts';
+import { Store } from './adapters/store.ts';
 import { startOutboxRelay } from './outbox-relay/outbox-relay.ts';
 import { LoggingEventDispatcher } from './adapters/outbox/logging-event-dispatcher.ts';
 

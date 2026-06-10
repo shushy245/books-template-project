@@ -1,11 +1,10 @@
-import { randomUUID } from 'crypto';
-
 import { expect } from 'vitest';
+import { randomUUID } from 'crypto';
 import { Author } from '@reading-room/common';
 
+import { listAuthors } from './list-authors.ts';
 import { anAuthor } from '../../testing/builders';
 import { FakeAuthorRepository } from '../../testing/fake-author.repository.ts';
-import { listAuthors } from './list-authors.ts';
 
 export type ListAuthorsDriver = {
     given: {

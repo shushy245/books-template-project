@@ -1,10 +1,9 @@
-import { StorePort, TransactionRepos } from '../domain/ports/store.port.ts';
-
 import { FakeBookRepository } from './fake-book-repository.ts';
-import { FakeAuthorRepository } from './fake-author.repository.ts';
-import { FakeOutboxRepository } from './fake-outbox.repository.ts';
 import { FakeShelfRepository } from './fake-shelf.repository.ts';
 import { FakeDeadLetterStore } from './fake-dead-letter-store.ts';
+import { FakeAuthorRepository } from './fake-author.repository.ts';
+import { FakeOutboxRepository } from './fake-outbox.repository.ts';
+import { StorePort, TransactionRepos } from '../domain/ports/store.port.ts';
 
 export class FakeStore implements StorePort {
     readonly books = new FakeBookRepository();

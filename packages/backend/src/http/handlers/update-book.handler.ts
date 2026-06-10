@@ -1,11 +1,10 @@
 import { RequestHandler, Response } from 'express';
-
 import { UpdateBookDto } from '@reading-room/common';
 
+import { errorToHttpStatus } from '../http-error.utils.ts';
+import { LoggerPort } from '../../telemetry/logger.port.ts';
 import { StorePort } from '../../domain/ports/store.port.ts';
 import { updateBook } from '../../domain/commands/update-book.ts';
-import { LoggerPort } from '../../telemetry/logger.port.ts';
-import { errorToHttpStatus } from '../http-error.utils.ts';
 import { ValidatedRequest } from '../middleware/validate.middleware.ts';
 
 type UpdateBookDeps = {

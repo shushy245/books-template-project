@@ -1,15 +1,13 @@
-import { randomUUID } from 'crypto';
-
 import { expect } from 'vitest';
-import type { Response } from 'supertest';
 import request from 'supertest';
-
+import { randomUUID } from 'crypto';
+import type { Response } from 'supertest';
 import { CreateBookDto } from '@reading-room/common';
 
-import { aBook, aShelf, anAuthor } from '../../testing/builders';
 import { buildApp } from '../../app.ts';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';
+import { aBook, aShelf, anAuthor } from '../../testing/builders';
 
 export type CreateBookDriver = {
     given: {

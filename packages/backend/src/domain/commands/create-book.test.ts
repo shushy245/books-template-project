@@ -1,5 +1,4 @@
 import { beforeEach, describe, it } from 'vitest';
-
 import { OutboxEventType } from '@reading-room/common';
 
 import { CreateBookDriver, makeCreateBookDriver } from './create-book.driver.ts';

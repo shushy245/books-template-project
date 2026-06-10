@@ -1,7 +1,6 @@
-import { randomUUID } from 'crypto';
-
-import { defineConfig } from 'cypress';
 import { Pool } from 'pg';
+import { randomUUID } from 'crypto';
+import { defineConfig } from 'cypress';
 
 const makePool = (): Pool =>
     new Pool({

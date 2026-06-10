@@ -1,10 +1,10 @@
 import { Db } from '../db/client.ts';
-import { StorePort, TransactionRepos } from '../domain/ports/store.port.ts';
-import { BookRepository } from './repositories/book.repository.ts';
-import { AuthorRepository } from './repositories/author.repository.ts';
-import { OutboxRepository } from './outbox/outbox.repository.ts';
-import { ShelfRepository } from './repositories/shelf.repository.ts';
 import { DeadLetterStore } from './outbox/dead-letter-store.ts';
+import { OutboxRepository } from './outbox/outbox.repository.ts';
+import { BookRepository } from './repositories/book.repository.ts';
+import { ShelfRepository } from './repositories/shelf.repository.ts';
+import { AuthorRepository } from './repositories/author.repository.ts';
+import { StorePort, TransactionRepos } from '../domain/ports/store.port.ts';
 
 export class Store implements StorePort {
     readonly books: BookRepository;

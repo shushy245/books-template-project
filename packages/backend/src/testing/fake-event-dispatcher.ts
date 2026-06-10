@@ -1,5 +1,5 @@
-import { EventDispatcherPort } from '../domain/ports/event-dispatcher.port.ts';
 import { OutboxRecord } from '../domain/ports/outbox-repository.port.ts';
+import { EventDispatcherPort } from '../domain/ports/event-dispatcher.port.ts';
 
 export class FakeEventDispatcher implements EventDispatcherPort {
     private readonly dispatched: OutboxRecord[] = [];
