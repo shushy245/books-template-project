@@ -45,12 +45,12 @@ export const makeBookCardDriver = (): BookCardDriver => {
                 _book = aBook(overrides).build();
             },
             patchBookResolvesWith: (overrides = {}) => {
-                vi.spyOn(booksApi, 'patchBook').mockImplementation(() =>
+                vi.mocked(booksApi.patchBook).mockImplementation(() =>
                     Promise.resolve({ ..._book, updatedAt: new Date(), ...overrides }),
                 );
             },
             patchBookRejectsWith: (error = new Error('network error')) => {
-                vi.spyOn(booksApi, 'patchBook').mockRejectedValue(error);
+                vi.mocked(booksApi.patchBook).mockRejectedValue(error);
             },
         },
         when: {
