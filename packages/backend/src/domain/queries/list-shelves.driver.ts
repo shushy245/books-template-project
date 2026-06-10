@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 import { expect } from 'vitest';
 import { Shelf } from '@reading-room/common';
 
-import { aShelf } from '../../testing/builders/index.ts';
+import { aShelf } from '../../testing/builders';
 import { FakeShelfRepository } from '../../testing/fake-shelf.repository.ts';
 import { listShelves } from './list-shelves.ts';
 

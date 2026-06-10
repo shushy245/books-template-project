@@ -6,7 +6,7 @@ import request from 'supertest';
 
 import { Author } from '@reading-room/common';
 
-import { anAuthor } from '../../testing/builders/index.ts';
+import { anAuthor } from '../../testing/builders';
 import { buildApp } from '../../app.ts';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';

@@ -2,7 +2,7 @@ import { beforeEach, describe, it, vi } from 'vitest';
 
 import { ReadingStatus } from '@reading-room/common';
 
-import { aBook } from '../../testing/builders/index.ts';
+import { aBook } from '../../testing/builders';
 import { BookListDriver, makeBookListDriver } from './book-list.driver.tsx';
 
 vi.mock('../../api/books.api.ts');

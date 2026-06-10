@@ -5,7 +5,7 @@ import { expect, vi } from 'vitest';
 import { Book, ReadingStatus } from '@reading-room/common';
 
 import * as booksApi from '../../api/books.api.ts';
-import { aBook } from '../../testing/builders/index.ts';
+import { aBook } from '../../testing/builders';
 import { BookCard } from './book-card.tsx';
 import { BookListTestIds } from './book-list.test-ids.ts';
 import { readingStatusLabelMap } from './book-list.utils.ts';

@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Shelf } from '@reading-room/common';
 
-import { aShelf } from '../../testing/builders/index.ts';
+import { aShelf } from '../../testing/builders';
 import { ShelfRepositoryPort } from './shelf-repository.port.ts';
 
 type TestContext = {

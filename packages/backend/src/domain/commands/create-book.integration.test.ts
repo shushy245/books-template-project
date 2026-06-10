@@ -11,7 +11,7 @@ import { BookRepository } from '../../adapters/repositories/book.repository.ts';
 import { AuthorRepository } from '../../adapters/repositories/author.repository.ts';
 import { Store } from '../../adapters/store.ts';
 import { StorePort } from '../ports/store.port.ts';
-import { aBook } from '../../testing/builders/index.ts';
+import { aBook } from '../../testing/builders';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';
 import { FakeOutboxRepository } from '../../testing/fake-outbox.repository.ts';
 import { createBook } from './create-book.ts';

@@ -6,7 +6,7 @@ import request from 'supertest';
 
 import { CreateBookDto } from '@reading-room/common';
 
-import { aBook, aShelf, anAuthor } from '../../testing/builders/index.ts';
+import { aBook, aShelf, anAuthor } from '../../testing/builders';
 import { buildApp } from '../../app.ts';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';

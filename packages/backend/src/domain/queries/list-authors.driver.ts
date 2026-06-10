@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 import { expect } from 'vitest';
 import { Author } from '@reading-room/common';
 
-import { anAuthor } from '../../testing/builders/index.ts';
+import { anAuthor } from '../../testing/builders';
 import { FakeAuthorRepository } from '../../testing/fake-author.repository.ts';
 import { listAuthors } from './list-authors.ts';
 

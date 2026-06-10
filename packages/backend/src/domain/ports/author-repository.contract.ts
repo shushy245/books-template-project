@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Author } from '@reading-room/common';
 
-import { anAuthor } from '../../testing/builders/index.ts';
+import { anAuthor } from '../../testing/builders';
 import { AuthorRepositoryPort } from './author-repository.port.ts';
 
 type TestContext = {

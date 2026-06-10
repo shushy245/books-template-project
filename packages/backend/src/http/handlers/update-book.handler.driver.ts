@@ -5,7 +5,7 @@ import request from 'supertest';
 import { Book, ReadingStatus } from '@reading-room/common';
 
 import { buildApp } from '../../app.ts';
-import { aBook } from '../../testing/builders/index.ts';
+import { aBook } from '../../testing/builders';
 import { FakeStore } from '../../testing/fake-store.ts';
 import { makeFakeLogger } from '../../testing/fake-logger.ts';
 

@@ -14,7 +14,7 @@ import {
 import { Db } from '../../db/client.ts';
 import { books } from '../../db/schema.ts';
 import { mapBookRow } from './row-mappers.utils.ts';
-import { ConflictError, NotFoundError, conflictMessage, notFoundMessage } from '../../domain/errors/index.ts';
+import { ConflictError, NotFoundError, conflictMessage, notFoundMessage } from '../../domain/errors';
 import { BookRepositoryPort } from '../../domain/ports/book-repository.port.ts';
 
 const DEFAULT_PAGE_SIZE = 20;
