@@ -1,14 +1,25 @@
+import { z } from 'zod';
 import { Pool } from 'pg';
 import { randomUUID } from 'crypto';
 import { defineConfig } from 'cypress';
 
+const DbConfigSchema = z.object({
+    DB_HOST: z.string().min(1),
+    DB_PORT: z.coerce.number().int().positive(),
+    DB_USER: z.string().min(1),
+    DB_PASSWORD: z.string().min(1),
+    DB_NAME: z.string().min(1),
+});
+
+const dbConfig = DbConfigSchema.parse(process.env);
+
 const makePool = (): Pool =>
     new Pool({
-        host: process.env['DB_HOST'] ?? 'localhost',
-        port: Number(process.env['DB_PORT'] ?? 5434),
-        user: process.env['DB_USER'] ?? 'reading_room',
-        password: process.env['DB_PASSWORD'] ?? 'reading_room',
-        database: process.env['DB_NAME'] ?? 'reading_room',
+        host: dbConfig.DB_HOST,
+        port: dbConfig.DB_PORT,
+        user: dbConfig.DB_USER,
+        password: dbConfig.DB_PASSWORD,
+        database: dbConfig.DB_NAME,
     });
 
 type SeedBooksInput = { titles: string[] };
