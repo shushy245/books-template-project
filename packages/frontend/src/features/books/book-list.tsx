@@ -88,18 +88,24 @@ const BookListContent = ({ result, page, onPageChange, hiddenIds, onDelete }: Bo
 
 type PaginationProps = { page: number; totalPages: number; onPageChange: (page: number) => void };
 
-const Pagination = ({ page, totalPages, onPageChange }: PaginationProps): JSX.Element => (
-    <Row className={styles.pagination}>
-        <button onClick={() => onPageChange(page - 1)} disabled={page <= 1} data-testid={BookListTestIds.PrevPage}>
-            {`← Prev`}
-        </button>
-        <span>{`${page} / ${totalPages}`}</span>
-        <button
-            onClick={() => onPageChange(page + 1)}
-            disabled={page >= totalPages}
-            data-testid={BookListTestIds.NextPage}
-        >
-            {`Next →`}
-        </button>
-    </Row>
-);
+const Pagination = ({ page, totalPages, onPageChange }: PaginationProps): JSX.Element => {
+    const handlePrevPage = (): void => {
+        onPageChange(page - 1);
+    };
+
+    const handleNextPage = (): void => {
+        onPageChange(page + 1);
+    };
+
+    return (
+        <Row className={styles.pagination}>
+            <button onClick={handlePrevPage} disabled={page <= 1} data-testid={BookListTestIds.PrevPage}>
+                {`← Prev`}
+            </button>
+            <span>{`${page} / ${totalPages}`}</span>
+            <button onClick={handleNextPage} disabled={page >= totalPages} data-testid={BookListTestIds.NextPage}>
+                {`Next →`}
+            </button>
+        </Row>
+    );
+};
