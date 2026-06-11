@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "mcp__plugin_context7_context7__resolve-library-id",
-      "mcp__plugin_context7_context7__query-docs"
+      "mcp__plugin_context7_context7__query-docs",
+      "Bash(python3 -c \"import sys,json; cfg=json.load\\(sys.stdin\\); print\\(json.dumps\\(cfg.get\\('rules',{}\\).get\\('perfectionist/sort-imports','NOT FOUND'\\), indent=2\\)\\)\")",
+      "Bash(python3 -c \"import sys,json; p=json.load\\(sys.stdin\\); print\\(p.get\\('version'\\)\\); print\\(list\\(p.get\\('exports',{}\\).keys\\(\\)\\)[:10]\\)\")",
+      "Bash(node -e \"const p = require\\('/Users/shalevshushy/Desktop/code/work/blackjack/node_modules/eslint-plugin-perfectionist'\\); console.log\\(JSON.stringify\\(Object.keys\\(p\\), null, 2\\)\\)\")",
+      "Bash(node -e \"const p = require\\('/Users/shalevshushy/Desktop/code/work/blackjack/node_modules/eslint-plugin-perfectionist'\\); console.log\\('rules keys:', Object.keys\\(p.rules || {}\\)\\); console.log\\('has sort-imports:', 'sort-imports' in \\(p.rules || {}\\)\\); console.log\\('p.default keys:', Object.keys\\(p.default || {}\\)\\)\")",
+      "Bash(node -e ' *)"
     ]
   },
   "hooks": {
