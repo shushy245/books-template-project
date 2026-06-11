@@ -5,7 +5,7 @@ import { errorToHttpStatus } from '../http-error.utils.ts';
 import { LoggerPort } from '../../telemetry/logger.port.ts';
 import { StorePort } from '../../domain/ports/store.port.ts';
 import { createBook } from '../../domain/commands/create-book.ts';
-import { ValidatedRequest } from '../middleware/validate.middleware.ts';
+import { ValidatedRequest, requireValidated } from '../middleware/validate.middleware.ts';
 
 type CreateBookDeps = {
     store: StorePort;
@@ -15,7 +15,7 @@ type CreateBookDeps = {
 export const makeCreateBookHandler =
     ({ store, logger }: CreateBookDeps): RequestHandler =>
     async (req: ValidatedRequest<{ body: CreateBookDto }>, res: Response): Promise<void> => {
-        const { body } = req.validated!;
+        const { body } = requireValidated(req);
         logger.info({}, 'createBook: handler started', { shelfId: body.shelfId, authorId: body.authorId });
 
         try {

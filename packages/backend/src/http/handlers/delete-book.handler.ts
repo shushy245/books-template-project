@@ -4,7 +4,7 @@ import { errorToHttpStatus } from '../http-error.utils.ts';
 import { LoggerPort } from '../../telemetry/logger.port.ts';
 import { StorePort } from '../../domain/ports/store.port.ts';
 import { deleteBook } from '../../domain/commands/delete-book.ts';
-import { ValidatedRequest } from '../middleware/validate.middleware.ts';
+import { ValidatedRequest, requireValidated } from '../middleware/validate.middleware.ts';
 
 type DeleteBookDeps = {
     store: StorePort;
@@ -14,7 +14,7 @@ type DeleteBookDeps = {
 export const makeDeleteBookHandler =
     ({ store, logger }: DeleteBookDeps): RequestHandler =>
     async (req: ValidatedRequest<{ params: { id: string } }>, res: Response): Promise<void> => {
-        const { id } = req.validated!.params;
+        const { id } = requireValidated(req).params;
         logger.info({}, 'deleteBook: handler started', { id });
 
         try {

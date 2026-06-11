@@ -5,7 +5,7 @@ import { errorToHttpStatus } from '../http-error.utils.ts';
 import { LoggerPort } from '../../telemetry/logger.port.ts';
 import { StorePort } from '../../domain/ports/store.port.ts';
 import { updateBook } from '../../domain/commands/update-book.ts';
-import { ValidatedRequest } from '../middleware/validate.middleware.ts';
+import { ValidatedRequest, requireValidated } from '../middleware/validate.middleware.ts';
 
 type UpdateBookDeps = {
     store: StorePort;
@@ -18,7 +18,7 @@ export const makeUpdateBookHandler =
         req: ValidatedRequest<{ params: { id: string }; body: Omit<UpdateBookDto, 'id'> }>,
         res: Response,
     ): Promise<void> => {
-        const { params, body } = req.validated!;
+        const { params, body } = requireValidated(req);
         logger.info({}, 'updateBook: handler started', { id: params.id });
 
         try {

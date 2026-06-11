@@ -49,7 +49,7 @@ A story is not done until code-review has run. For stories touching multiple lay
 1. Define Zod schema in `handlers/my-handler.handler.utils.ts` and export it
 2. Export parse functions if you need to reuse them in tests
 3. In `router.ts`: import the schema and wire it as middleware
-4. Handler receives validated data via `req.validated`
+4. Handler reads validated data via `requireValidated(req)` — never `req.validated!`
 
 **Example:**
 ```ts
@@ -69,7 +69,7 @@ router.patch('/my/:id',
 // handlers/my-handler.ts
 export const makeMyHandler = ({ store, logger }: Deps): RequestHandler =>
     async (req: ValidatedRequest<{ params: { id: string }; body: { name: string } }>, res: Response) => {
-        const { params, body } = req.validated!;
+        const { params, body } = requireValidated(req);
         // validation already happened, domain logic goes here
     };
 ```
@@ -95,7 +95,7 @@ Monorepo — three packages:
 ## Key conventions (project-specific)
 
 - `StorePort` has `books`, `shelves`, and `transaction()`. Outbox is only accessible inside a transaction.
-- **Validation is always a middleware.** Zod schemas live in `handlers/*.handler.utils.ts` and are imported into `router.ts`. Use `createValidator(schema, source)` for single validation, `createCombinedValidator([rules])` for multiple (params + body). Handlers receive pre-validated data via `req.validated`.
+- **Validation is always a middleware.** Zod schemas live in `handlers/*.handler.utils.ts` and are imported into `router.ts`. Use `createValidator(schema, source)` for single validation, `createCombinedValidator([rules])` for multiple (params + body). Handlers read pre-validated data via `requireValidated(req)` (guard-clause selector in `validate.middleware.ts`) — never `req.validated!`.
 - Error HTTP mapping lives in `http/http-error.utils.ts`: NotFoundError→404, ConflictError→409, RuleError→422.
 - `BookRepository` contract tests in `domain/ports/book-repository.contract.ts` run against both
   `FakeBookRepository` and `BookRepository`. Add new repo behaviour there first.
