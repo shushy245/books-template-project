@@ -72,8 +72,9 @@ module.exports = {
     // ── Implicit arrow returns over explicit ──────────────────────────────────
     'arrow-body-style': ['error', 'as-needed'],
 
-    // ── Guard clauses: no else after return ───────────────────────────────────
+    // ── Guard clauses: no else after return, shallow nesting ──────────────────
     'no-else-return': ['error', { allowElseIf: false }],
+    'max-depth': ['error', 2],
 
     // ── Immutability: never reassign params ───────────────────────────────────
     'no-param-reassign': 'error',
