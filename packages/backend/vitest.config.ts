@@ -13,5 +13,6 @@ export default defineConfig({
         reporter: 'verbose',
         environment: 'node',
         exclude: ['**/node_modules/**', '**/dist/**', '**/*.integration.test.ts'],
+        clearMocks: true,
     },
 });
