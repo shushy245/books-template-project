@@ -85,7 +85,7 @@ describe('createBook integration', () => {
                 list: async () => [],
             },
             outbox: new FakeOutboxRepository(),
-            deadLetters: { append: async () => {} },
+            deadLetters: { append: async () => {}, list: async () => [] },
             transaction: (work) =>
                 db.transaction(async (tx) =>
                     work({
@@ -98,7 +98,7 @@ describe('createBook integration', () => {
                             markProcessed: async () => {},
                             incrementDeliveryCount: async () => {},
                         },
-                        deadLetters: { append: async () => {} },
+                        deadLetters: { append: async () => {}, list: async () => [] },
                     }),
                 ),
         };

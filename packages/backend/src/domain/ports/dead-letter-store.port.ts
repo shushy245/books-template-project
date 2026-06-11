@@ -9,6 +9,12 @@ export type DeadLetterEntry = {
     error: string;
 };
 
+export type DlqEventRecord = DeadLetterEntry & {
+    id: string;
+    createdAt: Date;
+};
+
 export interface DeadLetterStorePort {
     append(entry: DeadLetterEntry): Promise<void>;
+    list(): Promise<DlqEventRecord[]>;
 }
