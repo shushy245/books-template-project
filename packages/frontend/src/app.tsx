@@ -24,7 +24,7 @@ export const App = (): JSX.Element => {
     return (
         <Column>
             <Row>
-                <h1 data-testid={AppTestIds.Heading}>Reading Room</h1>
+                <h1 data-testid={AppTestIds.Heading}>{`Reading Room`}</h1>
                 <span data-testid={AppTestIds.BackendBadge}>
                     {backendStatus === undefined ? 'checking backend…' : `backend: ${backendStatus}`}
                 </span>

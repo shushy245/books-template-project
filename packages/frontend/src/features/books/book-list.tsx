@@ -66,7 +66,7 @@ const BookListContent = ({ result, page, onPageChange, hiddenIds, onDelete }: Bo
     if (visibleItems.length === 0) {
         return (
             <p className={styles.empty} data-testid={BookListTestIds.EmptyState}>
-                No books yet.
+                {`No books yet.`}
             </p>
         );
     }
@@ -91,17 +91,15 @@ type PaginationProps = { page: number; totalPages: number; onPageChange: (page: 
 const Pagination = ({ page, totalPages, onPageChange }: PaginationProps): JSX.Element => (
     <Row className={styles.pagination}>
         <button onClick={() => onPageChange(page - 1)} disabled={page <= 1} data-testid={BookListTestIds.PrevPage}>
-            ← Prev
+            {`← Prev`}
         </button>
-        <span>
-            {page} / {totalPages}
-        </span>
+        <span>{`${page} / ${totalPages}`}</span>
         <button
             onClick={() => onPageChange(page + 1)}
             disabled={page >= totalPages}
             data-testid={BookListTestIds.NextPage}
         >
-            Next →
+            {`Next →`}
         </button>
     </Row>
 );

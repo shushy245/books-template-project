@@ -41,13 +41,13 @@ export const BookCard = ({ book, onDelete }: BookCardProps): JSX.Element => {
 
             <Row className={styles.meta}>
                 <StatusSelect book={localBook} onStatusChange={handleStatusChange} />
-                {localBook.rating !== undefined && <span>{localBook.rating} ★</span>}
+                {localBook.rating !== undefined && <span>{`${localBook.rating} ★`}</span>}
                 <button
                     className={styles.deleteButton}
                     onClick={handleDelete}
                     data-testid={BookListTestIds.CardDeleteButton(localBook.id)}
                 >
-                    Delete
+                    {`Delete`}
                 </button>
             </Row>
         </Column>

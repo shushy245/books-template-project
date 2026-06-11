@@ -56,6 +56,16 @@ module.exports = {
         selector: "JSXAttribute[name.name='data-testid'] > Literal",
         message: 'Use the component *TestIds object — never raw strings in data-testid.',
       },
+      // JSX text nodes always in {`backticks`} — whitespace explicit, every node uniform.
+      // Props are untouched (Prettier keeps JSX attributes double-quoted).
+      {
+        selector: ':matches(JSXElement, JSXFragment) > JSXText[value=/\\S/]',
+        message: 'Wrap JSX text nodes in {`backticks`} — even static ones.',
+      },
+      {
+        selector: 'JSXExpressionContainer > Literal[value=type(string)]',
+        message: 'Use {`backticks`} for JSX text expressions, not quoted strings.',
+      },
     ],
 
     // ── Named exports only (no default exports) ───────────────────────────────

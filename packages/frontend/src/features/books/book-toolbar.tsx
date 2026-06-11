@@ -21,7 +21,7 @@ export const BookToolbar = (): JSX.Element => {
     return (
         <Row className={styles.toolbar} data-testid={BookListTestIds.Toolbar}>
             <label>
-                Sort by
+                {`Sort by`}
                 <select value={query.sortBy} onChange={handleSortByChange} data-testid={BookListTestIds.SortBySelect}>
                     {Object.values(BookSortField).map((field) => (
                         <option key={field} value={field}>
@@ -32,7 +32,7 @@ export const BookToolbar = (): JSX.Element => {
             </label>
 
             <label>
-                Direction
+                {`Direction`}
                 <select
                     value={query.sortDir}
                     onChange={handleSortDirChange}

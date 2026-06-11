@@ -8,9 +8,9 @@ type RestfulWrapperProps<T> = {
 };
 
 export const RestfulWrapper = <T,>({ loading, error, data, children }: RestfulWrapperProps<T>): JSX.Element => {
-    if (loading) return <p>Loading…</p>;
-    if (error !== undefined) return <p>Error: {error.message}</p>;
-    if (data === undefined) return <p>No data.</p>;
+    if (loading) return <p>{`Loading…`}</p>;
+    if (error !== undefined) return <p>{`Error: ${error.message}`}</p>;
+    if (data === undefined) return <p>{`No data.`}</p>;
 
     return <>{children(data)}</>;
 };
