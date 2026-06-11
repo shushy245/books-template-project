@@ -2,23 +2,23 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   ci:
     runs-on: ubuntu-latest
 
     services:
-      postgres_test:
+      postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: reading_room_test
-          POSTGRES_PASSWORD: reading_room_test
-          POSTGRES_DB: reading_room_test
+          POSTGRES_USER: reading_room
+          POSTGRES_PASSWORD: reading_room
+          POSTGRES_DB: reading_room
         ports:
-          - 5433:5432
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -49,13 +49,27 @@ jobs:
       - name: Unit tests
         run: pnpm -r test
 
-      - name: Integration tests (Knex migrations)
+      - name: Run migrations
+        run: pnpm --filter @reading-room/backend db:migrate
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USER: reading_room
+          DB_PASSWORD: reading_room
+          DB_NAME: reading_room
+
+      - name: Integration tests
         run: pnpm --filter @reading-room/backend test:integration
         env:
-          DB_TEST_PORT: 5433
-          DB_TEST_USER: reading_room_test
-          DB_TEST_PASSWORD: reading_room_test
-          DB_TEST_NAME: reading_room_test
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USER: reading_room
+          DB_PASSWORD: reading_room
+          DB_NAME: reading_room
+          DB_TEST_PORT: 5432
+          DB_TEST_USER: reading_room
+          DB_TEST_PASSWORD: reading_room
+          DB_TEST_NAME: reading_room
 
       - name: Build frontend
         run: pnpm --filter @reading-room/frontend build
@@ -64,8 +78,30 @@ jobs:
         run: pnpm --filter @reading-room/backend dev &
         env:
           PORT: 3000
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USER: reading_room
+          DB_PASSWORD: reading_room
+          DB_NAME: reading_room
+          OUTBOX_RELAY_INTERVAL_MS: 5000
+
+      - name: Wait for backend
+        run: until curl -sf http://localhost:3000/api/health; do sleep 1; done
+        timeout-minutes: 1
+
+      - name: Start frontend preview
+        run: pnpm --filter @reading-room/frontend preview --port 5173 &
+
+      - name: Wait for frontend
+        run: until curl -sf http://localhost:5173; do sleep 1; done
+        timeout-minutes: 1
 
       - name: Cypress E2E
         run: pnpm --filter @reading-room/frontend cypress:run
         env:
           CYPRESS_BASE_URL: http://localhost:5173
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USER: reading_room
+          DB_PASSWORD: reading_room
+          DB_NAME: reading_room
