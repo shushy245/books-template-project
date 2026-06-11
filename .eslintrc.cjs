@@ -183,6 +183,21 @@ module.exports = {
       },
     ],
 
+    // ── Wrapped borrowed code: the library name appears in exactly one file ───
+    // Each wrapped third-party module gets an entry here the moment its wrapper
+    // is born; the wrapper file itself is exempted in overrides below.
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: 'axios',
+            message: 'axios is wrapped — import the http-client from api/http-client.ts instead.',
+          },
+        ],
+      },
+    ],
+
     // ── Misc quality ─────────────────────────────────────────────────────────
     'no-console': 'warn', // use the structured logger, not console.log
     'no-debugger': 'error',
@@ -200,6 +215,13 @@ module.exports = {
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         '@typescript-eslint/strict-boolean-expressions': 'error',
         '@typescript-eslint/no-unnecessary-condition': 'error',
+      },
+    },
+    // ── Wrapper files: the one place each wrapped library may be imported ─────
+    {
+      files: ['**/api/http-client.ts'],
+      rules: {
+        'no-restricted-imports': 'off',
       },
     },
     // ── Lazy-loaded route files: default exports are allowed ──────────────────
