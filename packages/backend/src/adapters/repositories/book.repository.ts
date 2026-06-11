@@ -46,10 +46,6 @@ export class BookRepository implements BookRepositoryPort {
         const pageSize = query.pageSize ?? DEFAULT_PAGE_SIZE;
 
         const sortColumn = sortColumnMap[sortBy];
-        if (sortColumn === undefined) {
-            throw new Error(`list: unexpected BookSortField '${sortBy}'`);
-        }
-
         const orderExpr = sortDir === SortDirection.Asc ? asc(sortColumn) : desc(sortColumn);
 
         // and() treats undefined args as absent — no WHERE clause when both are undefined.

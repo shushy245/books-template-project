@@ -10,7 +10,7 @@ module.exports = {
     // project is omitted here — type-aware rules are expensive and break on non-TS files.
     // We use syntactic rules only at the root; packages add type-aware rules in their own configs.
   },
-  plugins: ['@typescript-eslint', 'import', 'prettier', 'perfectionist'],
+  plugins: ['@typescript-eslint', 'import', 'prettier', 'perfectionist', 'react'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -19,6 +19,7 @@ module.exports = {
     'prettier',
   ],
   settings: {
+    react: { version: 'detect' },
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
@@ -76,6 +77,11 @@ module.exports = {
 
     // ── Immutability: never reassign params ───────────────────────────────────
     'no-param-reassign': 'error',
+
+    // ── JSX handler naming: on* props receive handle* functions ───────────────
+    // (react/jsx-no-bind was evaluated and dropped: it flags named const-arrow
+    // handlers — our canonical pattern — not just inline lambdas.)
+    'react/jsx-handler-names': 'error',
 
     // ── No React.FC — explicit return type instead ────────────────────────────
     '@typescript-eslint/ban-types': [
@@ -172,6 +178,19 @@ module.exports = {
     'eqeqeq': ['error', 'always'],
   },
   overrides: [
+    // ── Type-aware rules (need parserOptions.project; scoped to src) ──────────
+    {
+      files: ['packages/*/src/**/*.ts', 'packages/*/src/**/*.tsx'],
+      parserOptions: {
+        project: ['packages/*/tsconfig.json'],
+        tsconfigRootDir: __dirname,
+      },
+      rules: {
+        '@typescript-eslint/prefer-nullish-coalescing': 'error',
+        '@typescript-eslint/strict-boolean-expressions': 'error',
+        '@typescript-eslint/no-unnecessary-condition': 'error',
+      },
+    },
     // ── Lazy-loaded route files: default exports are allowed ──────────────────
     {
       files: ['**/routes/**/*.tsx', '**/routes/**/*.ts'],

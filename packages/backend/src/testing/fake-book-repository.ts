@@ -35,10 +35,6 @@ export class FakeBookRepository implements BookRepositoryPort {
         const sortDir = query.sortDir ?? SortDirection.Desc;
 
         const compareFn = sortFnMap[sortBy];
-        if (compareFn === undefined) {
-            throw new Error(`list: unexpected BookSortField '${sortBy}'`);
-        }
-
         const filtered = [...this.store.values()]
             .filter((b) => query.shelfId === undefined || b.shelfId === query.shelfId)
             .filter((b) => query.status === undefined || b.status === query.status);

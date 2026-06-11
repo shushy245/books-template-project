@@ -9,13 +9,6 @@ export const nextStatusesMap: Record<ReadingStatus, ReadingStatus[]> = {
     [ReadingStatus.Abandoned]: [ReadingStatus.WantToRead],
 };
 
-export const canTransition = (from: ReadingStatus, to: ReadingStatus): boolean => {
-    const allowed = nextStatusesMap[from];
-    if (allowed === undefined) {
-        throw new Error(`canTransition: unexpected ReadingStatus '${from}'`);
-    }
-
-    return allowed.includes(to);
-};
+export const canTransition = (from: ReadingStatus, to: ReadingStatus): boolean => nextStatusesMap[from].includes(to);
 
 export const canRate = (status: ReadingStatus): boolean => status === ReadingStatus.Read;
