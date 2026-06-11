@@ -10,6 +10,7 @@ export const validateBody =
 
         if (!result.success) {
             res.status(400).json({ error: result.error.issues.map((i) => i.message).join(', ') });
+
             return;
         }
 

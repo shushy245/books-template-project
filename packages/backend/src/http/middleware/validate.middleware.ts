@@ -22,6 +22,7 @@ export const validate =
 
         if (!result.success) {
             res.status(400).json({ error: formatZodError(result.error) });
+
             return;
         }
 

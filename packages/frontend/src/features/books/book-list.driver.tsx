@@ -26,7 +26,7 @@ const TriggerRefreshButton = (): JSX.Element => {
     const { triggerRefresh } = useBookListContext();
 
     return (
-        <button data-testid="test:triggerRefresh" onClick={triggerRefresh}>
+        <button data-testid={BookListTestIds.TriggerRefresh} onClick={triggerRefresh}>
             {`Refresh`}
         </button>
     );
@@ -106,7 +106,7 @@ export const makeBookListDriver = (): BookListDriver => {
                 await user.click(screen.getByTestId(BookListTestIds.PrevPage));
             },
             triggerRefresh: async () => {
-                await user.click(screen.getByTestId('test:triggerRefresh'));
+                await user.click(screen.getByTestId(BookListTestIds.TriggerRefresh));
             },
             deleteCard: async (id) => {
                 await user.click(screen.getByTestId(BookListTestIds.CardDeleteButton(id)));

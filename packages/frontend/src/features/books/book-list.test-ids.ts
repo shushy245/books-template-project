@@ -10,4 +10,5 @@ export const BookListTestIds = {
     EmptyState: 'BookListTestIds.EmptyState',
     PrevPage: 'BookListTestIds.PrevPage',
     NextPage: 'BookListTestIds.NextPage',
+    TriggerRefresh: 'BookListTestIds.TriggerRefresh',
 } as const;

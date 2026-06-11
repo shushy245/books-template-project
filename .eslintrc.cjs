@@ -51,10 +51,42 @@ module.exports = {
         message:
           'Use undefined instead of null. Normalise null at the boundary (row-mappers.utils.ts, http-client.ts).',
       },
+      {
+        selector: "JSXAttribute[name.name='data-testid'] > Literal",
+        message: 'Use the component *TestIds object — never raw strings in data-testid.',
+      },
     ],
 
     // ── Named exports only (no default exports) ───────────────────────────────
     'import/no-default-export': 'error',
+
+    // ── Blank line before standalone return ──────────────────────────────────
+    // A return with no preceding sibling statement (one-line guard, implicit
+    // arrow) needs no padding — the rule only fires after another statement.
+    'padding-line-between-statements': ['error', { blankLine: 'always', prev: '*', next: 'return' }],
+
+    // ── No non-null assertions (!) ────────────────────────────────────────────
+    '@typescript-eslint/no-non-null-assertion': 'error',
+
+    // ── Implicit arrow returns over explicit ──────────────────────────────────
+    'arrow-body-style': ['error', 'as-needed'],
+
+    // ── Guard clauses: no else after return ───────────────────────────────────
+    'no-else-return': ['error', { allowElseIf: false }],
+
+    // ── Immutability: never reassign params ───────────────────────────────────
+    'no-param-reassign': 'error',
+
+    // ── No React.FC — explicit return type instead ────────────────────────────
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        extendDefaults: true,
+        types: {
+          'React.FC': { message: 'Avoid React.FC — use an explicit return type instead.' },
+        },
+      },
+    ],
 
     // ── No circular dependencies (strictly acyclic DAG) ──────────────────────
     'import/no-cycle': ['error', { maxDepth: Infinity }],

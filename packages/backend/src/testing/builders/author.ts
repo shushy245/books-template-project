@@ -17,16 +17,19 @@ class AuthorBuilder {
 
     withId(id: string): this {
         this.state = { ...this.state, id };
+
         return this;
     }
 
     withName(name: string): this {
         this.state = { ...this.state, name };
+
         return this;
     }
 
     build(): Author {
         const now = new Date();
+
         return { id: this.state.id, name: this.state.name, createdAt: now, updatedAt: now };
     }
 }

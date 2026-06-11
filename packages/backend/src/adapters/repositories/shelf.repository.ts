@@ -11,6 +11,7 @@ export class ShelfRepository implements ShelfRepositoryPort {
     async findById(id: string): Promise<Shelf | undefined> {
         const row = await this.db.query.shelves.findFirst({ where: eq(shelves.id, id) });
         if (row === undefined) return undefined;
+
         return { id: row.id, name: row.name, createdAt: row.createdAt, updatedAt: row.updatedAt };
     }
 

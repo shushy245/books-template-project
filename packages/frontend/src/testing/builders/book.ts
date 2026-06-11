@@ -17,22 +17,27 @@ class BookBuilder {
 
     withId(id: string): this {
         this.state = { ...this.state, id };
+
         return this;
     }
     withTitle(title: string): this {
         this.state = { ...this.state, title };
+
         return this;
     }
     withAuthorId(authorId: string): this {
         this.state = { ...this.state, authorId };
+
         return this;
     }
     withStatus(status: ReadingStatus): this {
         this.state = { ...this.state, status };
+
         return this;
     }
     withRating(rating: number): this {
         this.state = { ...this.state, rating };
+
         return this;
     }
 

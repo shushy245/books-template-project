@@ -44,6 +44,7 @@ export default defineConfig({
                     } finally {
                         await pool.end();
                     }
+
                     return null;
                 },
 
@@ -57,6 +58,7 @@ export default defineConfig({
                     } finally {
                         await pool.end();
                     }
+
                     return null;
                 },
 
@@ -70,6 +72,7 @@ export default defineConfig({
                     } finally {
                         await pool.end();
                     }
+
                     return null;
                 },
 
@@ -80,6 +83,7 @@ export default defineConfig({
                     } finally {
                         await pool.end();
                     }
+
                     return null;
                 },
             });

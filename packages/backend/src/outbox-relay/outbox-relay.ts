@@ -113,6 +113,7 @@ export const startOutboxRelay = (
 
     return () => {
         clearInterval(handle);
+
         return currentPoll;
     };
 };

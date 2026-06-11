@@ -46,6 +46,7 @@ describe('createBook integration', () => {
         const [author] = await db.insert(authors).values({ name: 'Test Author' }).returning();
         const [shelf] = await db.insert(shelves).values({ name: 'Test Shelf' }).returning();
         if (author === undefined || shelf === undefined) throw new Error('seedAuthorAndShelf: insert failed');
+
         return { authorId: author.id, shelfId: shelf.id };
     };
 

@@ -34,6 +34,7 @@ export const makeListBooksDriver = (): ListBooksDriver => {
         get: {
             books: (query = {}) => {
                 const qs = new URLSearchParams(query).toString();
+
                 return request(app).get(`/api/books${qs ? `?${qs}` : ''}`);
             },
         },

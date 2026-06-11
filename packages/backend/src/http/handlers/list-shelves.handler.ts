@@ -22,6 +22,7 @@ export const makeListShelvesHandler =
         } catch (err) {
             if (err instanceof Error) {
                 res.status(errorToHttpStatus(err)).json({ error: err.message });
+
                 return;
             }
             throw err;
