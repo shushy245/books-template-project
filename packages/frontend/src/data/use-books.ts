@@ -20,6 +20,8 @@ export const useBooks = (query: BookQueryDto): UseBooksResult => {
         setTick((t) => t + 1);
     }, []);
 
+    const { page, pageSize, sortBy, sortDir, shelfId, status } = query;
+
     useEffect(() => {
         setLoading(true);
         setError(undefined);
@@ -33,7 +35,7 @@ export const useBooks = (query: BookQueryDto): UseBooksResult => {
                 setError(err instanceof Error ? err : new Error('fetchBooks: unexpected error'));
                 setLoading(false);
             });
-    }, [tick, JSON.stringify(query)]);
+    }, [tick, page, pageSize, sortBy, sortDir, shelfId, status]);
 
     return { data, loading, error, refetch };
 };
