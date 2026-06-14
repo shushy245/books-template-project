@@ -14,9 +14,13 @@ type RestfulWrapperProps<T, A> = {
 };
 
 export const RestfulWrapper = <T, A>(props: RestfulWrapperProps<T, A>): JSX.Element => {
-    const { fetch, initialArgs, renderChild, renderError, renderLoader } = props;
+    const { fetch, initialArgs, renderChild } = props;
     const wrapperArgs: UseRestfulWrapperArgs<T, A> = { fetch, initialArgs };
     const { renderRestfulState } = useRestfulWrapper(wrapperArgs);
 
-    return renderRestfulState({ renderChild, renderError, renderLoader });
+    return renderRestfulState({
+        renderChild,
+        ...(props.renderError !== undefined && { renderError: props.renderError }),
+        ...(props.renderLoader !== undefined && { renderLoader: props.renderLoader }),
+    });
 };
