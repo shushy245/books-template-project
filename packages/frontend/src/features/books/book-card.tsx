@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Book, ReadingStatus } from '@reading-room/common';
 
+import { bookModel } from '~/models';
+
 import { Column, Row } from '../../ui/box.tsx';
 import { patchBook } from '../../api/books.api.ts';
 import { BookListTestIds, isReadingStatus, readingStatusLabelMap } from './book-list.utils.ts';
@@ -36,7 +38,7 @@ export const BookCard = ({ book, onDelete }: BookCardProps): JSX.Element => {
 
             <Row className={styles.meta}>
                 <StatusSelect book={localBook} onStatusChange={handleStatusChange} />
-                {localBook.rating !== undefined && <span>{`${localBook.rating} ★`}</span>}
+                {bookModel.hasRating(localBook) && <span>{`${localBook.rating} ★`}</span>}
                 <button
                     className={styles.deleteButton}
                     onClick={handleDelete}

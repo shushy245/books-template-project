@@ -1,10 +1,6 @@
 import { Book, CreateBookDto, ReadingStatus } from '@reading-room/common';
 
-// Wire shape from the API — JSON serialization produces ISO strings, not Date objects
-export type BookWireDTO = Omit<Book, 'createdAt' | 'updatedAt'> & {
-    createdAt: string;
-    updatedAt: string;
-};
+import { BookWireDTO } from './model.ts';
 
 export const fromDTO = (dto: BookWireDTO): Book => ({
     ...dto,
