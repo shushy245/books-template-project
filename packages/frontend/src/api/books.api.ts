@@ -1,10 +1,9 @@
 import { Book, BookQueryDto, CreateBookDto, PaginatedResult, ReadingStatus } from '@reading-room/common';
 
-import { httpClient } from './http-client.ts';
+import * as bookModel from '~/models/book';
+import { BookWireDTO } from '~/models/book';
 
-// ── Translators ──────────────────────────────────────────────────────────────
-// All wire-format translation happens here. No other layer builds or unpacks
-// API request/response shapes.
+import { httpClient } from './http-client.ts';
 
 export const buildBooksQueryString = (query: BookQueryDto): string => {
     const params = new URLSearchParams();
@@ -18,39 +17,26 @@ export const buildBooksQueryString = (query: BookQueryDto): string => {
     return params.toString();
 };
 
-type BookPatchUpdate = {
-    book: Book;
-    status?: ReadingStatus;
-    rating?: number;
-};
-
-const toPatchBody = ({ book, status, rating }: BookPatchUpdate): Record<string, unknown> => {
-    const body: Record<string, unknown> = { updatedAt: String(book.updatedAt) };
-    if (status !== undefined) body['status'] = status;
-    if (rating !== undefined) body['rating'] = rating;
-
-    return body;
-};
-
-// ── API ───────────────────────────────────────────────────────────────────────
-
 export const fetchBooks = async (query: BookQueryDto): Promise<PaginatedResult<Book>> => {
     const qs = buildBooksQueryString(query);
-    const response = await httpClient.get<PaginatedResult<Book>>(`/books${qs ? `?${qs}` : ''}`);
+    const response = await httpClient.get<PaginatedResult<BookWireDTO>>(`/books${qs ? `?${qs}` : ''}`);
 
-    return response.data;
+    return { ...response.data, items: response.data.items.map(bookModel.fromDTO) };
 };
 
 export const createBook = async (dto: CreateBookDto): Promise<Book> => {
-    const response = await httpClient.post<Book>('/books', { ...dto, title: dto.title.trim() });
+    const response = await httpClient.post<BookWireDTO>('/books', bookModel.toCreatePayload(dto));
 
-    return response.data;
+    return bookModel.fromDTO(response.data);
 };
 
-export const patchBook = async (update: BookPatchUpdate): Promise<Book> => {
-    const response = await httpClient.patch<Book>(`/books/${update.book.id}`, toPatchBody(update));
+export const patchBook = async (update: { book: Book; status?: ReadingStatus; rating?: number }): Promise<Book> => {
+    const response = await httpClient.patch<BookWireDTO>(
+        `/books/${update.book.id}`,
+        bookModel.toUpdatePayload(update.book, update),
+    );
 
-    return response.data;
+    return bookModel.fromDTO(response.data);
 };
 
 export const deleteBook = async (id: string): Promise<void> => {
