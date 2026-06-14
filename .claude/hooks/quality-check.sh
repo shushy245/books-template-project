@@ -38,15 +38,46 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
+# Determine which packages need typechecking.
+# common edits propagate to both consumers, so include all three.
+TYPECHECK_RAW=""
+while IFS= read -r f; do
+    case "$f" in
+        */packages/common/*)
+            TYPECHECK_RAW="$TYPECHECK_RAW
+@reading-room/common
+@reading-room/frontend
+@reading-room/backend"
+            ;;
+        */packages/frontend/*)
+            TYPECHECK_RAW="$TYPECHECK_RAW
+@reading-room/frontend"
+            ;;
+        */packages/backend/*)
+            TYPECHECK_RAW="$TYPECHECK_RAW
+@reading-room/backend"
+            ;;
+    esac
+done <<< "$EDITED_TS"
+
+TYPECHECK_PACKAGES=$(echo "$TYPECHECK_RAW" | sort -u | grep -v '^$' || true)
+
 ERRORS=""
 
-LINT_OUTPUT=$(pnpm lint 2>&1) || ERRORS="$ERRORS
+# Lint only the edited files (faster than project-wide pnpm lint)
+LINT_OUTPUT=$(echo "$EDITED_TS" | xargs ./node_modules/.bin/eslint --max-warnings 0 2>&1) || ERRORS="$ERRORS
 ### Lint:
 $LINT_OUTPUT"
 
-TYPE_OUTPUT=$(pnpm typecheck 2>&1) || ERRORS="$ERRORS
-### Typecheck:
+# Typecheck only the packages that contain edited files
+if [ -n "$TYPECHECK_PACKAGES" ]; then
+    while IFS= read -r pkg; do
+        [ -z "$pkg" ] && continue
+        TYPE_OUTPUT=$(pnpm --filter "$pkg" typecheck 2>&1) || ERRORS="$ERRORS
+### Typecheck ($pkg):
 $TYPE_OUTPUT"
+    done <<< "$TYPECHECK_PACKAGES"
+fi
 
 if [ -n "$ERRORS" ]; then
     REASON="Quality checks failed — fix before stopping:$ERRORS"
