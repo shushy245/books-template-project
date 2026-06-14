@@ -46,6 +46,7 @@ export const useRestfulWrapper = <T, A>(
     const isMounted = useIsMounted();
     const optionsRef = useRef(options);
     optionsRef.current = options;
+    const generationRef = useRef(0);
 
     const [state, setState] = useState<RestfulState<T>>({
         data: undefined,
@@ -54,7 +55,10 @@ export const useRestfulWrapper = <T, A>(
     });
 
     // Wraps any fetch call to a zero-arg thunk so A does not leak into state management.
+    // generationRef guards against last-to-resolve wins: only the most recent call applies state.
     const runFetch = useCallback((fetchFn: () => Promise<T>, silent: boolean): Promise<void> => {
+        const generation = ++generationRef.current;
+
         if (silent) {
             setState((prev) => ({ ...prev, loading: true }));
         } else {
@@ -63,11 +67,11 @@ export const useRestfulWrapper = <T, A>(
 
         return fetchFn()
             .then((data) => {
-                if (!isMounted()) return;
+                if (!isMounted() || generationRef.current !== generation) return;
                 setState((prev) => ({ ...prev, data, loading: false, error: undefined }));
             })
             .catch((err: unknown) => {
-                if (!isMounted()) return;
+                if (!isMounted() || generationRef.current !== generation) return;
                 setState((prev) => ({
                     ...prev,
                     error: err instanceof Error ? err : new Error(String(err)),

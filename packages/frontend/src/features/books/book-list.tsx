@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { PaginatedResult, Book } from '@reading-room/common';
 
 import { BookCard } from './book-card.tsx';
@@ -10,8 +10,14 @@ import { useBookListContext } from './book-list-context.tsx';
 import styles from './book-list.module.scss';
 
 export const BookList = (): JSX.Element => {
-    const { data, error, query, setPage, refresh } = useBookListContext();
+    const { data, error, loading, query, setPage, refresh } = useBookListContext();
     const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set());
+
+    // Refs so the delete-rollback catch always uses the live query/refresh, not a stale closure.
+    const queryRef = useRef(query);
+    queryRef.current = query;
+    const refreshRef = useRef(refresh);
+    refreshRef.current = refresh;
 
     const handleDelete = (id: string): void => {
         setHiddenIds((prev) => new Set([...prev, id]));
@@ -22,12 +28,12 @@ export const BookList = (): JSX.Element => {
 
                 return next;
             });
-            refresh({ args: query }).catch(() => {});
+            refreshRef.current({ args: queryRef.current }).catch(() => {});
         });
     };
 
     if (error !== undefined) return <p>{`Error: ${error.message}`}</p>;
-    if (data === undefined) return <p>{`Loading…`}</p>;
+    if (data === undefined || loading) return <p>{`Loading…`}</p>;
 
     return (
         <BookListContent

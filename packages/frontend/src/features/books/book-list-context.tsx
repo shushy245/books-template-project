@@ -28,12 +28,15 @@ export const useBookListContext = (): BookListContextValue => {
 
 type BookListProviderProps = { children: ReactNode };
 
-export const BookListProvider = ({ children }: BookListProviderProps): JSX.Element => {
-    const [sortBy, setSortByState] = useState<BookSortField>(BookSortField.CreatedAt);
-    const [sortDir, setSortDirState] = useState<SortDirection>(SortDirection.Desc);
-    const [page, setPageState] = useState(1);
+const initialQuery: BookQueryDto = {
+    sortBy: BookSortField.CreatedAt,
+    sortDir: SortDirection.Desc,
+    page: 1,
+    pageSize: 20,
+};
 
-    const query: BookQueryDto = { sortBy, sortDir, page, pageSize: 20 };
+export const BookListProvider = ({ children }: BookListProviderProps): JSX.Element => {
+    const [query, setQuery] = useState<BookQueryDto>(initialQuery);
 
     const { data, loading, error, refresh } = useRestfulWrapper<PaginatedResult<Book>, BookQueryDto>({
         fetch: fetchBooks,
@@ -41,18 +44,21 @@ export const BookListProvider = ({ children }: BookListProviderProps): JSX.Eleme
     });
 
     const setSortBy = (sortBy: BookSortField): void => {
-        setSortByState(sortBy);
-        refresh({ args: { sortBy, sortDir, page, pageSize: 20 } }).catch(() => {});
+        const next = { ...query, sortBy, page: 1 };
+        setQuery(next);
+        refresh({ args: next }).catch(() => {});
     };
 
     const setSortDir = (sortDir: SortDirection): void => {
-        setSortDirState(sortDir);
-        refresh({ args: { sortBy, sortDir, page, pageSize: 20 } }).catch(() => {});
+        const next = { ...query, sortDir, page: 1 };
+        setQuery(next);
+        refresh({ args: next }).catch(() => {});
     };
 
     const setPage = (page: number): void => {
-        setPageState(page);
-        refresh({ args: { sortBy, sortDir, page, pageSize: 20 } }).catch(() => {});
+        const next = { ...query, page };
+        setQuery(next);
+        refresh({ args: next }).catch(() => {});
     };
 
     return (
