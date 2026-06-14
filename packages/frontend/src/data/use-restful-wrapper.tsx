@@ -59,9 +59,7 @@ export const useRestfulWrapper = <T, A>(
     const runFetch = useCallback((fetchFn: () => Promise<T>, silent: boolean): Promise<void> => {
         const generation = ++generationRef.current;
 
-        if (silent) {
-            setState((prev) => ({ ...prev, loading: true }));
-        } else {
+        if (!silent) {
             setState((prev) => ({ ...prev, loading: true, error: undefined }));
         }
 

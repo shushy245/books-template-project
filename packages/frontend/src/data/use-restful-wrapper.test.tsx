@@ -83,7 +83,7 @@ describe('useRestfulWrapper', () => {
             result.current.refresh({ silent: true, args: initialArgs });
         });
 
-        expect(result.current.loading).toBe(true);
+        expect(result.current.loading).toBe(false);
         expect(result.current.data).toEqual(['initial']);
     });
 
