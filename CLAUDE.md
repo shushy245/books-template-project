@@ -57,14 +57,10 @@ A story is not done until code-review has run. For stories touching multiple lay
 export const MyParamsSchema = z.object({ id: z.string().uuid() });
 export const MyBodySchema = z.object({ name: z.string().min(1) });
 
+export const MyRequestSchema = z.object({ params: MyParamsSchema, body: MyBodySchema });
+
 // router.ts
-router.patch('/my/:id',
-    createCombinedValidator([
-        { schema: MyParamsSchema, source: 'params', key: 'params' },
-        { schema: MyBodySchema, source: 'body', key: 'body' },
-    ]),
-    makeMyHandler({ store, logger })
-);
+router.patch('/my/:id', validate(MyRequestSchema), makeMyHandler({ store, logger }));
 
 // handlers/my-handler.ts
 export const makeMyHandler = ({ store, logger }: Deps): RequestHandler =>
@@ -95,7 +91,7 @@ Monorepo — three packages:
 ## Key conventions (project-specific)
 
 - `StorePort` has `books`, `shelves`, and `transaction()`. Outbox is only accessible inside a transaction.
-- **Validation is always a middleware.** Zod schemas live in `handlers/*.handler.utils.ts` and are imported into `router.ts`. Use `createValidator(schema, source)` for single validation, `createCombinedValidator([rules])` for multiple (params + body). Handlers read pre-validated data via `requireValidated(req)` (guard-clause selector in `validate.middleware.ts`) — never `req.validated!`.
+- **Validation is always a middleware.** Zod schemas live in `handlers/*.handler.utils.ts` and are imported into `router.ts`. Define sub-schemas (`ParamsSchema`, `BodySchema`) then compose into a single `RequestSchema = z.object({ params: ..., body: ... })` and wire with `validate(RequestSchema)`. Handlers read pre-validated data via `requireValidated(req)` (guard-clause selector in `validate.middleware.ts`) — never `req.validated!`.
 - Error HTTP mapping lives in `http/http-error.utils.ts`: NotFoundError→404, ConflictError→409, RuleError→422.
 - `BookRepository` contract tests in `domain/ports/book-repository.contract.ts` run against both
   `FakeBookRepository` and `BookRepository`. Add new repo behaviour there first.
