@@ -10,7 +10,7 @@ export default defineConfig({
     test: {
         reporter: 'verbose',
         environment: 'jsdom',
-        setupFiles: ['./src/testing/setup.ts'],
+        setupFiles: ['./src/testkit/setup.ts'],
         clearMocks: true,
         passWithNoTests: true,
     },

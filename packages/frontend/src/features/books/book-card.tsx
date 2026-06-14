@@ -3,8 +3,7 @@ import { Book, ReadingStatus } from '@reading-room/common';
 
 import { Column, Row } from '../../ui/box.tsx';
 import { patchBook } from '../../api/books.api.ts';
-import { BookListTestIds } from './book-list.test-ids.ts';
-import { isReadingStatus, readingStatusLabelMap } from './book-list.utils.ts';
+import { BookListTestIds, isReadingStatus, readingStatusLabelMap } from './book-list.utils.ts';
 
 import styles from './book-card.module.scss';
 

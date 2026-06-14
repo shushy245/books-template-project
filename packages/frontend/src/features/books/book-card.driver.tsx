@@ -4,10 +4,9 @@ import { Book, ReadingStatus } from '@reading-room/common';
 import { render, screen, waitFor } from '@testing-library/react';
 
 import { BookCard } from './book-card.tsx';
-import { aBook } from '../../testing/builders';
+import { aBook } from '../../testkit/builders';
 import * as booksApi from '../../api/books.api.ts';
-import { BookListTestIds } from './book-list.test-ids.ts';
-import { readingStatusLabelMap } from './book-list.utils.ts';
+import { BookListTestIds, readingStatusLabelMap } from './book-list.utils.ts';
 
 export type BookCardDriver = {
     given: {

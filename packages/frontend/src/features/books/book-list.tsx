@@ -4,7 +4,7 @@ import { PaginatedResult, Book } from '@reading-room/common';
 import { BookCard } from './book-card.tsx';
 import { Column, Row } from '../../ui/box.tsx';
 import { deleteBook } from '../../api/books.api.ts';
-import { BookListTestIds } from './book-list.test-ids.ts';
+import { BookListTestIds } from './book-list.utils.ts';
 import { useBookListContext } from './book-list-context.tsx';
 
 import styles from './book-list.module.scss';

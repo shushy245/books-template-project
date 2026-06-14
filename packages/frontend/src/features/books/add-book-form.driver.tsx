@@ -8,7 +8,7 @@ import * as booksApi from '../../api/books.api.ts';
 import { BookListProvider } from './book-list-context.tsx';
 import * as useAuthorsModule from '../../data/use-authors.ts';
 import * as useShelvesModule from '../../data/use-shelves.ts';
-import { AddBookFormTestIds } from './add-book-form.test-ids.ts';
+import { AddBookFormTestIds } from './add-book-form.utils.ts';
 
 const emptyPaginatedResult = { items: [], total: 0, page: 1, pageSize: 20 };
 

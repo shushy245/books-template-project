@@ -5,7 +5,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 
 import { BookList } from './book-list.tsx';
 import * as booksApi from '../../api/books.api.ts';
-import { BookListTestIds } from './book-list.test-ids.ts';
+import { BookListTestIds } from './book-list.utils.ts';
 import { BookListProvider, useBookListContext } from './book-list-context.tsx';
 
 const makePaginatedResult = (books: Book[], total?: number): PaginatedResult<Book> => ({

@@ -1,9 +1,14 @@
 import { BookSortField, SortDirection } from '@reading-room/common';
 
 import { Row } from '../../ui/box.tsx';
-import { BookListTestIds } from './book-list.test-ids.ts';
 import { useBookListContext } from './book-list-context.tsx';
-import { isBookSortField, isSortDirection, sortDirectionLabelMap, sortFieldLabelMap } from './book-list.utils.ts';
+import {
+    BookListTestIds,
+    isBookSortField,
+    isSortDirection,
+    sortDirectionLabelMap,
+    sortFieldLabelMap,
+} from './book-list.utils.ts';
 
 import styles from './book-list.module.scss';
 

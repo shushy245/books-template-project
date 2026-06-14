@@ -1,7 +1,7 @@
 import { ReadingStatus } from '@reading-room/common';
 import { beforeEach, describe, it, vi } from 'vitest';
 
-import { aBook } from '../../testing/builders';
+import { aBook } from '../../testkit/builders';
 import { BookListDriver, makeBookListDriver } from './book-list.driver.tsx';
 
 vi.mock('../../api/books.api.ts');

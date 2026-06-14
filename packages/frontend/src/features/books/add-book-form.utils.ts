@@ -18,3 +18,13 @@ export const emptyAddBookForm = (): AddBookFormState => ({
 // author and shelf. Status always has a value (defaults to WantToRead).
 export const isAddBookFormValid = (state: AddBookFormState): boolean =>
     state.title.trim().length > 0 && state.authorId.length > 0 && state.shelfId.length > 0;
+
+export const AddBookFormTestIds = {
+    Form: 'AddBookFormTestIds.Form',
+    TitleInput: 'AddBookFormTestIds.TitleInput',
+    AuthorSelect: 'AddBookFormTestIds.AuthorSelect',
+    ShelfSelect: 'AddBookFormTestIds.ShelfSelect',
+    StatusSelect: 'AddBookFormTestIds.StatusSelect',
+    SubmitButton: 'AddBookFormTestIds.SubmitButton',
+    Error: 'AddBookFormTestIds.Error',
+} as const;
