@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ReadingStatus } from '@reading-room/common';
 
-import { AddBookFormState, emptyAddBookForm, isAddBookFormValid, makeCreateBookDto } from './add-book-form.utils.ts';
+import { AddBookFormState, emptyAddBookForm, isAddBookFormValid } from './add-book-form.utils.ts';
 
 const aFormState = (overrides: Partial<AddBookFormState> = {}): AddBookFormState => ({
     title: 'Dune',
@@ -32,20 +32,5 @@ describe('isAddBookFormValid', () => {
 
     it('is invalid when no shelf is chosen', () => {
         expect(isAddBookFormValid(aFormState({ shelfId: '' }))).toBe(false);
-    });
-});
-
-describe('makeCreateBookDto', () => {
-    it('builds the dto from form state', () => {
-        expect(makeCreateBookDto(aFormState())).toEqual({
-            title: 'Dune',
-            authorId: 'author-1',
-            shelfId: 'shelf-1',
-            status: ReadingStatus.WantToRead,
-        });
-    });
-
-    it('trims surrounding whitespace from the title', () => {
-        expect(makeCreateBookDto(aFormState({ title: '  Dune  ' })).title).toBe('Dune');
     });
 });

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { BookSortField, ReadingStatus, SortDirection } from '@reading-room/common';
 
+import { buildBooksQueryString } from '../../api/books.api.ts';
 import {
-    buildBooksQueryString,
     isBookSortField,
     isReadingStatus,
     isSortDirection,

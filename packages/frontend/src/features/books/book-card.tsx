@@ -22,11 +22,7 @@ export const BookCard = ({ book, onDelete }: BookCardProps): JSX.Element => {
         setLocalBook({ ...localBook, status: newStatus });
 
         try {
-            const updated = await patchBook({
-                id: localBook.id,
-                updatedAt: String(localBook.updatedAt),
-                status: newStatus,
-            });
+            const updated = await patchBook({ book: localBook, status: newStatus });
             setLocalBook(updated);
         } catch {
             setLocalBook(original);

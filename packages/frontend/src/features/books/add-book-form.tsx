@@ -8,7 +8,7 @@ import { useShelves } from '../../data/use-shelves.ts';
 import { useBookListContext } from './book-list-context.tsx';
 import { AddBookFormTestIds } from './add-book-form.test-ids.ts';
 import { isReadingStatus, readingStatusLabelMap } from './book-list.utils.ts';
-import { AddBookFormState, emptyAddBookForm, isAddBookFormValid, makeCreateBookDto } from './add-book-form.utils.ts';
+import { AddBookFormState, emptyAddBookForm, isAddBookFormValid } from './add-book-form.utils.ts';
 
 import styles from './add-book-form.module.scss';
 
@@ -45,7 +45,7 @@ export const AddBookForm = (): JSX.Element => {
         setSubmitting(true);
         setError(undefined);
 
-        createBook(makeCreateBookDto(form))
+        createBook(form)
             .then(() => {
                 // The list is server-sorted (newest first) and paginated, so we can't know the
                 // new book's position locally — jump to page 1 and re-fetch rather than guess.

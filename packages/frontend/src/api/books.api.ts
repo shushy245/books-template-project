@@ -1,7 +1,38 @@
 import { Book, BookQueryDto, CreateBookDto, PaginatedResult, ReadingStatus } from '@reading-room/common';
 
 import { httpClient } from './http-client.ts';
-import { buildBooksQueryString } from '../features/books/book-list.utils.ts';
+
+// ── Translators ──────────────────────────────────────────────────────────────
+// All wire-format translation happens here. No other layer builds or unpacks
+// API request/response shapes.
+
+export const buildBooksQueryString = (query: BookQueryDto): string => {
+    const params = new URLSearchParams();
+    if (query.shelfId !== undefined) params.set('shelfId', query.shelfId);
+    if (query.status !== undefined) params.set('status', query.status);
+    if (query.sortBy !== undefined) params.set('sortBy', query.sortBy);
+    if (query.sortDir !== undefined) params.set('sortDir', query.sortDir);
+    if (query.page !== undefined) params.set('page', String(query.page));
+    if (query.pageSize !== undefined) params.set('pageSize', String(query.pageSize));
+
+    return params.toString();
+};
+
+type BookPatchUpdate = {
+    book: Book;
+    status?: ReadingStatus;
+    rating?: number;
+};
+
+const toPatchBody = ({ book, status, rating }: BookPatchUpdate): Record<string, unknown> => {
+    const body: Record<string, unknown> = { updatedAt: String(book.updatedAt) };
+    if (status !== undefined) body['status'] = status;
+    if (rating !== undefined) body['rating'] = rating;
+
+    return body;
+};
+
+// ── API ───────────────────────────────────────────────────────────────────────
 
 export const fetchBooks = async (query: BookQueryDto): Promise<PaginatedResult<Book>> => {
     const qs = buildBooksQueryString(query);
@@ -11,24 +42,13 @@ export const fetchBooks = async (query: BookQueryDto): Promise<PaginatedResult<B
 };
 
 export const createBook = async (dto: CreateBookDto): Promise<Book> => {
-    const response = await httpClient.post<Book>('/books', dto);
+    const response = await httpClient.post<Book>('/books', { ...dto, title: dto.title.trim() });
 
     return response.data;
 };
 
-type UpdateBookRequest = {
-    id: string;
-    updatedAt: string;
-    status?: ReadingStatus;
-    rating?: number;
-};
-
-export const patchBook = async (req: UpdateBookRequest): Promise<Book> => {
-    const body: Record<string, unknown> = { updatedAt: req.updatedAt };
-    if (req.status !== undefined) body['status'] = req.status;
-    if (req.rating !== undefined) body['rating'] = req.rating;
-
-    const response = await httpClient.patch<Book>(`/books/${req.id}`, body);
+export const patchBook = async (update: BookPatchUpdate): Promise<Book> => {
+    const response = await httpClient.patch<Book>(`/books/${update.book.id}`, toPatchBody(update));
 
     return response.data;
 };
