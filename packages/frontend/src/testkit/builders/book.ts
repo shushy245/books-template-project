@@ -1,14 +1,17 @@
+import Chance from 'chance';
 import { Book, ReadingStatus } from '@reading-room/common';
+
+const chance = new Chance();
 
 class BookBuilder {
     private state: Book = {
-        id: 'book-1',
-        title: 'Dune',
-        authorId: 'author-1',
-        shelfId: 'shelf-1',
+        id: chance.guid(),
+        title: chance.sentence({ words: 3 }),
+        authorId: chance.guid(),
+        shelfId: chance.guid(),
         status: ReadingStatus.WantToRead,
-        createdAt: new Date('2024-01-01'),
-        updatedAt: new Date('2024-01-01'),
+        createdAt: chance.date(),
+        updatedAt: chance.date(),
     };
 
     constructor(overrides?: Partial<Book>) {
@@ -20,21 +23,25 @@ class BookBuilder {
 
         return this;
     }
+
     withTitle(title: string): this {
         this.state = { ...this.state, title };
 
         return this;
     }
+
     withAuthorId(authorId: string): this {
         this.state = { ...this.state, authorId };
 
         return this;
     }
+
     withStatus(status: ReadingStatus): this {
         this.state = { ...this.state, status };
 
         return this;
     }
+
     withRating(rating: number): this {
         this.state = { ...this.state, rating };
 
