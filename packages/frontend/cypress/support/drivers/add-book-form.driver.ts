@@ -1,4 +1,4 @@
-import { AddBookFormTestIds } from '../../../src/features/books/add-book-form.test-ids.ts';
+import { AddBookFormTestIds } from '../../../src/features/books/add-book-form.utils.ts';
 
 export class AddBookFormDriver {
     given = {

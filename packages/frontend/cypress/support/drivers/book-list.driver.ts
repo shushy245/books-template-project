@@ -1,4 +1,4 @@
-import { BookListTestIds } from '../../../src/features/books/book-list.test-ids.ts';
+import { BookListTestIds } from '../../../src/features/books/book-list.utils.ts';
 
 export class BookListDriver {
     given = {
