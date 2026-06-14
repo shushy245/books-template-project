@@ -10,10 +10,13 @@ import * as useAuthorsModule from '../../data/use-authors.ts';
 import * as useShelvesModule from '../../data/use-shelves.ts';
 import { AddBookFormTestIds } from './add-book-form.test-ids.ts';
 
+const emptyPaginatedResult = { items: [], total: 0, page: 1, pageSize: 20 };
+
 export type AddBookFormDriver = {
     given: {
         authors: (authors: Author[]) => void;
         shelves: (shelves: Shelf[]) => void;
+        fetchBooksResolves: () => void;
         createBookResolves: () => void;
         createBookRejectsWith: (err?: Error) => void;
         createBookNeverResolves: () => void;
@@ -58,6 +61,9 @@ export const makeAddBookFormDriver = (): AddBookFormDriver => {
                     loading: false,
                     error: undefined,
                 });
+            },
+            fetchBooksResolves: () => {
+                vi.mocked(booksApi.fetchBooks).mockResolvedValue(emptyPaginatedResult);
             },
             createBookResolves: () => {
                 vi.mocked(booksApi.createBook).mockResolvedValue({

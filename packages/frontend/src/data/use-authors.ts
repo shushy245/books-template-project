@@ -9,4 +9,4 @@ type UseAuthorsResult = {
     error: Error | undefined;
 };
 
-export const useAuthors = (): UseAuthorsResult => useFetchOnMount(fetchAuthors, 'fetchAuthors: unexpected error');
+export const useAuthors = (): UseAuthorsResult => useFetchOnMount(fetchAuthors);

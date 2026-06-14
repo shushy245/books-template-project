@@ -13,7 +13,7 @@ import { AddBookFormState, emptyAddBookForm, isAddBookFormValid, makeCreateBookD
 import styles from './add-book-form.module.scss';
 
 export const AddBookForm = (): JSX.Element => {
-    const { setPage, triggerRefresh } = useBookListContext();
+    const { setPage } = useBookListContext();
     const { data: authors } = useAuthors();
     const { data: shelves } = useShelves();
     const [form, setForm] = useState<AddBookFormState>(emptyAddBookForm());
@@ -51,7 +51,6 @@ export const AddBookForm = (): JSX.Element => {
                 // new book's position locally — jump to page 1 and re-fetch rather than guess.
                 setForm(emptyAddBookForm());
                 setPage(1);
-                triggerRefresh();
             })
             .catch(() => {
                 setError('Could not add the book. Please try again.');

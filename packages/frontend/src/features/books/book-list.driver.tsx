@@ -23,10 +23,14 @@ const requireButton = (testId: string): HTMLButtonElement => {
 };
 
 const TriggerRefreshButton = (): JSX.Element => {
-    const { triggerRefresh } = useBookListContext();
+    const { refresh, query } = useBookListContext();
+
+    const handleClick = (): void => {
+        refresh({ args: query }).catch(() => {});
+    };
 
     return (
-        <button data-testid={BookListTestIds.TriggerRefresh} onClick={triggerRefresh}>
+        <button data-testid={BookListTestIds.TriggerRefresh} onClick={handleClick}>
             {`Refresh`}
         </button>
     );

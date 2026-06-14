@@ -9,4 +9,4 @@ type UseShelvesResult = {
     error: Error | undefined;
 };
 
-export const useShelves = (): UseShelvesResult => useFetchOnMount(fetchShelves, 'fetchShelves: unexpected error');
+export const useShelves = (): UseShelvesResult => useFetchOnMount(fetchShelves);

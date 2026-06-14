@@ -25,6 +25,7 @@ describe('AddBookForm', () => {
 
     beforeEach(() => {
         driver = makeAddBookFormDriver();
+        driver.given.fetchBooksResolves();
         driver.given.authors([anAuthor('author-1', 'Frank Herbert')]);
         driver.given.shelves([aShelf('shelf-1', 'Sci-Fi')]);
     });

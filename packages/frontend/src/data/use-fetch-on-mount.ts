@@ -1,34 +1,36 @@
 import { useEffect, useState } from 'react';
 
-type UseFetchOnMountResult<T> = {
+import { useIsMounted } from './use-is-mounted.ts';
+
+type FetchOnMountState<T> = {
     data: T | undefined;
     loading: boolean;
     error: Error | undefined;
 };
 
-// Shared fetch-on-mount lifecycle: loading/error/data with Error normalisation.
-// use-authors and use-shelves delegate here so the lifecycle lives in one place.
-// (use-books is a richer variant — parameterised query + manual refetch — and stays separate.)
-export const useFetchOnMount = <T>(fetcher: () => Promise<T>, errorLabel: string): UseFetchOnMountResult<T> => {
-    const [data, setData] = useState<T | undefined>(undefined);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<Error | undefined>(undefined);
+export const useFetchOnMount = <T>(fetcher: () => Promise<T>): FetchOnMountState<T> => {
+    const isMounted = useIsMounted();
+    const [state, setState] = useState<FetchOnMountState<T>>({
+        data: undefined,
+        loading: true,
+        error: undefined,
+    });
 
     useEffect(() => {
-        setLoading(true);
-        setError(undefined);
-
         fetcher()
-            .then((result) => {
-                setData(result);
-                setLoading(false);
+            .then((data) => {
+                if (!isMounted()) return;
+                setState({ data, loading: false, error: undefined });
             })
             .catch((err: unknown) => {
-                setError(err instanceof Error ? err : new Error(errorLabel));
-                setLoading(false);
+                if (!isMounted()) return;
+                setState({
+                    data: undefined,
+                    loading: false,
+                    error: err instanceof Error ? err : new Error(String(err)),
+                });
             });
-        // Fetch once on mount — fetcher and errorLabel are stable module-level values.
     }, []);
 
-    return { data, loading, error };
+    return state;
 };
