@@ -1,13 +1,13 @@
 # ADR 0007: Concurrent Claude Code Sessions — Worktrees vs. Serialization
 
 ## Status
-Accepted — 2026-06-15
+Revised — 2026-06-15 (initial decision reversed; see Deliberation for correction)
 
 ## TL;DR
-Start with a serialization rule — one Claude Code session per repository at a time. Add git worktrees only when concurrent sessions become a regular daily workflow and the one-session rule creates real, felt friction. The failure mode of not having worktrees (filesystem collision) is loud and bounded, not silent; that disqualifies it from needing upfront protective infrastructure.
+Adopt per-session git worktrees now. Concurrent Claude Code sessions are already a regular workflow and already causing real interference (stop hook failures, wasted token burn from cross-session corruption). The "serialization first" conclusion reached in the original deliberation rested on a false premise — that this was anticipatory — and is reversed.
 
 ## Context
-The team uses trunk-based development — all commits go directly to main, no long-lived branches. As AI-assisted development (Claude Code) becomes a regular workflow, the question of running multiple concurrent sessions on the same repository arises. When two sessions work simultaneously they both read and write to the same filesystem paths, creating a potential for one session's in-flight edits to be overwritten by another's. The question is whether to adopt git worktrees (one per session, isolating each session to its own working directory) as a defensive measure before this has actually caused a problem.
+The team uses trunk-based development — all commits go directly to main, no long-lived branches. Concurrent Claude Code sessions on the same repository are already a regular workflow, not a hypothetical. Sessions have been observed interfering with each other through the shared filesystem — most visibly as stop hook failures and wasted token burn tracing problems whose root cause was another active session editing the same files. The question is how to isolate concurrent sessions so they cannot corrupt each other's in-flight work.
 
 ## Options Considered
 
@@ -21,33 +21,29 @@ The team uses trunk-based development — all commits go directly to main, no lo
 
 ## Deliberation
 
-The working agent initially characterized the filesystem collision failure mode as "subtle, non-obvious, and hard to diagnose" and used that framing to argue for worktrees as upfront protection. Marcus Reid challenged this characterization directly: the failure mode is neither subtle nor hard to diagnose. When two sessions overwrite each other's in-flight edits, the result is broken code, failing tests, or a compile error — loud, immediate, and git-tracked. There's no silent propagation; the failure announces itself and is fixable by restarting the session. This is a crucial distinction because YAGNI holds for failures that are visible and bounded; it does not hold for failures that are silent, propagating, or unrecoverable (e.g., missing pagination contract, missing outbox pattern, missing DLQ).
+**Initial deliberation (reversed):** The working agent opened arguing for worktrees; Marcus Reid pushed back with two points: (1) the failure mode is visible and bounded — broken build, visible diff, restart the session — so YAGNI holds; (2) worktrees move the conflict rather than eliminating it — if two sessions touch shared types, you replace a filesystem collision with a rebase conflict between diverged AI-session histories. The working agent conceded both points and concluded: serialization first, worktrees when the one-session rule creates real friction. The general principle surfaced was sound: YAGNI applies based on failure-mode visibility, not category.
 
-Marcus also surfaced the "worktrees move the conflict, not eliminate it" argument, which was decisive. If both sessions touch shared types — the most likely collision point in a frontend+backend parallel workflow — filesystem isolation doesn't help. The two sessions accumulate diverged commits on their respective worktree branches and someone must reconcile the diverged AI-session histories at rebase time. This conflict is harder to understand and resolve than the original filesystem collision, because it requires reconstructing intent from two independently running sessions.
+**Correction:** The entire deliberation rested on a false premise — that concurrent sessions were anticipatory. They are not. Sessions have been interfering regularly, with stop hook failures and token burn as concrete, felt symptoms. The frequency-driven trigger ("add worktrees when concurrent sessions become a regular daily workflow") is already met. The "worktrees move the conflict" argument remains true but is irrelevant at this frequency: the git-level rebase conflict is a manageable coordination cost; the filesystem-level session corruption is an active operational problem. Worktrees are warranted now.
 
-The working agent conceded both points. The debate produced a frequency-driven trigger: worktrees become worth their overhead when concurrent sessions are a regular daily workflow, because at that point the one-session coordination rule creates genuine friction and the overhead amortizes across many sessions. Until that threshold is reached, the serialization rule is unambiguously better — zero overhead, zero cognitive tail, equivalent protection against the (visible and bounded) failure mode.
-
-One important secondary point from the debate: the meaningful axis for whether YAGNI applies is **not** "architecture vs. developer tooling." It is **visible-and-bounded vs. silent-and-unrecoverable**. This reframing is load-bearing: it's why pagination gets built before the first list endpoint (missing pagination is a breaking change for every consumer — silent divergence between client expectations and server contract), but worktrees wait until needed (collision is loud and immediate).
+**What the principles from this deliberation still hold:** YAGNI-by-visibility is correct as a general rule. A coordination rule over infrastructure is correct when frequency is low. Both conclusions were right in principle but wrong in application because the frequency premise was wrong. The meta-lesson: "is this anticipatory?" is a factual question that requires checking, not assuming.
 
 ## Decision
 
-Start with serialization. One Claude Code session per repository at a time is the rule until concurrent sessions are a genuine daily workflow. At that point, revisit with the specific collision patterns that have actually been felt as the design input.
-
-**Trigger to revisit:** Concurrent sessions become a regular (multiple times per week) daily workflow, AND the one-session rule creates real, felt friction in practice.
+Adopt per-session git worktrees. Each Claude Code session works in its own isolated worktree. Sessions commit frequently to a short-lived worktree branch and rebase to main at session end. Stale worktrees are cleaned up when the session ends.
 
 ## Consequences / Tradeoffs
 
 **Easier:**
-- No new filesystem artifacts to manage or clean up
-- No cognitive overhead for engineers unfamiliar with git worktrees
-- Working directory is the single source of truth — no confusion about which directory reflects current state
-- If a collision does happen, the failure is visible and bounded — restart the session
+- Concurrent sessions cannot corrupt each other's in-flight file writes
+- Stop hook failures from cross-session interference are eliminated
+- Each session has a clean, isolated working state
 
 **Harder / accepted costs:**
-- Cannot parallelize work streams (frontend + backend simultaneously) until the trigger fires
-- The protection is procedural, not technical — accidental violation is possible (though Claude Code sessions are typically user-initiated, so the coordination surface is small)
+- Git worktrees are not well-understood by all engineers — the naming convention (`worktrees/<session-id>`) and cleanup discipline must be established
+- Integration step at session end (rebase to main) is now explicit — if two sessions touch shared types, a rebase conflict still requires human resolution
+- Stale worktrees accumulate without a cleanup discipline
 
-**Reversibility:** High in both directions. Adding worktrees later requires `git worktree add`; removing them is `git worktree remove`. Neither choice creates lasting artifacts in the codebase.
+**Reversibility:** High. Drop the worktree practice by returning to working in the main directory; no lasting artifacts remain in the codebase.
 
 ## Related
 - None (first decision touching AI session workflow)
